@@ -21,33 +21,36 @@ class _AccountCheckPageState extends State<AccountCheckPage> {
   @override
   void initState() {
     super.initState();
-    checkUserAuthentication();
+    accountcheck();
   }
 
   bool? exists;
 
   int? index;
+  List<Widget> pagebuilder = [
+    const LoginTab(),
+    const WaitingPage(),
+    const FinishProPage(),
+    const BpPage(),
+    const mainPage(),
+  ];
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        alignment: Alignment.center,
-        child: const Center(child: CircularProgressIndicator()),
-      ),
-    );
+    return pagebuilder[index!];
   }
 
   Future<void> pageBuilder(String adminStatus, String profileStatus) async {
+    await checkUserAuthentication();
     if (adminStatus == "waiting" && profileStatus == "unfinished") {
-      Get.to(() => const WaitingPage());
+      index = 1;
     } else if (adminStatus == "approved" && profileStatus == "unfinished") {
-      Get.to(() => const FinishProPage());
+      index = 2;
     } else {
-      Get.to(() => const BpPage());
+      index = 3;
     }
   }
 
-  void checkUserAuthentication() async {
+  Future<void> checkUserAuthentication() async {
     FirebaseAuth auth = FirebaseAuth.instance;
     User? user = auth.currentUser;
 
@@ -62,11 +65,11 @@ class _AccountCheckPageState extends State<AccountCheckPage> {
         Map<String, dynamic> data = docsnap.data() as Map<String, dynamic>;
         await pageBuilder(data["waiting"], data["unfinished"]);
       } else if (exists == false) {
-        Get.to(() => const MyHomePage());
+        index = 4;
       }
     } else {
       // User is not authenticated, navigate to the login page.
-      Get.to(() => const LoginTab());
+      index = 0;
     }
   }
 
@@ -80,5 +83,28 @@ class _AccountCheckPageState extends State<AccountCheckPage> {
 
     // Check if the document exists
     exists = docSnapshot.exists;
+  }
+
+  Future<int> accountcheck() async {
+    FirebaseAuth auth = FirebaseAuth.instance;
+    User? user = auth.currentUser;
+    if (user != null) {
+      await isDocumentExists(
+          "Business Accounts Requests", auth.currentUser!.uid.toString());
+      if (exists == true) {
+        DocumentSnapshot docsnap = await FirebaseFirestore.instance
+            .collection("")
+            .doc(auth.currentUser!.uid.toString())
+            .get();
+        Map<String, dynamic> data = docsnap.data() as Map<String, dynamic>;
+        await pageBuilder(data["waiting"], data["unfinished"]);
+      } else if (exists == false) {
+        index = 4;
+      }
+    } else {
+      // User is not authenticated, navigate to the login page.
+      index = 0;
+    }
+    return index!;
   }
 }

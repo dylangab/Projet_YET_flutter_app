@@ -519,11 +519,7 @@ class _LoginTabState extends State<LoginTab> with TickerProviderStateMixin {
                                         TextStyle(fontWeight: FontWeight.bold),
                                   ),
                                   onTap: () {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                const BpRegister()));
+                                    Get.to(() => const BpRegister());
                                   },
                                 ),
                               )

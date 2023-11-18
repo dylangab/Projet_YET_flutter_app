@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:final_project/Pages/BusinessAccount/accountCheckPage.dart';
+import 'package:final_project/Pages/BusinessAccount/waitingPage.dart';
 import 'package:final_project/widgets/LoginTab.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -570,8 +571,7 @@ class _BpRegisterState extends State<BpRegister> {
                                           ratingList: [],
                                           followerIdList: [],
                                           rateUids: []);
-                                      await Get.to(
-                                          () => const AccountCheckPage());
+                                      await Get.to(() => const WaitingPage());
                                     } else {
                                       ScaffoldMessenger.of(context)
                                           .showSnackBar(const SnackBar(

@@ -21,12 +21,13 @@ class _AccountCheckPageState extends State<AccountCheckPage> {
   @override
   void initState() {
     super.initState();
-    accountcheck();
+    accountCheck();
   }
 
+  User? user;
   bool? exists;
 
-  int? index;
+  int index = 0;
   List<Widget> pagebuilder = [
     const LoginTab(),
     const WaitingPage(),
@@ -36,73 +37,73 @@ class _AccountCheckPageState extends State<AccountCheckPage> {
   ];
   @override
   Widget build(BuildContext context) {
-    return pagebuilder[index!];
+    return FutureBuilder<int>(
+        future: accountCheck(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            // The asynchronous operations are complete
+            return pagebuilder[
+                snapshot.data ?? 0]; // Use snapshot.data with a fallback value
+          } else {
+            // The asynchronous operations are still in progress
+            return Scaffold(
+                body: Center(
+                    child:
+                        CircularProgressIndicator())); // You can show a loading indicator here
+          }
+          ;
+        });
   }
 
-  Future<void> pageBuilder(String adminStatus, String profileStatus) async {
-    await checkUserAuthentication();
-    if (adminStatus == "waiting" && profileStatus == "unfinished") {
-      index = 1;
-    } else if (adminStatus == "approved" && profileStatus == "unfinished") {
-      index = 2;
-    } else {
-      index = 3;
-    }
-  }
-
-  Future<void> checkUserAuthentication() async {
+  Future<User> getUser() async {
     FirebaseAuth auth = FirebaseAuth.instance;
     User? user = auth.currentUser;
 
+    return user!;
+  }
+
+  Future<bool> roleChecker(String? user) async {
+    bool? exists;
     if (user != null) {
-      await isDocumentExists(
-          "Business Accounts Requests", auth.currentUser!.uid.toString());
-      if (exists == true) {
-        DocumentSnapshot docsnap = await FirebaseFirestore.instance
-            .collection("")
-            .doc(auth.currentUser!.uid.toString())
-            .get();
-        Map<String, dynamic> data = docsnap.data() as Map<String, dynamic>;
-        await pageBuilder(data["waiting"], data["unfinished"]);
-      } else if (exists == false) {
-        index = 4;
-      }
-    } else {
-      // User is not authenticated, navigate to the login page.
-      index = 0;
+      DocumentReference documentReference = FirebaseFirestore.instance
+          .collection("Business Accounts Requests")
+          .doc('${user}');
+      DocumentSnapshot documentSnapshot = await documentReference.get();
+      exists = documentSnapshot.exists;
     }
+    return exists!;
   }
 
-  Future<void> isDocumentExists(String collection, String documentId) async {
-    // Get a reference to the document
-    DocumentReference docRef =
-        FirebaseFirestore.instance.collection(collection).doc(documentId);
-
-    // Get the document
-    DocumentSnapshot docSnapshot = await docRef.get();
-
-    // Check if the document exists
-    exists = docSnapshot.exists;
-  }
-
-  Future<int> accountcheck() async {
-    FirebaseAuth auth = FirebaseAuth.instance;
-    User? user = auth.currentUser;
-    if (user != null) {
-      await isDocumentExists(
-          "Business Accounts Requests", auth.currentUser!.uid.toString());
-      if (exists == true) {
-        DocumentSnapshot docsnap = await FirebaseFirestore.instance
-            .collection("")
-            .doc(auth.currentUser!.uid.toString())
-            .get();
-        Map<String, dynamic> data = docsnap.data() as Map<String, dynamic>;
-        await pageBuilder(data["waiting"], data["unfinished"]);
-      } else if (exists == false) {
-        index = 4;
+  Future<int> pageBuilder(String user, bool exists) async {
+    int num = 1;
+    if (exists == true) {
+      DocumentReference documentReference = FirebaseFirestore.instance
+          .collection("Business Accounts Requests")
+          .doc('${user}');
+      DocumentSnapshot documentSnapshot = await documentReference.get();
+      if (documentSnapshot.get('approvalStatus') == "waiting" &&
+          documentSnapshot.get('profile_finish') == "unfinished") {
+        num = 1;
+      } else if (documentSnapshot.get('approvalStatus') == "approved" &&
+          documentSnapshot.get('profile_finish') == "unfinished") {
+        num = 2;
+      } else if (documentSnapshot.get('approvalStatus') == "approved" &&
+          documentSnapshot.get('profile_finish') == "finished") {
+        num = 3;
       }
+    } else if (exists == false) {
+      num = 4;
+    }
+    index = num;
+    return index;
+  }
+
+  Future<int> accountCheck() async {
+    user = await getUser();
+    if (user != null) {
+      exists = await roleChecker(user!.uid.toString());
+      index = await pageBuilder(user!.uid.toString(), exists!);
     } else {
-      // User is not authenticated, navigate to the login page.
       index = 0;
     }
     return index!;

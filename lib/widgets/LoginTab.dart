@@ -518,8 +518,8 @@ class _LoginTabState extends State<LoginTab> with TickerProviderStateMixin {
                                     style:
                                         TextStyle(fontWeight: FontWeight.bold),
                                   ),
-                                  onTap: () {
-                                    Get.to(() => const BpRegister());
+                                  onTap: () async {
+                                    await Get.to(() => const BpRegister());
                                   },
                                 ),
                               )

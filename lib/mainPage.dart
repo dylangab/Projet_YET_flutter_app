@@ -21,6 +21,7 @@ class _mainPageState extends State<mainPage> {
     messageCheck();
   }
 
+  Set<String> NotifideMessageId = Set<String>();
   final FirebaseAuth _auth = FirebaseAuth.instance;
   List pages = [
     const MyHomePage(),
@@ -99,11 +100,14 @@ class _mainPageState extends State<mainPage> {
       for (var change in snapshot.docChanges) {
         if (change.type == DocumentChangeType.added) {
           // A new document has been added to the collection
-
+          String messageId;
+          messageId = change.doc.id;
           // Trigger a local notification here
-
-          await fetchAnnoucment();
-          await messageCounter();
+          if (!NotifideMessageId.contains(messageId)) {
+            await fetchAnnoucment();
+            await messageCounter();
+            NotifideMessageId.add(messageId);
+          }
         }
       }
     });

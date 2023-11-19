@@ -126,71 +126,103 @@ class _buzpageState extends State<buzpage> with TickerProviderStateMixin {
                                       )),
                                 ],
                               ),
-                              Visibility(
-                                visible: raterUid(
+                              FutureBuilder(
+                                future: raterUid(
                                     FirebaseAuth.instance.currentUser!.uid
                                         .toString()
                                         .trim(),
                                     snapshot.data!["rateUids"]),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: <Widget>[
-                                    Padding(
-                                        padding: EdgeInsets.only(top: 15),
-                                        child: IconButton(
-                                            onPressed: () {
-                                              AlertDialog(
-                                                title: Text("Give rate"),
-                                                content: RatingBar.builder(
-                                                  initialRating: 1,
-                                                  minRating: 1,
-                                                  direction: Axis.horizontal,
-                                                  allowHalfRating: true,
-                                                  itemCount: 5,
-                                                  itemPadding: const EdgeInsets
-                                                          .symmetric(
-                                                      horizontal: 4.0),
-                                                  itemBuilder: (context, _) =>
-                                                      const Icon(
-                                                    Icons.star,
-                                                    color: Colors.amber,
-                                                  ),
-                                                  onRatingUpdate: (rating) {
-                                                    Rating = rating;
-                                                    print(Rating);
+                                builder: (context, snapshots) {
+                                  if (snapshots.connectionState ==
+                                      ConnectionState.done) {
+                                    // The asynchronous operations are complete
+                                    return Visibility(
+                                      replacement: SizedBox.fromSize(
+                                        size: Size.square(10),
+                                      ),
+                                      visible: rateCheck!,
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: <Widget>[
+                                          Padding(
+                                              padding: EdgeInsets.only(top: 15),
+                                              child: IconButton(
+                                                  onPressed: () {
+                                                    AlertDialog(
+                                                      title: Text("Give rate"),
+                                                      content:
+                                                          RatingBar.builder(
+                                                        initialRating: 1,
+                                                        minRating: 1,
+                                                        direction:
+                                                            Axis.horizontal,
+                                                        allowHalfRating: true,
+                                                        itemCount: 5,
+                                                        itemPadding:
+                                                            const EdgeInsets
+                                                                    .symmetric(
+                                                                horizontal:
+                                                                    4.0),
+                                                        itemBuilder:
+                                                            (context, _) =>
+                                                                const Icon(
+                                                          Icons.star,
+                                                          color: Colors.amber,
+                                                        ),
+                                                        onRatingUpdate:
+                                                            (rating) {
+                                                          Rating = rating;
+                                                          print(Rating);
+                                                        },
+                                                      ),
+                                                      actions: [
+                                                        TextButton(
+                                                            onPressed:
+                                                                () async {
+                                                              await FirebaseFirestore
+                                                                  .instance
+                                                                  .collection(
+                                                                      "")
+                                                                  .doc("")
+                                                                  .update({
+                                                                'ratingList':
+                                                                    FieldValue
+                                                                        .arrayUnion([
+                                                                  Rating
+                                                                ])
+                                                              });
+                                                              await calculateAverageRating(
+                                                                  snapshot.data![
+                                                                      "rateUids"]);
+                                                            },
+                                                            child:
+                                                                Text("Submit"))
+                                                      ],
+                                                    );
                                                   },
-                                                ),
-                                                actions: [
-                                                  TextButton(
-                                                      onPressed: () async {
-                                                        await FirebaseFirestore
-                                                            .instance
-                                                            .collection("")
-                                                            .doc("")
-                                                            .update({
-                                                          'ratingList':
-                                                              FieldValue
-                                                                  .arrayUnion(
-                                                                      [Rating])
-                                                        });
-                                                        await calculateAverageRating(
-                                                            snapshot.data![
-                                                                "rateUids"]);
-                                                      },
-                                                      child: Text("Submit"))
-                                                ],
-                                              );
-                                            },
-                                            icon: Icon(Icons.star_border))),
-                                    Padding(
-                                        padding: EdgeInsets.only(bottom: 10),
-                                        child: Text(
-                                          "Rate this",
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.w400),
-                                        )),
-                                  ],
-                                ),
+                                                  icon:
+                                                      Icon(Icons.star_border))),
+                                          Padding(
+                                              padding:
+                                                  EdgeInsets.only(bottom: 10),
+                                              child: Text(
+                                                "Rate this",
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.w400),
+                                              )),
+                                        ],
+                                      ),
+                                    ); // Use snapshot.data with a fallback value
+                                  } else {
+                                    // The asynchronous operations are still in progress
+                                    return Scaffold(
+                                        body: Center(
+                                            child:
+                                                CircularProgressIndicator())); // You can show a loading indicator here
+                                  }
+                                },
                               ),
                               Column(
                                 mainAxisAlignment: MainAxisAlignment.start,
@@ -1355,12 +1387,14 @@ class _buzpageState extends State<buzpage> with TickerProviderStateMixin {
     return checker!;
   }
 
-  bool raterUid(String uid, List rateUids) {
+  Future<bool> raterUid(String uid, List rateUids) async {
+    bool existes;
     if (rateUids.contains(uid.trim())) {
-      rateCheck = true;
+      existes = true;
     } else {
-      rateCheck = false;
+      existes = false;
     }
+    rateCheck = existes;
     return rateCheck!;
   }
 

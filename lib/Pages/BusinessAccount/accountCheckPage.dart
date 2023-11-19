@@ -51,7 +51,6 @@ class _AccountCheckPageState extends State<AccountCheckPage> {
                     child:
                         CircularProgressIndicator())); // You can show a loading indicator here
           }
-          ;
         });
   }
 

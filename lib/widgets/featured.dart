@@ -28,7 +28,7 @@ class _featuredState extends State<featured> {
           child: StreamBuilder<QuerySnapshot>(
               stream: FirebaseFirestore.instance
                   .collection("Business Accounts Requests")
-                  .where('profile_finish', isEqualTo: 'yes')
+                  .where('profile_finish', isEqualTo: '')
                   .limit(7)
                   .snapshots(),
               builder: (context, snapshot) {

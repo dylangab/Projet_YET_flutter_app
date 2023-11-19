@@ -72,47 +72,77 @@ class _CatagoryPageState extends State<CatagoryPage> {
                   SizedBox(
                       height: 50,
                       width: 350,
-                      child: ListView.builder(
-                          padding: const EdgeInsets.all(0),
-                          scrollDirection: Axis.horizontal,
-                          itemCount: 6,
-                          itemBuilder: (context, index) {
-                            return GestureDetector(
-                                onTap: () async {
-                                  var data = await Get.to(
-                                      () => const SelectedCatagoryPage(),
-                                      arguments: _catagoryList[index]);
-                                },
-                                child: Padding(
-                                  padding: const EdgeInsets.all(10.0),
-                                  child: Text(
-                                    _catagoryList[index],
-                                    style: const TextStyle(fontSize: 15),
-                                  ),
-                                ));
-                          })),
+                      child: FutureBuilder(
+                        future: fetchCatagory(),
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.done) {
+                            // The asynchronous operations are complete
+                            return ListView.builder(
+                                padding: const EdgeInsets.all(0),
+                                scrollDirection: Axis.horizontal,
+                                itemCount: 6,
+                                itemBuilder: (context, index) {
+                                  return GestureDetector(
+                                      onTap: () async {
+                                        var data = await Get.to(
+                                            () => const SelectedCatagoryPage(),
+                                            arguments: _catagoryList[index]);
+                                      },
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(10.0),
+                                        child: Text(
+                                          _catagoryList[index],
+                                          style: const TextStyle(fontSize: 15),
+                                        ),
+                                      ));
+                                }); // Use snapshot.data with a fallback value
+                          } else {
+                            // The asynchronous operations are still in progress
+                            return Scaffold(
+                                body: Center(
+                                    child:
+                                        CircularProgressIndicator())); // You can show a loading indicator here
+                          }
+                        },
+                      )),
                 ],
               ),
               Container(
                   height: 615,
                   color: const Color.fromARGB(255, 238, 240, 235),
-                  child: ListView.builder(
-                      itemCount: _catagoryList.length,
-                      itemBuilder: (context, index) {
-                        return GestureDetector(
-                          onTap: () async {
-                            var data = await Get.to(
-                                () => const SelectedCatagoryPage(),
-                                arguments: _catagoryList[index]);
-                          },
-                          child: ListTile(
-                              trailing: IconButton(
-                                icon: const Icon(Icons.arrow_right_alt_sharp),
-                                onPressed: () {},
-                              ),
-                              title: Text(_catagoryList[index])),
-                        );
-                      })),
+                  child: FutureBuilder(
+                    future: fetchCatagory(),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.done) {
+                        // The asynchronous operations are complete
+                        return ListView.builder(
+                            itemCount: _catagoryList.length,
+                            itemBuilder: (context, index) {
+                              return GestureDetector(
+                                onTap: () async {
+                                  var data = await Get.to(
+                                      () => const SelectedCatagoryPage(),
+                                      arguments: _catagoryList[index]);
+                                },
+                                child: ListTile(
+                                    trailing: IconButton(
+                                      icon: const Icon(
+                                          Icons.arrow_right_alt_sharp),
+                                      onPressed: () {},
+                                    ),
+                                    title: Text(_catagoryList[index])),
+                              );
+                            }); // Use snapshot.data with a fallback value
+                      } else {
+                        // The asynchronous operations are still in progress
+                        return Scaffold(
+                            body: Center(
+                                child:
+                                    CircularProgressIndicator())); // You can show a loading indicator here
+                      }
+                    },
+                  )),
             ])));
   }
 
@@ -123,9 +153,6 @@ class _CatagoryPageState extends State<CatagoryPage> {
         .get();
     if (doc.exists) {
       _catagoryList = (doc['catagories'] as List<dynamic>).cast<String>();
-      for (var item in _catagoryList) {
-        setState(() {});
-      }
     }
   }
 }

@@ -30,7 +30,6 @@ class _RecentlyAddedState extends State<RecentlyAdded> {
           child: StreamBuilder<QuerySnapshot>(
               stream: FirebaseFirestore.instance
                   .collection("Business Accounts Requests")
-                  .where('profile_finish', isEqualTo: 'yes')
                   .orderBy('timestamp', descending: true)
                   .limit(5)
                   .snapshots(),
@@ -61,7 +60,7 @@ class _RecentlyAddedState extends State<RecentlyAdded> {
                                   decoration: BoxDecoration(
                                     image: DecorationImage(
                                         image: NetworkImage(
-                                            RecentlyAdded[index]["coverPhoto"]),
+                                            RecentlyAdded[index]["image"]),
                                         fit: BoxFit.cover),
                                     borderRadius: BorderRadius.circular(15),
                                     color: Colors.red,

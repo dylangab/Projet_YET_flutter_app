@@ -52,7 +52,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primaryColor: Colors.white,
       ),
-      home: const searchPage(),
+      home: const mainPage(),
     );
   }
 }

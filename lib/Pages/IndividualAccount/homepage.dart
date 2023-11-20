@@ -143,7 +143,7 @@ class _MyHomePage extends State<MyHomePage> with TickerProviderStateMixin {
                 )
               ],
             ),
-            RecentlyAdded(),
+            //   RecentlyAdded(),
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,

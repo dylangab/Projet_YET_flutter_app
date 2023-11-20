@@ -29,57 +29,84 @@ class _MostRatedState extends State<MostRated> {
           child: StreamBuilder<QuerySnapshot>(
               stream: FirebaseFirestore.instance
                   .collection("Business Accounts Requests")
-                  .where('profile_finish', isEqualTo: 'yes')
+                  .where('businesscatagory', isEqualTo: 'hotel')
                   .snapshots(),
               builder: (context, snapshot) {
                 print(snapshot);
-
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return SizedBox(
+                    child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: 5,
+                        itemBuilder: (context, index) {
+                          return SizedBox(
+                            child: Padding(
+                                padding: const EdgeInsets.all(9),
+                                child: Shimmer.fromColors(
+                                  child: Container(
+                                    padding: const EdgeInsets.all(10),
+                                    margin: const EdgeInsets.all(1),
+                                    width: 150,
+                                    height: 300,
+                                  ),
+                                  baseColor: Colors.grey,
+                                  highlightColor: Colors.white,
+                                )),
+                          );
+                        }),
+                  );
+                }
                 if (snapshot.hasData && snapshot.data!.docs.isNotEmpty) {
                   mostrated = snapshot.data!.docs;
-                }
 
-                return ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: snapshot.data!.docs.length,
-                    itemBuilder: (context, index) {
-                      return GestureDetector(
-                        onTap: () async {
-                          var data = await Get.to(() => buzpage(),
-                              arguments: mostrated[index]["bid"]);
-                        },
-                        child: SizedBox(
-                          child: Padding(
-                              padding: const EdgeInsets.all(9),
-                              child: Stack(children: [
-                                Container(
-                                  padding: const EdgeInsets.all(10),
-                                  margin: const EdgeInsets.all(1),
-                                  child: Text(''),
-                                  decoration: BoxDecoration(
-                                    image: DecorationImage(
-                                        image: NetworkImage(
-                                            mostrated[index]["coverPhoto"]),
-                                        fit: BoxFit.cover),
-                                    borderRadius: BorderRadius.circular(15),
-                                    color: Colors.red,
+                  return ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: snapshot.data!.docs.length,
+                      itemBuilder: (context, index) {
+                        return GestureDetector(
+                          onTap: () async {
+                            var data = await Get.to(() => buzpage(),
+                                arguments: mostrated[index]["bid"]);
+                          },
+                          child: SizedBox(
+                            child: Padding(
+                                padding: const EdgeInsets.all(9),
+                                child: Stack(children: [
+                                  Container(
+                                    padding: const EdgeInsets.all(10),
+                                    margin: const EdgeInsets.all(1),
+                                    child: Text(''),
+                                    decoration: BoxDecoration(
+                                      image: DecorationImage(
+                                          image: NetworkImage(
+                                              mostrated[index]["image"]),
+                                          fit: BoxFit.cover),
+                                      borderRadius: BorderRadius.circular(15),
+                                    ),
+                                    width: 150,
+                                    height: 300,
                                   ),
-                                  width: 150,
-                                  height: 300,
-                                ),
-                                Positioned(
-                                    bottom: 20,
-                                    left: 20,
-                                    child: Text(
-                                      '${mostrated[index]["Business Name"]}',
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.bold),
-                                    ))
-                              ])),
-                        ),
-                      );
-                    });
+                                  Positioned(
+                                      bottom: 20,
+                                      left: 20,
+                                      child: Text(
+                                        '${mostrated[index]["Business Name"]}',
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.bold),
+                                      ))
+                                ])),
+                          ),
+                        );
+                      });
+                } else {
+                  return SizedBox(
+                    child: Center(
+                      child: Text('server error'),
+                    ),
+                  );
+                }
               }),
         ),
 

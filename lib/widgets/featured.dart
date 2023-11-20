@@ -28,57 +28,84 @@ class _featuredState extends State<featured> {
           child: StreamBuilder<QuerySnapshot>(
               stream: FirebaseFirestore.instance
                   .collection("Business Accounts Requests")
-                  .where('profile_finish', isEqualTo: '')
-                  .limit(7)
+                  .limit(5)
                   .snapshots(),
               builder: (context, snapshot) {
                 print(snapshot);
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return SizedBox(
+                    child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: 5,
+                        itemBuilder: (context, index) {
+                          return SizedBox(
+                            child: Padding(
+                                padding: const EdgeInsets.all(9),
+                                child: Shimmer.fromColors(
+                                  child: Container(
+                                    padding: const EdgeInsets.all(10),
+                                    margin: const EdgeInsets.all(1),
+                                    width: 150,
+                                    height: 300,
+                                  ),
+                                  baseColor: Colors.grey,
+                                  highlightColor: Colors.white,
+                                )),
+                          );
+                        }),
+                  );
+                }
 
                 if (snapshot.hasData && snapshot.data!.docs.isNotEmpty) {
                   fearured = snapshot.data!.docs;
-                }
-
-                return ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: snapshot.data!.docs.length,
-                    itemBuilder: (context, index) {
-                      return GestureDetector(
-                        onTap: () async {
-                          var data = await Get.to(() => buzpage(),
-                              arguments: fearured[index]["bid"]);
-                        },
-                        child: SizedBox(
-                          child: Padding(
-                              padding: const EdgeInsets.all(9),
-                              child: Stack(children: [
-                                Container(
-                                  padding: const EdgeInsets.all(10),
-                                  margin: const EdgeInsets.all(1),
-                                  child: Text(''),
-                                  decoration: BoxDecoration(
-                                    image: DecorationImage(
-                                        image: NetworkImage(
-                                            fearured[index]["coverPhoto"]),
-                                        fit: BoxFit.cover),
-                                    borderRadius: BorderRadius.circular(15),
-                                    color: Colors.red,
+                  return ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: snapshot.data!.docs.length,
+                      itemBuilder: (context, index) {
+                        return GestureDetector(
+                          onTap: () async {
+                            var data = await Get.to(() => buzpage(),
+                                arguments: fearured[index]["bid"]);
+                          },
+                          child: SizedBox(
+                            child: Padding(
+                                padding: const EdgeInsets.all(9),
+                                child: Stack(children: [
+                                  Container(
+                                    padding: const EdgeInsets.all(10),
+                                    margin: const EdgeInsets.all(1),
+                                    child: Text(''),
+                                    decoration: BoxDecoration(
+                                      image: DecorationImage(
+                                          image: NetworkImage(
+                                              fearured[index]["image"]),
+                                          fit: BoxFit.cover),
+                                      borderRadius: BorderRadius.circular(15),
+                                    ),
+                                    width: 150,
+                                    height: 300,
                                   ),
-                                  width: 150,
-                                  height: 300,
-                                ),
-                                Positioned(
-                                    bottom: 20,
-                                    left: 20,
-                                    child: Text(
-                                        '${fearured[index]["Business Name"]}',
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.bold)))
-                              ])),
-                        ),
-                      );
-                    });
+                                  Positioned(
+                                      bottom: 20,
+                                      left: 20,
+                                      child: Text(
+                                          '${fearured[index]["Business Name"]}',
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.bold)))
+                                ])),
+                          ),
+                        );
+                      });
+                } else {
+                  return SizedBox(
+                    height: 300,
+                    child: Center(
+                      child: Text("Server Error!!"),
+                    ),
+                  );
+                }
               }),
         ),
 

@@ -404,7 +404,7 @@ class _IndiAccountState extends State<IndiAccount> {
                                         email: email.value.text.trim(),
                                         password: password.value.text.trim(),
                                         phoneno: phoneNo.value.text.trim(),
-                                        devicetoken: mydevicetoken.toString());
+                                        userInterest: []);
                                   } else {
                                     ScaffoldMessenger.of(context)
                                         .showSnackBar(SnackBar(

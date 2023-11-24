@@ -6,6 +6,7 @@ import 'package:final_project/Pages/IndividualAccount/homepage.dart';
 import 'package:final_project/Pages/IndividualAccount/EventPage.dart';
 import 'package:final_project/Pages/IndividualAccount/Catagory.dart';
 import 'package:final_project/Pages/IndividualAccount/NotificationPage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class mainPage extends StatefulWidget {
   const mainPage({super.key});
@@ -19,9 +20,13 @@ class _mainPageState extends State<mainPage> {
   void initState() {
     super.initState();
     messageCheck();
+    messageCounter();
   }
 
-  Set<String> NotifideMessageId = Set<String>();
+  final Future<SharedPreferences> _preferences =
+      SharedPreferences.getInstance();
+
+  List<String> NotifideMessageId = [];
   final FirebaseAuth _auth = FirebaseAuth.instance;
   List pages = [
     const MyHomePage(),
@@ -83,19 +88,20 @@ class _mainPageState extends State<mainPage> {
     });
   }
 
-  Future<void> messageCounter() async {
+  Future<int> messageCounter() async {
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
         .collection('Annoucment')
         .where('status', isEqualTo: 'unseen')
         .get();
 
     counter = querySnapshot.size;
+    return counter!;
   }
 
   Future messageCheck() async {
     CollectionReference messagesCollection =
         FirebaseFirestore.instance.collection('Annoucment');
-
+    final SharedPreferences preferences = await _preferences;
     messagesCollection.snapshots().listen((QuerySnapshot snapshot) async {
       for (var change in snapshot.docChanges) {
         if (change.type == DocumentChangeType.added) {
@@ -103,10 +109,12 @@ class _mainPageState extends State<mainPage> {
           String messageId;
           messageId = change.doc.id;
           // Trigger a local notification here
-          if (!NotifideMessageId.contains(messageId)) {
+          var idList = await preferences.getStringList('idList') ?? [];
+          if (idList.contains(messageId)) {
             await fetchAnnoucment();
-            await messageCounter();
-            NotifideMessageId.add(messageId);
+
+            idList.add(messageId);
+            await preferences.setStringList('idList', idList);
           }
         }
       }

@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
@@ -18,5 +19,37 @@ class GetMapController extends GetxController {
 
   void setCoordinates(LatLng point) {
     coordinates!.value = point;
+  }
+}
+
+class FirestoreDataService extends GetxController {
+  RxString userName = "".obs;
+
+  void fetchIndiAccount(String uid) {
+    final DocumentReference _myDocument =
+        FirebaseFirestore.instance.collection("Individual Accounts").doc(uid);
+    late Stream<DocumentSnapshot> myDocumentStream;
+    late DocumentSnapshot myDocumentData;
+    // Get initial data
+    _myDocument.get().then((DocumentSnapshot snapshot) {
+      myDocumentData = snapshot;
+
+      // Fetch a specific field from the document
+    });
+
+    // Listen to changes in the document
+    myDocumentStream = _myDocument.snapshots();
+
+    myDocumentStream.listen((DocumentSnapshot snapshot) {
+      // Update local variable with the latest data
+      myDocumentData = snapshot;
+
+      // Fetch a specific field from the updated document
+      userName = snapshot['First Name'] + snapshot['Last Name'];
+      print('Specific Field Updated: $userName');
+
+      // Process the data or trigger any actions
+      print('Received data: $snapshot');
+    });
   }
 }

@@ -137,6 +137,7 @@ class _buzpageState extends State<buzpage> with TickerProviderStateMixin {
                                       ConnectionState.done) {
                                     // The asynchronous operations are complete
                                     return Visibility(
+                                      maintainState: rateCheck!,
                                       replacement: SizedBox.fromSize(
                                         size: Size.square(10),
                                       ),

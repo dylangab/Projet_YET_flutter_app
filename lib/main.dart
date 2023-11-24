@@ -9,6 +9,7 @@ import 'package:final_project/Pages/BusinessAccount/waitingPage.dart';
 import 'package:final_project/Pages/IndividualAccount/Catagory.dart';
 import 'package:final_project/Pages/IndividualAccount/EventPage.dart';
 import 'package:final_project/Pages/IndividualAccount/IndiAccount.dart';
+import 'package:final_project/Pages/IndividualAccount/InterestPage.dart';
 import 'package:final_project/Pages/IndividualAccount/MessagePage.dart';
 import 'package:final_project/Pages/IndividualAccount/NotificationPage.dart';
 import 'package:final_project/Pages/IndividualAccount/Oops.dart';
@@ -52,7 +53,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primaryColor: Colors.white,
       ),
-      home: const mainPage(),
+      home: const InterestPage(),
     );
   }
 }

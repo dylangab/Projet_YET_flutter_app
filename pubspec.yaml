@@ -78,6 +78,7 @@ dependencies:
   firebase_messaging: ^14.6.2
   geolocator: ^8.0.0
   solid_bottom_sheet: ^0.1.10
+  shared_preferences: ^2.2.2
 
 dev_dependencies:
   flutter_test:

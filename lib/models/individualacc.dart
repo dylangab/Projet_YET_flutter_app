@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-
 class individualacc {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -12,7 +11,7 @@ class individualacc {
     required String email,
     required String password,
     required String phoneno,
-    required devicetoken,
+    required List userInterest,
   }) async {
     String res = "error occured";
     try {
@@ -32,7 +31,7 @@ class individualacc {
           'Last Name': lastname,
           'Email': email,
           'Phone Number': phoneno,
-          'devicetoken': devicetoken,
+          'userInterest': userInterest,
           'uid': cred.user!.uid,
         });
       }

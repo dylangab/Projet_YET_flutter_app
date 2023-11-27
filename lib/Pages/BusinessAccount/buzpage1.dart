@@ -23,6 +23,7 @@ class buzpage extends StatefulWidget {
 }
 
 class _buzpageState extends State<buzpage> with TickerProviderStateMixin {
+  final _auth = FirebaseAuth.instance.currentUser!.uid;
   List<DocumentSnapshot> annoucmnet = [];
   List<double> ratingList = [];
   List<String> UserIdList = [];
@@ -37,7 +38,7 @@ class _buzpageState extends State<buzpage> with TickerProviderStateMixin {
   String _text3 = loremIpsum(words: 150, initWithLorem: true);
   bool? checker;
   bool? idCheck;
-  bool? rateCheck;
+  bool rateCheck = true;
   @override
   void initState() {
     super.initState();
@@ -102,152 +103,169 @@ class _buzpageState extends State<buzpage> with TickerProviderStateMixin {
                     color: const Color.fromARGB(255, 238, 240, 235),
                     child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: <Widget>[
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: <Widget>[
-                                  Padding(
-                                      padding: EdgeInsets.only(top: 15),
-                                      child: Icon(
-                                        Icons.star_rate,
-                                        color: Colors.yellow,
-                                      )),
-                                  Padding(
-                                      padding: EdgeInsets.only(bottom: 10),
-                                      child: Text(
-                                        '4/5',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.w400),
-                                      )),
-                                ],
-                              ),
-                              FutureBuilder(
-                                future: raterUid(
-                                    FirebaseAuth.instance.currentUser!.uid
-                                        .toString()
-                                        .trim(),
-                                    snapshot.data!["rateUids"]),
-                                builder: (context, snapshots) {
-                                  if (snapshots.connectionState ==
-                                      ConnectionState.done) {
-                                    // The asynchronous operations are complete
-                                    return Visibility(
-                                      maintainState: rateCheck!,
-                                      replacement: SizedBox.fromSize(
-                                        size: Size.square(10),
-                                      ),
-                                      visible: rateCheck!,
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        children: <Widget>[
-                                          Padding(
-                                              padding: EdgeInsets.only(top: 15),
-                                              child: IconButton(
-                                                  onPressed: () {
-                                                    AlertDialog(
-                                                      title: Text("Give rate"),
-                                                      content:
-                                                          RatingBar.builder(
-                                                        initialRating: 1,
-                                                        minRating: 1,
-                                                        direction:
-                                                            Axis.horizontal,
-                                                        allowHalfRating: true,
-                                                        itemCount: 5,
-                                                        itemPadding:
-                                                            const EdgeInsets
-                                                                    .symmetric(
-                                                                horizontal:
-                                                                    4.0),
-                                                        itemBuilder:
-                                                            (context, _) =>
-                                                                const Icon(
-                                                          Icons.star,
-                                                          color: Colors.amber,
-                                                        ),
-                                                        onRatingUpdate:
-                                                            (rating) {
-                                                          Rating = rating;
-                                                          print(Rating);
+                          Container(
+                            margin: EdgeInsets.only(left: 30),
+                            alignment: Alignment.centerRight,
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: <Widget>[
+                                    Padding(
+                                        padding: EdgeInsets.only(top: 15),
+                                        child: Icon(
+                                          Icons.star_rate,
+                                          color: Colors.yellow,
+                                        )),
+                                    Padding(
+                                        padding: EdgeInsets.only(bottom: 10),
+                                        child: Text(
+                                          '4/5',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.w400),
+                                        )),
+                                  ],
+                                ),
+                                FutureBuilder(
+                                  future: raterUid(
+                                      _auth.toString().trim(),
+                                      snapshot.data!["rateUids"],
+                                      snapshot.data!["bid"]),
+                                  builder: (context, snapshots) {
+                                    if (snapshots.connectionState ==
+                                        ConnectionState.done) {
+                                      // The asynchronous operations are complete
+                                      return Visibility(
+                                        maintainState: true,
+                                        visible: rateCheck,
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          children: <Widget>[
+                                            Padding(
+                                                padding:
+                                                    EdgeInsets.only(top: 0),
+                                                child: IconButton(
+                                                    onPressed: () {
+                                                      print("rate");
+                                                      showDialog(
+                                                        context: context,
+                                                        builder: (context) {
+                                                          return AlertDialog(
+                                                            title: Text(
+                                                                "Give rate"),
+                                                            content: RatingBar
+                                                                .builder(
+                                                              initialRating: 1,
+                                                              minRating: 1,
+                                                              direction: Axis
+                                                                  .horizontal,
+                                                              allowHalfRating:
+                                                                  true,
+                                                              itemCount: 5,
+                                                              itemPadding:
+                                                                  const EdgeInsets
+                                                                          .symmetric(
+                                                                      horizontal:
+                                                                          4.0),
+                                                              itemBuilder:
+                                                                  (context,
+                                                                          _) =>
+                                                                      const Icon(
+                                                                Icons.star,
+                                                                color: Colors
+                                                                    .amber,
+                                                              ),
+                                                              onRatingUpdate:
+                                                                  (rating) {
+                                                                Rating = rating;
+                                                                print(Rating);
+                                                              },
+                                                            ),
+                                                            actions: [
+                                                              TextButton(
+                                                                  onPressed:
+                                                                      () async {
+                                                                    double
+                                                                        rating;
+                                                                    String uid =
+                                                                        await snapshot
+                                                                            .data!['bid'];
+                                                                    print(uid);
+                                                                    await updateRatingList(
+                                                                        uid,
+                                                                        Rating!,
+                                                                        snapshot
+                                                                            .data!['ratingList']);
+                                                                    rating = await calculateAverageRating(
+                                                                        snapshot
+                                                                            .data!["ratingList"]);
+                                                                    print(
+                                                                        rating);
+
+                                                                    await submitRating(
+                                                                        rating,
+                                                                        uid);
+                                                                  },
+                                                                  child: Text(
+                                                                      "Submit"))
+                                                            ],
+                                                          );
                                                         },
-                                                      ),
-                                                      actions: [
-                                                        TextButton(
-                                                            onPressed:
-                                                                () async {
-                                                              await FirebaseFirestore
-                                                                  .instance
-                                                                  .collection(
-                                                                      "")
-                                                                  .doc("")
-                                                                  .update({
-                                                                'ratingList':
-                                                                    FieldValue
-                                                                        .arrayUnion([
-                                                                  Rating
-                                                                ])
-                                                              });
-                                                              await calculateAverageRating(
-                                                                  snapshot.data![
-                                                                      "rateUids"]);
-                                                            },
-                                                            child:
-                                                                Text("Submit"))
-                                                      ],
-                                                    );
-                                                  },
-                                                  icon:
-                                                      Icon(Icons.star_border))),
-                                          Padding(
-                                              padding:
-                                                  EdgeInsets.only(bottom: 10),
-                                              child: Text(
-                                                "Rate this",
-                                                style: TextStyle(
-                                                    fontWeight:
-                                                        FontWeight.w400),
-                                              )),
-                                        ],
-                                      ),
-                                    ); // Use snapshot.data with a fallback value
-                                  } else {
-                                    // The asynchronous operations are still in progress
-                                    return Scaffold(
-                                        body: Center(
-                                            child:
-                                                CircularProgressIndicator())); // You can show a loading indicator here
-                                  }
-                                },
-                              ),
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: <Widget>[
-                                  Padding(
-                                      padding:
-                                          EdgeInsets.fromLTRB(0, 20, 100, 0),
-                                      child: Text(
-                                        "(${snapshot.data!["followerIds"].length})",
-                                        style: const TextStyle(
-                                            fontWeight: FontWeight.w400),
-                                      )),
-                                  const Padding(
-                                      padding:
-                                          EdgeInsets.fromLTRB(0, 5, 100, 0),
-                                      child: Text(
-                                        'Followers',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.w400),
-                                      ))
-                                ],
-                              ),
-                            ],
-                          )
+                                                      );
+                                                    },
+                                                    icon: Icon(
+                                                        Icons.star_border))),
+                                            Padding(
+                                                padding:
+                                                    EdgeInsets.only(bottom: 0),
+                                                child: Text(
+                                                  "Rate this",
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.w400),
+                                                )),
+                                          ],
+                                        ),
+                                      ); // Use snapshot.data with a fallback value
+                                    } else {
+                                      // The asynchronous operations are still in progress
+                                      return Center(
+                                          child:
+                                              CircularProgressIndicator()); // You can show a loading indicator here
+                                    }
+                                  },
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 20),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: <Widget>[
+                                      Padding(
+                                          padding: EdgeInsets.fromLTRB(
+                                              0, 20, 100, 0),
+                                          child: Text(
+                                            "(${snapshot.data!["followerIds"].length})",
+                                            style: const TextStyle(
+                                                fontWeight: FontWeight.w400),
+                                          )),
+                                      const Padding(
+                                          padding:
+                                              EdgeInsets.fromLTRB(0, 5, 100, 0),
+                                          child: Text(
+                                            'Followers',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.w400),
+                                          ))
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
                         ]),
                   ),
                   Padding(
@@ -759,23 +777,6 @@ class _buzpageState extends State<buzpage> with TickerProviderStateMixin {
                                                                       .w400),
                                                         ),
                                                       ),
-                                                      /*  Padding(
-                                                  padding:
-                                                      EdgeInsets.only(left: 10),
-                                                  child: Icon(
-                                                      Icons.more_horiz_sharp),
-                                                ),
-                                                Padding(
-                                                  padding: EdgeInsets.only(
-                                                      right: 80),
-                                                  child: Text(
-                                                    "10 mins ago",
-                                                    style: TextStyle(
-                                                        fontSize: 16,
-                                                        fontWeight:
-                                                            FontWeight.w300),
-                                                  ),
-                                                )*/
                                                     ],
                                                   ),
                                                   Padding(
@@ -803,144 +804,6 @@ class _buzpageState extends State<buzpage> with TickerProviderStateMixin {
                                         child: Text("No Reviews Yet...."),
                                       ),
                                     ),
-
-                              /* ListView(
-                                children: [
-                                  Container(
-                                    decoration: BoxDecoration(
-                                        borderRadius:
-                                            BorderRadius.circular(15)),
-                                    width: 400,
-                                    child: Card(
-                                      shape: OutlineInputBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(15)),
-                                      color: const Color.fromARGB(
-                                          255, 238, 240, 235),
-                                      elevation: 8,
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(15),
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            const Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                CircleAvatar(
-                                                  child: Center(
-                                                    child: Text("M"),
-                                                  ),
-                                                ),
-                                                Text(
-                                                  "Sara chakamola",
-                                                  style: TextStyle(
-                                                      fontSize: 18,
-                                                      fontWeight:
-                                                          FontWeight.w400),
-                                                ),
-                                                /*  Padding(
-                                                  padding:
-                                                      EdgeInsets.only(left: 10),
-                                                  child: Icon(
-                                                      Icons.more_horiz_sharp),
-                                                ),
-                                                Padding(
-                                                  padding: EdgeInsets.only(
-                                                      right: 80),
-                                                  child: Text(
-                                                    "10 mins ago",
-                                                    style: TextStyle(
-                                                        fontSize: 16,
-                                                        fontWeight:
-                                                            FontWeight.w300),
-                                                  ),
-                                                )*/
-                                              ],
-                                            ),
-                                            Text(
-                                              _text1,
-                                              style: const TextStyle(
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.w300),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  Container(
-                                    decoration: BoxDecoration(
-                                        borderRadius:
-                                            BorderRadius.circular(15)),
-                                    width: 400,
-                                    child: Card(
-                                      shape: OutlineInputBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(15)),
-                                      color: const Color.fromARGB(
-                                          255, 238, 240, 235),
-                                      elevation: 8,
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(15),
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            const Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Text(
-                                                  "Sara chakamola",
-                                                  style: TextStyle(
-                                                      fontSize: 18,
-                                                      fontWeight:
-                                                          FontWeight.w400),
-                                                ),
-                                                Padding(
-                                                  padding:
-                                                      EdgeInsets.only(left: 10),
-                                                  child: Icon(
-                                                      Icons.more_horiz_sharp),
-                                                ),
-                                                Padding(
-                                                  padding: EdgeInsets.only(
-                                                      right: 80),
-                                                  child: Text(
-                                                    "10 mins ago",
-                                                    style: TextStyle(
-                                                        fontSize: 16,
-                                                        fontWeight:
-                                                            FontWeight.w300),
-                                                  ),
-                                                )
-                                              ],
-                                            ),
-                                            Text(
-                                              _text1,
-                                              style: const TextStyle(
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.w300),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              ),*/
                             ),
                             Expanded(
                               child: SizedBox(
@@ -1086,158 +949,7 @@ class _buzpageState extends State<buzpage> with TickerProviderStateMixin {
                                   )
                                 : const Center(
                                     child: Text("No Photos Yet...."),
-                                  )
-
-                            /* GridView.count(
-                            crossAxisCount: 3,
-                            mainAxisSpacing: 5,
-                            crossAxisSpacing: 5,
-                            children: [
-                              Container(
-                                color: const Color.fromARGB(255, 238, 240, 235),
-                                height: 70,
-                                width: 70,
-                              ),
-                              Container(
-                                color: const Color.fromARGB(255, 238, 240, 235),
-                                height: 70,
-                                width: 70,
-                              ),
-                              Container(
-                                color: const Color.fromARGB(255, 238, 240, 235),
-                                height: 70,
-                                width: 70,
-                              ),
-                              Container(
-                                color: const Color.fromARGB(255, 238, 240, 235),
-                                height: 70,
-                                width: 70,
-                              ),
-                              Container(
-                                color: const Color.fromARGB(255, 238, 240, 235),
-                                height: 70,
-                                width: 70,
-                              )
-                            ],
-                          ),*/
-                            )
-                        /*
-                        Container(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text(
-                                  'Description :',
-                                  style: TextStyle(fontSize: 14),
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(15.0),
-                                child: Text(
-                                  snapshot.data!["description"].toString(),
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text(
-                                  'Services :',
-                                  style: TextStyle(fontSize: 14),
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(15),
-                                child: Container(
-                                  child: Text(
-                                      snapshot.data!['service'].toString()),
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(15),
-                                child: Container(
-                                  child: Text(snapshot.data!['openinghours']
-                                      .toString()),
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(15),
-                                child: Container(
-                                  child: Text(snapshot.data!['closinghours']
-                                      .toString()),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        // buildcommentSection(),
-                        Container(
-                            child: Form(
-                                child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(10.0),
-                              child: Text(
-                                'write a comment',
-                                style: TextStyle(fontSize: 16),
-                              ),
-                            ),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.fromLTRB(10, 10, 70, 10),
-                              child: TextFormField(
-                                controller: comment,
-                                decoration: InputDecoration(
-                                    border: OutlineInputBorder()),
-                              ),
-                            ),
-                            Center(
-                              child: ElevatedButton(
-                                  onPressed: () async {
-                                    await FirebaseFirestore.instance
-                                        .collection('Business Account Requests')
-                                        .doc("${Get.arguments}")
-                                        .collection('comments')
-                                        .add({
-                                      'commentBy': FirebaseAuth
-                                          .instance.currentUser!.uid,
-                                      'Comment': comment.value.text,
-                                      'timestamp': FieldValue.serverTimestamp(),
-                                    });
-                                  },
-                                  child: Text('Submit comment')),
-                            )
-                          ],
-                        ))),
-                        Row(
-                          children: [
-                            Container(
-                              child: RatingBar.builder(
-                                initialRating: 1,
-                                minRating: 1,
-                                direction: Axis.horizontal,
-                                allowHalfRating: true,
-                                itemCount: 5,
-                                itemPadding:
-                                    const EdgeInsets.symmetric(horizontal: 4.0),
-                                itemBuilder: (context, _) => Icon(
-                                  Icons.star,
-                                  color: Colors.amber,
-                                ),
-                                onRatingUpdate: (rating) {
-                                  Rating = rating;
-                                  print(Rating);
-                                },
-                              ),
-                            ),
-                            ElevatedButton(
-                              child: Text("submit"),
-                              onPressed: () {},
-                            )
-                          ],
-                        )*/
+                                  ))
                       ],
                     ),
                   )
@@ -1320,21 +1032,39 @@ class _buzpageState extends State<buzpage> with TickerProviderStateMixin {
     }
   }
 
-  Future<void> calculateAverageRating(List snapshot) async {
-    double sum = snapshot.reduce((a, b) => a + b);
-    average = sum / snapshot.length;
-    await FirebaseFirestore.instance.collection("").doc().update({
-      'rating': average,
-    });
+  Future<double> calculateAverageRating(List snapshot) async {
+    List rate = await snapshot;
+    double sum = rate.reduce((a, b) => a + b);
+    average = sum / rate.length;
+    return average!;
   }
 
-  void submitRating() async {
+  Future<void> submitRating(double rating, String uid) async {
     DocumentReference docRef = FirebaseFirestore.instance
-        .collection('Business Account Requests')
-        .doc("${Get.arguments}");
+        .collection("Business Accounts Requests")
+        .doc(uid);
 
     await docRef.update({
-      "rating": average,
+      "rating": rating,
+    }).then((value) => FirebaseFirestore.instance
+            .collection("Business Accounts Requests")
+            .doc(uid)
+            .update({
+          'rateUids': FieldValue.arrayUnion([uid]),
+        }));
+  }
+
+  Future<void> updateRatingList(
+      String uid, double rating, List snapshot) async {
+    List rateList = snapshot;
+    rateList.add(rating);
+
+    DocumentReference docRef = FirebaseFirestore.instance
+        .collection("Business Accounts Requests")
+        .doc(uid);
+
+    await docRef.update({
+      "ratingList": rateList,
     });
   }
 
@@ -1388,15 +1118,20 @@ class _buzpageState extends State<buzpage> with TickerProviderStateMixin {
     return checker!;
   }
 
-  Future<bool> raterUid(String uid, List rateUids) async {
-    bool existes;
-    if (rateUids.contains(uid.trim())) {
-      existes = true;
+  Future<bool> raterUid(
+      String snapshotuid, List snapshotrateUids, String snapshotbid) async {
+    bool visable;
+    List uids = snapshotrateUids;
+    String uid = snapshotuid;
+
+    if (uids.contains(uid)) {
+      visable = false;
     } else {
-      existes = false;
+      visable = true;
     }
-    rateCheck = existes;
-    return rateCheck!;
+    rateCheck = visable;
+
+    return rateCheck;
   }
 
   void reviewSection(List snapshot) {
@@ -1438,23 +1173,6 @@ class _buzpageState extends State<buzpage> with TickerProviderStateMixin {
                           style: TextStyle(
                               fontSize: 18, fontWeight: FontWeight.w400),
                         ),
-                        /*  Padding(
-                                                  padding:
-                                                      EdgeInsets.only(left: 10),
-                                                  child: Icon(
-                                                      Icons.more_horiz_sharp),
-                                                ),
-                                                Padding(
-                                                  padding: EdgeInsets.only(
-                                                      right: 80),
-                                                  child: Text(
-                                                    "10 mins ago",
-                                                    style: TextStyle(
-                                                        fontSize: 16,
-                                                        fontWeight:
-                                                            FontWeight.w300),
-                                                  ),
-                                                )*/
                       ],
                     ),
                     Text(

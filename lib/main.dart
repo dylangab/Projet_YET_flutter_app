@@ -14,6 +14,7 @@ import 'package:final_project/Pages/IndividualAccount/MessagePage.dart';
 import 'package:final_project/Pages/IndividualAccount/NotificationPage.dart';
 import 'package:final_project/Pages/IndividualAccount/Oops.dart';
 import 'package:final_project/Pages/IndividualAccount/SearchPage.dart';
+import 'package:final_project/Pages/IndividualAccount/getLocationPage.dart';
 import 'package:final_project/localnoti.dart';
 import 'package:final_project/mainPage.dart';
 import 'package:final_project/Pages/IndividualAccount/NotificationPage.dart';
@@ -53,7 +54,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primaryColor: Colors.white,
       ),
-      home: const InterestPage(),
+      home: const GetLocation(),
     );
   }
 }

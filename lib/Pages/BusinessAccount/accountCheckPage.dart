@@ -87,7 +87,7 @@ class _AccountCheckPageState extends State<AccountCheckPage> {
           documentSnapshot.get('profile_finish') == "unfinished") {
         num = 2;
       } else if (documentSnapshot.get('approvalStatus') == "approved" &&
-          documentSnapshot.get('profile_finish') == "finished") {
+          documentSnapshot.get('profile_finish') == "yes") {
         num = 3;
       }
     } else if (exists == false) {

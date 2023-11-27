@@ -954,7 +954,8 @@ class _FinishProPageState extends State<FinishProPage> {
                               .collection('Business Accounts Requests')
                               .doc(_auth.currentUser!.uid)
                               .collection('bussiness_Hours')
-                              .add(businessHours));
+                              .doc(_auth.currentUser!.uid)
+                              .set(businessHours));
                     }
                   },
                   child: const Text('Submit')),

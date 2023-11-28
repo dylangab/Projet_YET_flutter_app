@@ -59,12 +59,11 @@ class FirestoreDataService extends GetxController {
 class GetAddress extends GetxController {
   RxString currentAddress = "".obs;
 
-  Future<void> getCurrentAddress() async {
+  Future<String> getCurrentAddress() async {
     LocationPermission permission = await Geolocator.requestPermission();
     if (permission == LocationPermission.denied ||
         permission == LocationPermission.deniedForever) {
       print("Location permission denied by user");
-      return;
     }
 
     try {
@@ -86,15 +85,17 @@ class GetAddress extends GetxController {
     } catch (e) {
       print("Error getting location: $e");
     }
+    return currentAddress.value;
   }
 }
 
 class individualAccountFetch extends GetxController {
   RxString userName = "".obs;
 
-  Future<void> firebaseService(String uid) async {
-    final DocumentReference reference =
-        FirebaseFirestore.instance.collection("Individual Accounts").doc(uid);
+  Future<void> firebaseService() async {
+    final DocumentReference reference = FirebaseFirestore.instance
+        .collection("Indivdual Accounts")
+        .doc("vGM1BF3bW7bcIYgrGLvY6vzClRu1");
     late Stream<DocumentSnapshot> stream;
     late DocumentSnapshot documentSnapshot;
 
@@ -104,7 +105,7 @@ class individualAccountFetch extends GetxController {
     stream.listen((event) {
       documentSnapshot = event;
       userName.value =
-          "${documentSnapshot['First Name'] + documentSnapshot['Last Name']}";
+          "${documentSnapshot.get('First Name') + documentSnapshot.get('Last Name')}";
     });
   }
 }

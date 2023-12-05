@@ -108,41 +108,42 @@ class _CatagoryPageState extends State<CatagoryPage> {
                       )),
                 ],
               ),
-              Container(
-                  height: 615,
-                  color: const Color.fromARGB(255, 238, 240, 235),
-                  child: FutureBuilder(
-                    future: fetchCatagory(),
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.done) {
-                        // The asynchronous operations are complete
-                        return ListView.builder(
-                            itemCount: _catagoryList.length,
-                            itemBuilder: (context, index) {
-                              return GestureDetector(
-                                onTap: () async {
-                                  var data = await Get.to(
-                                      () => const SelectedCatagoryPage(),
-                                      arguments: _catagoryList[index]);
-                                },
-                                child: ListTile(
-                                    trailing: IconButton(
-                                      icon: const Icon(
-                                          Icons.arrow_right_alt_sharp),
-                                      onPressed: () {},
-                                    ),
-                                    title: Text(_catagoryList[index])),
-                              );
-                            }); // Use snapshot.data with a fallback value
-                      } else {
-                        // The asynchronous operations are still in progress
-                        return Scaffold(
-                            body: Center(
-                                child:
-                                    CircularProgressIndicator())); // You can show a loading indicator here
-                      }
-                    },
-                  )),
+              Expanded(
+                child: Container(
+                    color: const Color.fromARGB(255, 238, 240, 235),
+                    child: FutureBuilder(
+                      future: fetchCatagory(),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState == ConnectionState.done) {
+                          // The asynchronous operations are complete
+                          return ListView.builder(
+                              itemCount: _catagoryList.length,
+                              itemBuilder: (context, index) {
+                                return GestureDetector(
+                                  onTap: () async {
+                                    var data = await Get.to(
+                                        () => const SelectedCatagoryPage(),
+                                        arguments: _catagoryList[index]);
+                                  },
+                                  child: ListTile(
+                                      trailing: IconButton(
+                                        icon: const Icon(
+                                            Icons.arrow_right_alt_sharp),
+                                        onPressed: () {},
+                                      ),
+                                      title: Text(_catagoryList[index])),
+                                );
+                              }); // Use snapshot.data with a fallback value
+                        } else {
+                          // The asynchronous operations are still in progress
+                          return Scaffold(
+                              body: Center(
+                                  child:
+                                      CircularProgressIndicator())); // You can show a loading indicator here
+                        }
+                      },
+                    )),
+              ),
             ])));
   }
 

@@ -40,7 +40,7 @@ class _BpPageState extends State<BpPage> {
   final FocusNode _eventNodeDescription = FocusNode();
   final GetMapController controller = Get.put(GetMapController());
   List tokenList = [];
-  List userIdList = [];
+  List<String> userIdList = [];
   String? photoUrl;
   String? _coordinateText;
   final ImagePicker _imagePicker = ImagePicker();
@@ -49,6 +49,15 @@ class _BpPageState extends State<BpPage> {
   XFile? file;
   bool? imagechecker;
   bool? checker;
+  String? bussinessName;
+  String? description;
+  String? service;
+  String? profilePic;
+  String? firstName;
+  String? lastName;
+  String? phoneNo;
+  String? address;
+  LatLng? coordinates;
 
   @override
   Widget build(BuildContext context) {
@@ -567,8 +576,8 @@ class _BpPageState extends State<BpPage> {
                                                     'eventDescription':
                                                         _eventDescription
                                                             .value.text,
-                                                    'photoUrl': snapshot
-                                                        .data!["profilePic"],
+                                                    'profilePic': profilePic,
+                                                    'photoUrl': photoUrl,
                                                     'comments': "",
                                                     'likeduid': "",
                                                     'coodinates': LatLng(
@@ -722,16 +731,28 @@ class _BpPageState extends State<BpPage> {
                                             width: 150,
                                             child: ElevatedButton(
                                               onPressed: () async {
+                                                await getUserId(
+                                                        _auth.currentUser!.uid)
+                                                    .then((value) {
+                                                  for (var followerId
+                                                      in value) {
+                                                    saveMessageindi(followerId,
+                                                            '', '', '')
+                                                        .then((value) => null);
+                                                  }
+                                                });
                                                 for (var followerId
                                                     in userIdList) {
                                                   await saveMessageindi(
                                                           followerId,
-                                                          '',
-                                                          '',
-                                                          '')
+                                                          profilePic!,
+                                                          bussinessName!,
+                                                          _auth
+                                                              .currentUser!.uid)
                                                       .then((value) => null);
                                                 }
-                                                await saveMessageBp('', '', '');
+                                                await saveMessageBp(
+                                                    _auth.currentUser!.uid);
                                               },
                                               style: ElevatedButton.styleFrom(
                                                   backgroundColor:
@@ -938,269 +959,6 @@ class _BpPageState extends State<BpPage> {
         );
       },
     );
-    /*
-        */
-
-    /* StreamBuilder<DocumentSnapshot>(
-            stream: FirebaseFirestore.instance
-                .collection("Business Accounts Requests")
-                .doc(_auth.currentUser!.uid)
-                .snapshots(),
-            builder: (context, snapshot) {
-              print(snapshot);
-
-              return ListView(
-                scrollDirection: Axis.vertical,
-                children: [
-                  Container(
-                    color: Colors.teal,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: <Widget>[
-                        Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 25),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: <Widget>[
-                                    Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: <Widget>[
-                                        const Padding(
-                                            padding: EdgeInsets.symmetric(
-                                                horizontal: 10),
-                                            child: CircleAvatar(
-                                              radius: 40,
-                                            )),
-                                        Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                vertical: 0),
-                                            child: Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              children: <Widget>[
-                                                Padding(
-                                                    padding:
-                                                        EdgeInsets.symmetric(
-                                                            horizontal: 20),
-                                                    child: Text(snapshot
-                                                        .data!["Business Name"]
-                                                        .toString())),
-                                                Padding(
-                                                    padding: const EdgeInsets
-                                                            .symmetric(
-                                                        vertical: 15),
-                                                    child: ElevatedButton(
-                                                        onPressed: () {
-                                                          Navigator.push(
-                                                              context,
-                                                              MaterialPageRoute(
-                                                                  builder:
-                                                                      (context) =>
-                                                                          const LoginTab()));
-                                                        },
-                                                        style: const ButtonStyle(
-                                                            shape: MaterialStatePropertyAll(
-                                                                RoundedRectangleBorder(
-                                                                    borderRadius:
-                                                                        BorderRadius.all(Radius.circular(
-                                                                            20)))),
-                                                            backgroundColor:
-                                                                MaterialStatePropertyAll(
-                                                                    Colors
-                                                                        .white)),
-                                                        child: const Text(
-                                                          'Account Approval Status: pending',
-                                                          style: TextStyle(
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w600,
-                                                              color:
-                                                                  Colors.black),
-                                                        ))),
-                                              ],
-                                            )),
-                                      ],
-                                    ),
-                                  ],
-                                )
-                              ],
-                            )),
-                      ],
-                    ),
-                  ),
-                  Container(
-                    decoration: const BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(25),
-                            topRight: Radius.circular(25))),
-                    child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [],
-                          ),
-                          Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 1),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  SizedBox(
-                                    height: 50,
-                                  ),
-                                  Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
-                                    children: [
-                                      Stack(
-                                        fit: StackFit.loose,
-                                        children: [
-                                          GestureDetector(
-                                            onTap: () {
-                                              Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          const PostEvent()));
-                                            },
-                                            child: Container(
-                                              height: 150,
-                                              width: 150,
-                                              decoration: const BoxDecoration(
-                                                  color: Colors.grey,
-                                                  borderRadius:
-                                                      BorderRadius.all(
-                                                          Radius.circular(20))),
-                                            ),
-                                          ),
-                                          const Positioned(
-                                            bottom: 70,
-                                            left: 45,
-                                            child: Center(
-                                                child: Text('Add Event')),
-                                          )
-                                        ],
-                                      ),
-                                      Stack(
-                                        fit: StackFit.loose,
-                                        children: [
-                                          GestureDetector(
-                                            onTap: () {
-                                              Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          const Annoucmentpage()));
-                                            },
-                                            child: Container(
-                                              height: 150,
-                                              width: 150,
-                                              decoration: const BoxDecoration(
-                                                  color: Colors.grey,
-                                                  borderRadius:
-                                                      BorderRadius.all(
-                                                          Radius.circular(20))),
-                                            ),
-                                          ),
-                                          const Positioned(
-                                            bottom: 70,
-                                            left: 20,
-                                            child: Center(
-                                                child: Text('Add Annoucment')),
-                                          )
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(top: 20),
-                                    child: Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceEvenly,
-                                      children: [
-                                        Stack(
-                                          fit: StackFit.loose,
-                                          children: [
-                                            GestureDetector(
-                                              onTap: () {
-                                                Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            const PostEvent()));
-                                              },
-                                              child: Container(
-                                                height: 150,
-                                                width: 150,
-                                                decoration: const BoxDecoration(
-                                                    color: Colors.grey,
-                                                    borderRadius:
-                                                        BorderRadius.all(
-                                                            Radius.circular(
-                                                                20))),
-                                              ),
-                                            ),
-                                            const Positioned(
-                                              bottom: 70,
-                                              left: 45,
-                                              child: Center(
-                                                  child: Text('Add Photos')),
-                                            )
-                                          ],
-                                        ),
-                                        Stack(
-                                          fit: StackFit.loose,
-                                          children: [
-                                            GestureDetector(
-                                              onTap: () {
-                                                Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            const Annoucmentpage()));
-                                              },
-                                              child: Container(
-                                                height: 150,
-                                                width: 150,
-                                                decoration: const BoxDecoration(
-                                                    color: Colors.grey,
-                                                    borderRadius:
-                                                        BorderRadius.all(
-                                                            Radius.circular(
-                                                                20))),
-                                              ),
-                                            ),
-                                            const Positioned(
-                                              bottom: 70,
-                                              left: 45,
-                                              child: Center(
-                                                  child: Text('Add Vidoes')),
-                                            )
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    height: 20,
-                                  ),
-                                ],
-                              ))
-                        ]),
-                  ),
-                ],
-              );
-            })*/
   }
 
   void getTokenList() async {
@@ -1215,45 +973,39 @@ class _BpPageState extends State<BpPage> {
                 }));
   }
 
-  void getUserId() async {
+  Future<List> getUserId(String bid) async {
     await FirebaseFirestore.instance
-        .collection('Business Account Requests')
-        .doc(FirebaseAuth.instance.currentUser!.uid)
-        .collection("followers")
+        .collection("Business Accounts Requests")
+        .doc(bid)
         .get()
-        .then(
-            (QuerySnapshot querySnapshot) => querySnapshot.docs.forEach((doc) {
-                  tokenList.add(doc["uid"]);
-                }));
+        .then((value) => userIdList = value.get('followerIdList'));
+    return userIdList;
   }
 
   Future<void> saveMessageindi(
       followerId, String profilePic, String businessName, String bid) async {
     await FirebaseFirestore.instance
-        .collection("")
+        .collection("Indivdual Accounts")
         .doc(followerId)
         .collection('messages')
         .add({
       'senderName': businessName,
       'bid': bid,
       'profilePic': profilePic,
-      'timestamp': FieldValue.serverTimestamp(),
+      'timestamp': DateTime.now(),
       'message': _annoucment.value.text,
       'title': _title.value.text,
+      'status': "unseen"
     });
   }
 
-  Future<void> saveMessageBp(
-      String profilePic, String businessName, String bid) async {
+  Future<void> saveMessageBp(String bid) async {
     await FirebaseFirestore.instance
-        .collection("")
+        .collection("Business Accounts Requests")
         .doc(_auth.currentUser!.uid)
         .collection('My_messages')
         .add({
-      'senderName': businessName,
-      'bid': bid,
-      'profilePic': profilePic,
-      'timestamp': FieldValue.serverTimestamp(),
+      'timestamp': DateTime.now(),
       'message': _annoucment.value.text,
       'title': _title.value.text,
     });
@@ -1314,5 +1066,28 @@ class _BpPageState extends State<BpPage> {
       checker = true;
     }
     return checker!;
+  }
+
+  Future<void> getAccount(String bid) async {
+    final DocumentReference reference = FirebaseFirestore.instance
+        .collection("Business Accounts Requests")
+        .doc(bid);
+    late Stream<DocumentSnapshot> stream;
+    late DocumentSnapshot documentSnapshot;
+
+    reference.get().then((value) => documentSnapshot = value);
+
+    stream = reference.snapshots();
+    stream.listen((event) {
+      documentSnapshot = event;
+      bussinessName = documentSnapshot.get('Business Name');
+      description = documentSnapshot.get('description');
+      service = documentSnapshot.get('service');
+      profilePic = documentSnapshot.get('profile_Pic');
+      firstName = documentSnapshot.get('First Name');
+      lastName = documentSnapshot.get('Last Name');
+      address = documentSnapshot.get('Address');
+      phoneNo = documentSnapshot.get('Phone Number');
+    });
   }
 }

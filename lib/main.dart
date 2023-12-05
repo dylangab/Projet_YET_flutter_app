@@ -4,6 +4,7 @@ import 'package:final_project/Pages/BusinessAccount/PostEventPage.dart';
 import 'package:final_project/Pages/BusinessAccount/accountCheckPage.dart';
 import 'package:final_project/Pages/BusinessAccount/buzpage1.dart';
 import 'package:final_project/Pages/BusinessAccount/chooseLocation.dart';
+import 'package:final_project/Pages/BusinessAccount/editprofile.dart';
 import 'package:final_project/Pages/BusinessAccount/finishProfilePage.dart';
 import 'package:final_project/Pages/BusinessAccount/waitingPage.dart';
 import 'package:final_project/Pages/IndividualAccount/Catagory.dart';
@@ -54,7 +55,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primaryColor: Colors.white,
       ),
-      home: const GetLocation(),
+      home: const mainPage(),
     );
   }
 }

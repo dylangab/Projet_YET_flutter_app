@@ -39,9 +39,11 @@ class _buzpageState extends State<buzpage> with TickerProviderStateMixin {
   bool? checker;
   bool? idCheck;
   bool rateCheck = true;
+  String? bid;
   @override
   void initState() {
     super.initState();
+    bid = Get.arguments;
   }
 
   @override
@@ -1134,59 +1136,8 @@ class _buzpageState extends State<buzpage> with TickerProviderStateMixin {
     return rateCheck;
   }
 
-  void reviewSection(List snapshot) {
-    if (snapshot.isEmpty) {
-      Container(
-        child: Center(
-          child: Text("No Reviews Yet...."),
-        ),
-      );
-    } else if (snapshot.isNotEmpty) {
-      ListView.builder(
-        itemCount: snapshot.length,
-        itemBuilder: (context, index) {
-          return Container(
-            decoration: BoxDecoration(borderRadius: BorderRadius.circular(15)),
-            width: 400,
-            child: Card(
-              shape:
-                  OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
-              color: const Color.fromARGB(255, 238, 240, 235),
-              elevation: 8,
-              child: Padding(
-                padding: const EdgeInsets.all(15),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        CircleAvatar(
-                          child: Center(
-                            child: Text("M"),
-                          ),
-                        ),
-                        Text(
-                          "Sara chakamola",
-                          style: TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.w400),
-                        ),
-                      ],
-                    ),
-                    Text(
-                      _text1,
-                      style: const TextStyle(
-                          fontSize: 16, fontWeight: FontWeight.w300),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          );
-        },
-      );
-    }
+  Future<String> getBid() async {
+    bid = await Get.arguments;
+    return bid!;
   }
 }

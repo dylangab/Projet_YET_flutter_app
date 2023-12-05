@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'dart:typed_data';
-
+import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:final_project/Pages/BusinessAccount/accountCheckPage.dart';
 import 'package:final_project/Pages/BusinessAccount/waitingPage.dart';
 import 'package:final_project/widgets/LoginTab.dart';
@@ -45,7 +45,7 @@ class _BpRegisterState extends State<BpRegister> {
   final FocusNode _confirmPasswordNode = FocusNode();
   final FocusNode _phoneNoNode = FocusNode();
   bool _passwordHide = false;
-
+  PhoneNumber number = PhoneNumber(isoCode: 'NG');
   String? imageurl;
 /*
   Future<void> pickImage(ImageSource source) async {
@@ -189,9 +189,9 @@ class _BpRegisterState extends State<BpRegister> {
                                 }
                                 return message;
                               },
-                              cursorColor:
-                                  const Color.fromARGB(255, 66, 106, 90),
+                              cursorColor: Color.fromARGB(255, 66, 106, 94),
                               controller: tinNUmber,
+                              keyboardType: TextInputType.numberWithOptions(),
                               decoration: const InputDecoration(
                                   focusedBorder: OutlineInputBorder(
                                       borderSide: BorderSide(
@@ -388,6 +388,27 @@ class _BpRegisterState extends State<BpRegister> {
                           ),
                           Padding(
                             padding: const EdgeInsets.fromLTRB(10, 5, 30, 10),
+                            child: InternationalPhoneNumberInput(
+                              onInputChanged: (value) {
+                                number.phoneNumber;
+                              },
+                              inputBorder: const OutlineInputBorder(),
+                              textFieldController: phoneNo,
+                              keyboardType:
+                                  const TextInputType.numberWithOptions(
+                                      signed: true, decimal: true),
+                              initialValue: number,
+                              selectorConfig: const SelectorConfig(
+                                selectorType:
+                                    PhoneInputSelectorType.BOTTOM_SHEET,
+                              ),
+                              ignoreBlank: false,
+                              autoValidateMode: AutovalidateMode.disabled,
+                              selectorTextStyle: TextStyle(color: Colors.black),
+                            ),
+                          )
+                          /*   Padding(
+                            padding: const EdgeInsets.fromLTRB(10, 5, 30, 10),
                             child: TextFormField(
                               focusNode: _phoneNoNode,
                               validator: (value) {
@@ -417,7 +438,8 @@ class _BpRegisterState extends State<BpRegister> {
                                             Color.fromARGB(255, 66, 106, 90)),
                                   )),
                             ),
-                          ),
+                          )*/
+                          ,
                           const Padding(
                             padding: EdgeInsets.fromLTRB(15, 15, 0, 10),
                             child: Text(

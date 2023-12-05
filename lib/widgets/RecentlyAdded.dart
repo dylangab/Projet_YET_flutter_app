@@ -17,11 +17,8 @@ class RecentlyAdded extends StatefulWidget {
 class _RecentlyAddedState extends State<RecentlyAdded> {
   List<DocumentSnapshot> RecentlyAdded = [];
 
-  List businessdetil = [];
-
   @override
   Widget build(BuildContext context) {
-    String businessid;
     return Column(
       children: [
         // most rated
@@ -31,7 +28,7 @@ class _RecentlyAddedState extends State<RecentlyAdded> {
               stream: FirebaseFirestore.instance
                   .collection("Business Accounts Requests")
                   .orderBy('timestamp', descending: true)
-                  .limit(5)
+                  .limit(10)
                   .snapshots(),
               builder: (context, snapshot) {
                 print(snapshot);

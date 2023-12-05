@@ -20,10 +20,10 @@ class _eventpageState extends State<eventpage> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   bool? value;
-  String uid = "uid";
+
   int? counter = 0;
   List uidList = [];
-  String? re = "mussie";
+
   SolidController _solidController = SolidController();
   String text = loremIpsum(words: 10, initWithLorem: true);
   TextEditingController commentController = TextEditingController();

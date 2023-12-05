@@ -30,7 +30,7 @@ class _AccountCheckPageState extends State<AccountCheckPage> {
   int index = 0;
   List<Widget> pagebuilder = [
     const LoginTab(),
-    const WaitingPage(),
+    WaitingPage(),
     const FinishProPage(),
     const BpPage(),
     const mainPage(),

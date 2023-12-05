@@ -91,6 +91,7 @@ class GetAddress extends GetxController {
 
 class individualAccountFetch extends GetxController {
   RxString userName = "".obs;
+  RxList userInterests = [].obs;
 
   Future<void> firebaseService() async {
     final DocumentReference reference = FirebaseFirestore.instance
@@ -106,6 +107,7 @@ class individualAccountFetch extends GetxController {
       documentSnapshot = event;
       userName.value =
           "${documentSnapshot.get('First Name') + documentSnapshot.get('Last Name')}";
+      userInterests = documentSnapshot.get('userInterest');
     });
   }
 }

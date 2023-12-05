@@ -35,6 +35,7 @@ class _LoginTabState extends State<LoginTab> with TickerProviderStateMixin {
   bool? indiclicked;
   bool? buzclicked;
   bool? _exists;
+  final individualAccountFetch controller = Get.put(individualAccountFetch());
 
   @override
   void dispose() {
@@ -556,6 +557,7 @@ class _LoginTabState extends State<LoginTab> with TickerProviderStateMixin {
     // Check if the document exists
     _exists = docSnapshot.exists;
     if (_exists == true) {
+      controller.firebaseService.call();
       Get.to(() => const mainPage());
     } else {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(

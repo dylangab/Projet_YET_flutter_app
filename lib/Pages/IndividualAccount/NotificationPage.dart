@@ -1,7 +1,9 @@
+import 'package:final_project/Pages/BusinessAccount/buzpage1.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:final_project/widgets/RecentlyAdded.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:get/get.dart';
 import 'package:lorem_ipsum/lorem_ipsum.dart';
 
 import '../../models/notiservice.dart';
@@ -15,6 +17,7 @@ class indiannoucmnetpage extends StatefulWidget {
 
 class _indiannoucmnetpageState extends State<indiannoucmnetpage> {
   List<DocumentSnapshot> annoucmnet = [];
+  bool? notification;
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
   String text = loremIpsum(words: 20, initWithLorem: true);
@@ -39,87 +42,120 @@ class _indiannoucmnetpageState extends State<indiannoucmnetpage> {
               child: SizedBox(
                 child: StreamBuilder<QuerySnapshot>(
                     stream: FirebaseFirestore.instance
-                        .collection("Annoucment")
+                        .collection("Indivdual Accounts")
+                        .doc(_auth.currentUser!.uid)
+                        .collection("messages")
                         .snapshots(),
                     builder: (context, snapshot) {
                       print(snapshot.data);
 
                       if (snapshot.hasData && snapshot.data!.docs.isNotEmpty) {
                         annoucmnet = snapshot.data!.docs;
+                        notification = true;
+                      } else {
+                        notification = false;
                       }
-                      return ListView.builder(
-                        itemCount: annoucmnet.length,
-                        itemBuilder: (context, index) {
-                          return Padding(
-                            padding: const EdgeInsets.fromLTRB(15, 50, 15, 0),
-                            child: Container(
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(15)),
-                                width: 400,
-                                child: Card(
-                                  shape: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(15)),
-                                  color:
-                                      const Color.fromARGB(255, 238, 240, 235),
-                                  elevation: 8,
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Padding(
-                                            padding: const EdgeInsets.all(10.0),
-                                            child: SizedBox(
-                                              width: 255,
-                                              child: Text(
-                                                annoucmnet[index]["annoucment"],
-                                                style: const TextStyle(
-                                                    fontSize: 15,
-                                                    fontWeight:
-                                                        FontWeight.w300),
+                      return notification!
+                          ? ListView.builder(
+                              itemCount: annoucmnet.length,
+                              itemBuilder: (context, index) {
+                                return Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(15, 50, 15, 0),
+                                  child: Container(
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(15)),
+                                      width: 400,
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          Get.to(() => buzpage(),
+                                              arguments: annoucmnet[index]
+                                                  ["bid"]);
+                                        },
+                                        child: Card(
+                                          shape: OutlineInputBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(15)),
+                                          color: const Color.fromARGB(
+                                              255, 238, 240, 235),
+                                          elevation: 8,
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Row(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            10.0),
+                                                    child: SizedBox(
+                                                      width: 255,
+                                                      child: Text(
+                                                        annoucmnet[index]
+                                                            ["message"],
+                                                        style: const TextStyle(
+                                                            fontSize: 15,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w300),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  IconButton(
+                                                      onPressed: () {},
+                                                      icon: const Icon(Icons
+                                                          .more_horiz_sharp))
+                                                ],
                                               ),
-                                            ),
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Padding(
+                                                    padding:
+                                                        EdgeInsets.fromLTRB(
+                                                            20, 8, 0, 10),
+                                                    child: CircleAvatar(
+                                                      backgroundImage:
+                                                          NetworkImage(annoucmnet[
+                                                                      index]
+                                                                  ["profilePic"]
+                                                              .toString()),
+                                                      radius: 18,
+                                                    ),
+                                                  ),
+                                                  Padding(
+                                                    padding: EdgeInsets.all(20),
+                                                    child: Text(
+                                                      "${annoucmnet[index]["timestamp"].toString()}",
+                                                      style: TextStyle(
+                                                          fontSize: 13,
+                                                          fontWeight:
+                                                              FontWeight.w300),
+                                                    ),
+                                                  )
+                                                ],
+                                              )
+                                            ],
                                           ),
-                                          IconButton(
-                                              onPressed: () {},
-                                              icon: const Icon(
-                                                  Icons.more_horiz_sharp))
-                                        ],
-                                      ),
-                                      const Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Padding(
-                                            padding: EdgeInsets.all(10.0),
-                                            child: CircleAvatar(
-                                              radius: 15,
-                                            ),
-                                          ),
-                                          Padding(
-                                            padding: EdgeInsets.all(20),
-                                            child: Text(
-                                              '3 min ago',
-                                              style: TextStyle(
-                                                  fontSize: 13,
-                                                  fontWeight: FontWeight.w300),
-                                            ),
-                                          )
-                                        ],
-                                      )
-                                    ],
-                                  ),
-                                )),
-                          );
-                        },
-                      );
+                                        ),
+                                      )),
+                                );
+                              },
+                            )
+                          : Center(
+                              child: Text("No messages yet..."),
+                            );
                     }),
               ),
             )

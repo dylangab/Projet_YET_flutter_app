@@ -8,6 +8,7 @@ import 'package:final_project/Pages/BusinessAccount/businesspage.dart';
 import 'package:get/get.dart';
 
 import '../Pages/BusinessAccount/buzpage1.dart';
+import '../models/getX.dart';
 
 class featured extends StatefulWidget {
   @override
@@ -16,10 +17,13 @@ class featured extends StatefulWidget {
 
 class _featuredState extends State<featured> {
   List<DocumentSnapshot> fearured = [];
+  List dd = ["resturants", "educational", "barbor"];
 
   @override
   Widget build(BuildContext context) {
-    String businessid;
+    final individualAccountFetch controller = Get.put(individualAccountFetch());
+    // ignore: invalid_use_of_protected_member
+    List bb = controller.userInterests.value;
     return Column(
       children: [
         // most rated
@@ -28,7 +32,7 @@ class _featuredState extends State<featured> {
           child: StreamBuilder<QuerySnapshot>(
               stream: FirebaseFirestore.instance
                   .collection("Business Accounts Requests")
-                  .limit(5)
+                  .where('businesscatagory', whereIn: dd)
                   .snapshots(),
               builder: (context, snapshot) {
                 print(snapshot);
@@ -65,7 +69,8 @@ class _featuredState extends State<featured> {
                         return GestureDetector(
                           onTap: () async {
                             var data = await Get.to(() => buzpage(),
-                                arguments: fearured[index]["bid"]);
+                                arguments: fearured[index]["bid"],
+                                transition: Transition.zoom);
                           },
                           child: SizedBox(
                             child: Padding(

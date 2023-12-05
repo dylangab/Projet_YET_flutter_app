@@ -1,9 +1,11 @@
 import 'package:final_project/Pages/IndividualAccount/Oops.dart';
 
 import 'package:final_project/widgets/LoginTab.dart';
+import 'package:final_project/widgets/maps.dart';
 import 'package:flutter/material.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:get/get.dart';
 
 class DrawerPage extends StatefulWidget {
   const DrawerPage({super.key});
@@ -30,9 +32,11 @@ class _DrawerPageState extends State<DrawerPage> {
           Padding(
               padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
               child: ListTile(
-                leading: const Icon(FluentIcons.person_32_regular),
-                title: const Text('Account'),
-                onTap: () {},
+                leading: const Icon(FluentIcons.map_24_regular),
+                title: const Text('Map'),
+                onTap: () {
+                  Get.to(() => MyMap());
+                },
               )),
           Padding(
               padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
@@ -50,13 +54,6 @@ class _DrawerPageState extends State<DrawerPage> {
                   Navigator.push(context,
                       MaterialPageRoute(builder: (context) => Oopspage()));
                 },
-              )),
-          Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-              child: ListTile(
-                leading: const Icon(FluentIcons.lock_shield_48_regular),
-                title: const Text('Privacy policy'),
-                onTap: () {},
               )),
           Padding(
               padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),

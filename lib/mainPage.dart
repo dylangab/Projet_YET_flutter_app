@@ -6,7 +6,10 @@ import 'package:final_project/Pages/IndividualAccount/homepage.dart';
 import 'package:final_project/Pages/IndividualAccount/EventPage.dart';
 import 'package:final_project/Pages/IndividualAccount/Catagory.dart';
 import 'package:final_project/Pages/IndividualAccount/NotificationPage.dart';
+import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'models/getX.dart';
 
 class mainPage extends StatefulWidget {
   const mainPage({super.key});
@@ -74,23 +77,31 @@ class _mainPageState extends State<mainPage> {
 
   Future fetchAnnoucment() async {
     FirebaseFirestore.instance
-        .collection('Annoucment')
+        .collection("Indivdual Accounts")
+        .doc(_auth.currentUser!.uid)
+        .collection("messages")
         .where('status', isEqualTo: 'unseen')
         .get()
         .then((QuerySnapshot querySnapshot) {
-      for (var doc in querySnapshot.docs) {
-        NotiService().showNoti(
-            id: 0,
-            title: doc['title'],
-            body: doc['annoucment'],
-            payload: 'adadad');
+      if (querySnapshot.docs.isNotEmpty) {
+        for (var doc in querySnapshot.docs) {
+          NotiService().showNoti(
+              id: 0,
+              title: doc['title'],
+              body: doc['message'],
+              payload: 'adadad');
+        }
+      } else {
+        print("no message");
       }
     });
   }
 
   Future<int> messageCounter() async {
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-        .collection('Annoucment')
+        .collection("Indivdual Accounts")
+        .doc(_auth.currentUser!.uid)
+        .collection("messages")
         .where('status', isEqualTo: 'unseen')
         .get();
 
@@ -99,8 +110,10 @@ class _mainPageState extends State<mainPage> {
   }
 
   Future messageCheck() async {
-    CollectionReference messagesCollection =
-        FirebaseFirestore.instance.collection('Annoucment');
+    CollectionReference messagesCollection = FirebaseFirestore.instance
+        .collection("Indivdual Accounts")
+        .doc(_auth.currentUser!.uid)
+        .collection("messages");
     final SharedPreferences preferences = await _preferences;
     messagesCollection.snapshots().listen((QuerySnapshot snapshot) async {
       for (var change in snapshot.docChanges) {

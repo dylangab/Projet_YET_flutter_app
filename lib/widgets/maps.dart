@@ -23,18 +23,16 @@ class _MyMapState extends State<MyMap> {
   void fetchMarkerDataFromFirestore() async {
     FirebaseFirestore firestore = FirebaseFirestore.instance;
 
-    QuerySnapshot querySnapshot = await firestore.collection('location').get();
+    QuerySnapshot querySnapshot =
+        await firestore.collection("Business Accounts Requests").get();
 
     List<MapMarker> markers = querySnapshot.docs.map((doc) {
       Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
 
       return MapMarker(
         profileId: data['bid'] as String,
-        name: data['labels'] as String,
-        coordinates: LatLng(
-          data['latitude'] as double,
-          data['longitude'] as double,
-        ),
+        name: data['Business Name'] as String,
+        coordinates: data['coordinates'],
       );
     }).toList();
 

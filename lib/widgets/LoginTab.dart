@@ -27,12 +27,14 @@ class _LoginTabState extends State<LoginTab> with TickerProviderStateMixin {
   final _formkey2 = GlobalKey<FormState>();
   final FocusNode _focusNode = FocusNode();
   final FocusNode _focusNode1 = FocusNode();
+  final FocusNode _buzemailfocusNode = FocusNode();
+  final FocusNode _buzpassfocusNode = FocusNode();
   TextEditingController indiemail = TextEditingController();
   TextEditingController indipass = TextEditingController();
   TextEditingController buzemail = TextEditingController();
   TextEditingController buzpass = TextEditingController();
   int? index = 0;
-  bool? indiclicked;
+  bool indiclicked = true;
   bool? buzclicked;
   bool? _exists;
   final individualAccountFetch controller = Get.put(individualAccountFetch());
@@ -55,7 +57,7 @@ class _LoginTabState extends State<LoginTab> with TickerProviderStateMixin {
         children: [
           Container(
             decoration:
-                BoxDecoration(color: Color.fromARGB(255, 229, 143, 101)),
+                const BoxDecoration(color: Color.fromARGB(255, 229, 143, 101)),
             height: 150,
           ),
           Center(
@@ -66,7 +68,7 @@ class _LoginTabState extends State<LoginTab> with TickerProviderStateMixin {
                 child: Container(
                   width: 100,
                   height: 100,
-                  decoration: BoxDecoration(color: Colors.red),
+                  decoration: const BoxDecoration(color: Colors.red),
                 ),
               ),
             ),
@@ -103,19 +105,19 @@ class _LoginTabState extends State<LoginTab> with TickerProviderStateMixin {
                     index = 0;
                   });
                 },
-                child: const Text(
-                  "Individual Account",
-                  style: TextStyle(color: Colors.black),
-                ),
                 style: ElevatedButton.styleFrom(
                     backgroundColor: buttonClick(index!)
                         ? const Color.fromARGB(255, 229, 143, 101)
                         : Colors.white,
                     shape: RoundedRectangleBorder(
-                        side: BorderSide(
+                        side: const BorderSide(
                             width: 1.5,
-                            color: const Color.fromARGB(255, 229, 143, 101)),
+                            color: Color.fromARGB(255, 229, 143, 101)),
                         borderRadius: BorderRadius.circular(15))),
+                child: const Text(
+                  "Individual Account",
+                  style: TextStyle(color: Colors.black),
+                ),
               ),
             ),
             ElevatedButton(
@@ -129,9 +131,9 @@ class _LoginTabState extends State<LoginTab> with TickerProviderStateMixin {
                       ? Colors.white
                       : const Color.fromARGB(255, 229, 143, 101),
                   shape: RoundedRectangleBorder(
-                      side: BorderSide(
+                      side: const BorderSide(
                           width: 1.5,
-                          color: const Color.fromARGB(255, 229, 143, 101)),
+                          color: Color.fromARGB(255, 229, 143, 101)),
                       borderRadius: BorderRadius.circular(15))),
               child: const Text("Business Account",
                   style: TextStyle(color: Colors.black)),
@@ -155,7 +157,7 @@ class _LoginTabState extends State<LoginTab> with TickerProviderStateMixin {
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Padding(
+                              const Padding(
                                 padding: EdgeInsets.fromLTRB(15, 15, 0, 10),
                                 child: Text(
                                   'Email',
@@ -176,30 +178,31 @@ class _LoginTabState extends State<LoginTab> with TickerProviderStateMixin {
                                     }
                                     return message;
                                   },
-                                  cursorColor: Color.fromARGB(255, 66, 106, 90),
+                                  cursorColor:
+                                      const Color.fromARGB(255, 66, 106, 90),
                                   controller: indiemail,
                                   decoration: InputDecoration(
                                       errorBorder: _emailerror
-                                          ? OutlineInputBorder()
-                                          : OutlineInputBorder(),
-                                      focusedBorder: OutlineInputBorder(
+                                          ? const OutlineInputBorder()
+                                          : const OutlineInputBorder(),
+                                      focusedBorder: const OutlineInputBorder(
                                           borderSide: BorderSide(
                                               width: 1.5,
                                               color: Color.fromARGB(
                                                   255, 66, 106, 90))),
-                                      enabledBorder: OutlineInputBorder(
+                                      enabledBorder: const OutlineInputBorder(
                                           borderSide: BorderSide(
                                               width: 1.5,
                                               color: Color.fromARGB(
                                                   255, 66, 106, 90))),
-                                      border: OutlineInputBorder(
+                                      border: const OutlineInputBorder(
                                         borderSide: BorderSide(
                                             color: Color.fromARGB(
                                                 255, 66, 106, 90)),
                                       )),
                                 ),
                               ),
-                              Padding(
+                              const Padding(
                                 padding: EdgeInsets.fromLTRB(15, 15, 0, 10),
                                 child: Text('Password'),
                               ),
@@ -209,7 +212,8 @@ class _LoginTabState extends State<LoginTab> with TickerProviderStateMixin {
                                 child: TextFormField(
                                   focusNode: _focusNode1,
                                   obscureText: !_passwordHide,
-                                  cursorColor: Color.fromARGB(255, 66, 106, 90),
+                                  cursorColor:
+                                      const Color.fromARGB(255, 66, 106, 90),
                                   keyboardType: TextInputType.emailAddress,
                                   controller: indipass,
                                   validator: (value) {
@@ -230,23 +234,23 @@ class _LoginTabState extends State<LoginTab> with TickerProviderStateMixin {
                                             _passwordHide = !_passwordHide;
                                           });
                                         },
-                                        color:
-                                            Color.fromARGB(255, 229, 143, 101),
+                                        color: const Color.fromARGB(
+                                            255, 229, 143, 101),
                                         icon: Icon(_passwordHide
                                             ? Icons.visibility
                                             : Icons.visibility_off),
                                       ),
-                                      focusedBorder: OutlineInputBorder(
+                                      focusedBorder: const OutlineInputBorder(
                                           borderSide: BorderSide(
                                               width: 1.5,
                                               color: Color.fromRGBO(
                                                   66, 106, 90, 1))),
-                                      enabledBorder: OutlineInputBorder(
+                                      enabledBorder: const OutlineInputBorder(
                                           borderSide: BorderSide(
                                               width: 1.5,
                                               color: Color.fromARGB(
                                                   255, 66, 106, 90))),
-                                      border: OutlineInputBorder(
+                                      border: const OutlineInputBorder(
                                         borderSide: BorderSide(
                                             color: Color.fromARGB(
                                                 255, 66, 106, 90)),
@@ -283,7 +287,7 @@ class _LoginTabState extends State<LoginTab> with TickerProviderStateMixin {
                                         } on FirebaseAuthException catch (e) {
                                           if (e.code == 'user-not-found') {
                                             ScaffoldMessenger.of(context)
-                                                .showSnackBar(SnackBar(
+                                                .showSnackBar(const SnackBar(
                                               content: Text(
                                                   "No user found for that email."),
                                             ));
@@ -293,7 +297,7 @@ class _LoginTabState extends State<LoginTab> with TickerProviderStateMixin {
                                           } else if (e.code ==
                                               'wrong-password') {
                                             ScaffoldMessenger.of(context)
-                                                .showSnackBar(SnackBar(
+                                                .showSnackBar(const SnackBar(
                                               content: Text(
                                                   "Wrong password provided for that user."),
                                             ));
@@ -303,15 +307,14 @@ class _LoginTabState extends State<LoginTab> with TickerProviderStateMixin {
                                           }
                                         }
                                       },
-                                      child: Text('Login')),
+                                      child: const Text('Login')),
                                 ),
                               ),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
-                                  Padding(
-                                    padding:
-                                        const EdgeInsets.fromLTRB(3, 10, 0, 3),
+                                  const Padding(
+                                    padding: EdgeInsets.fromLTRB(3, 10, 0, 3),
                                     child: Text(
                                       'Dont have an account',
                                       style: TextStyle(
@@ -322,7 +325,7 @@ class _LoginTabState extends State<LoginTab> with TickerProviderStateMixin {
                                       padding: const EdgeInsets.fromLTRB(
                                           3, 10, 20, 3),
                                       child: GestureDetector(
-                                        child: Text(
+                                        child: const Text(
                                           'Register',
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold),
@@ -353,7 +356,7 @@ class _LoginTabState extends State<LoginTab> with TickerProviderStateMixin {
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Padding(
+                          const Padding(
                             padding: EdgeInsets.fromLTRB(15, 15, 0, 10),
                             child: Text(
                               'Email',
@@ -363,7 +366,7 @@ class _LoginTabState extends State<LoginTab> with TickerProviderStateMixin {
                           Padding(
                             padding: const EdgeInsets.fromLTRB(10, 5, 30, 10),
                             child: TextFormField(
-                              focusNode: _focusNode,
+                              focusNode: _buzemailfocusNode,
                               validator: (value) {
                                 String? message;
                                 if (value!.isEmpty) {
@@ -373,39 +376,41 @@ class _LoginTabState extends State<LoginTab> with TickerProviderStateMixin {
                                 }
                                 return message;
                               },
-                              cursorColor: Color.fromARGB(255, 66, 106, 90),
+                              cursorColor:
+                                  const Color.fromARGB(255, 66, 106, 90),
                               controller: buzemail,
                               decoration: InputDecoration(
                                   errorBorder: _emailerror
-                                      ? OutlineInputBorder()
-                                      : OutlineInputBorder(),
-                                  focusedBorder: OutlineInputBorder(
+                                      ? const OutlineInputBorder()
+                                      : const OutlineInputBorder(),
+                                  focusedBorder: const OutlineInputBorder(
                                       borderSide: BorderSide(
                                           width: 1.5,
                                           color: Color.fromARGB(
                                               255, 66, 106, 90))),
-                                  enabledBorder: OutlineInputBorder(
+                                  enabledBorder: const OutlineInputBorder(
                                       borderSide: BorderSide(
                                           width: 1.5,
                                           color: Color.fromARGB(
                                               255, 66, 106, 90))),
-                                  border: OutlineInputBorder(
+                                  border: const OutlineInputBorder(
                                     borderSide: BorderSide(
                                         color:
                                             Color.fromARGB(255, 66, 106, 90)),
                                   )),
                             ),
                           ),
-                          Padding(
+                          const Padding(
                             padding: EdgeInsets.fromLTRB(15, 15, 0, 10),
                             child: Text('Password'),
                           ),
                           Padding(
                             padding: const EdgeInsets.fromLTRB(10, 5, 30, 10),
                             child: TextFormField(
-                              focusNode: _focusNode1,
+                              focusNode: _buzpassfocusNode,
                               obscureText: !_passwordHide,
-                              cursorColor: Color.fromARGB(255, 66, 106, 90),
+                              cursorColor:
+                                  const Color.fromARGB(255, 66, 106, 90),
                               keyboardType: TextInputType.emailAddress,
                               controller: buzpass,
                               validator: (value) {
@@ -426,22 +431,23 @@ class _LoginTabState extends State<LoginTab> with TickerProviderStateMixin {
                                         _passwordHide = !_passwordHide;
                                       });
                                     },
-                                    color: Color.fromARGB(255, 229, 143, 101),
+                                    color: const Color.fromARGB(
+                                        255, 229, 143, 101),
                                     icon: Icon(_passwordHide
                                         ? Icons.visibility
                                         : Icons.visibility_off),
                                   ),
-                                  focusedBorder: OutlineInputBorder(
+                                  focusedBorder: const OutlineInputBorder(
                                       borderSide: BorderSide(
                                           width: 1.5,
                                           color: Color.fromARGB(
                                               255, 66, 106, 90))),
-                                  enabledBorder: OutlineInputBorder(
+                                  enabledBorder: const OutlineInputBorder(
                                       borderSide: BorderSide(
                                           width: 1.5,
                                           color: Color.fromARGB(
                                               255, 66, 106, 90))),
-                                  border: OutlineInputBorder(
+                                  border: const OutlineInputBorder(
                                     borderSide: BorderSide(
                                         color:
                                             Color.fromARGB(255, 66, 106, 90)),
@@ -472,7 +478,7 @@ class _LoginTabState extends State<LoginTab> with TickerProviderStateMixin {
                                       } on FirebaseAuthException catch (e) {
                                         if (e.code == 'user-not-found') {
                                           ScaffoldMessenger.of(context)
-                                              .showSnackBar(SnackBar(
+                                              .showSnackBar(const SnackBar(
                                             content: Text(
                                                 "No user found for that email."),
                                           ));
@@ -481,7 +487,7 @@ class _LoginTabState extends State<LoginTab> with TickerProviderStateMixin {
                                               'No user found for that email.');
                                         } else if (e.code == 'wrong-password') {
                                           ScaffoldMessenger.of(context)
-                                              .showSnackBar(SnackBar(
+                                              .showSnackBar(const SnackBar(
                                             content: Text(
                                                 "Wrong password provided for that user."),
                                           ));
@@ -492,19 +498,19 @@ class _LoginTabState extends State<LoginTab> with TickerProviderStateMixin {
                                       }
                                     } else {
                                       ScaffoldMessenger.of(context)
-                                          .showSnackBar(SnackBar(
+                                          .showSnackBar(const SnackBar(
                                         content: Text("error"),
                                       ));
                                     }
                                   },
-                                  child: Text('Login')),
+                                  child: const Text('Login')),
                             ),
                           ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
-                              Padding(
-                                padding: const EdgeInsets.fromLTRB(3, 10, 0, 3),
+                              const Padding(
+                                padding: EdgeInsets.fromLTRB(3, 10, 0, 3),
                                 child: Text(
                                   'Dont have an account',
                                   style: TextStyle(fontWeight: FontWeight.w200),
@@ -514,7 +520,7 @@ class _LoginTabState extends State<LoginTab> with TickerProviderStateMixin {
                                 padding:
                                     const EdgeInsets.fromLTRB(3, 10, 20, 3),
                                 child: GestureDetector(
-                                  child: Text(
+                                  child: const Text(
                                     'Register',
                                     style:
                                         TextStyle(fontWeight: FontWeight.bold),

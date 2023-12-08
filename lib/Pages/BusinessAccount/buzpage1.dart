@@ -1,13 +1,9 @@
-import 'package:final_project/widgets/comment.dart';
 import 'package:flutter/material.dart';
-import 'package:shimmer/shimmer.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:final_project/widgets/MostRated.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import '../../widgets/BpInfo.dart';
 import 'package:get/get.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:lorem_ipsum/lorem_ipsum.dart';
 
@@ -34,8 +30,7 @@ class _buzpageState extends State<buzpage> with TickerProviderStateMixin {
   List<double> flutterlist = [];
   double? average;
   String _text = loremIpsum(words: 60, initWithLorem: true);
-  String _text1 = loremIpsum(words: 60, initWithLorem: true);
-  String _text3 = loremIpsum(words: 150, initWithLorem: true);
+
   bool? checker;
   bool? idCheck;
   bool rateCheck = true;
@@ -125,7 +120,7 @@ class _buzpageState extends State<buzpage> with TickerProviderStateMixin {
                                     Padding(
                                         padding: EdgeInsets.only(bottom: 10),
                                         child: Text(
-                                          '4/5',
+                                          snapshot.data!['rating'].toString(),
                                           style: TextStyle(
                                               fontWeight: FontWeight.w400),
                                         )),
@@ -193,12 +188,12 @@ class _buzpageState extends State<buzpage> with TickerProviderStateMixin {
                                                                       () async {
                                                                     double
                                                                         rating;
-                                                                    String uid =
+                                                                    String bid =
                                                                         await snapshot
                                                                             .data!['bid'];
-                                                                    print(uid);
+                                                                    print(bid);
                                                                     await updateRatingList(
-                                                                        uid,
+                                                                        bid,
                                                                         Rating!,
                                                                         snapshot
                                                                             .data!['ratingList']);
@@ -210,7 +205,14 @@ class _buzpageState extends State<buzpage> with TickerProviderStateMixin {
 
                                                                     await submitRating(
                                                                         rating,
-                                                                        uid);
+                                                                        bid);
+                                                                    await updateRateUidList(
+                                                                        bid,
+                                                                        _auth
+                                                                            .toString()
+                                                                            .trim(),
+                                                                        snapshot
+                                                                            .data!["rateUids"]);
                                                                   },
                                                                   child: Text(
                                                                       "Submit"))
@@ -1067,6 +1069,19 @@ class _buzpageState extends State<buzpage> with TickerProviderStateMixin {
 
     await docRef.update({
       "ratingList": rateList,
+    });
+  }
+
+  Future<void> updateRateUidList(String bid, String uid, List snapshot) async {
+    List uidList = snapshot;
+    uidList.add(uid);
+
+    DocumentReference docRef = FirebaseFirestore.instance
+        .collection("Business Accounts Requests")
+        .doc(bid);
+
+    await docRef.update({
+      "rateUids": uidList,
     });
   }
 

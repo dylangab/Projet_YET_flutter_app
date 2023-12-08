@@ -1,12 +1,9 @@
 import 'package:final_project/Pages/IndividualAccount/showOnMap.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:flutter/material.dart';
-import 'package:final_project/widgets/RecentlyAdded.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:lorem_ipsum/lorem_ipsum.dart';
-import 'package:solid_bottom_sheet/solid_bottom_sheet.dart';
-import 'package:bottom_sheet/bottom_sheet.dart';
 
 class eventpage extends StatefulWidget {
   const eventpage({super.key});
@@ -17,36 +14,16 @@ class eventpage extends StatefulWidget {
 
 class _eventpageState extends State<eventpage> {
   List<DocumentSnapshot> event = [];
-  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   bool? value;
 
   int? counter = 0;
   List uidList = [];
 
-  SolidController _solidController = SolidController();
   String text = loremIpsum(words: 10, initWithLorem: true);
   TextEditingController commentController = TextEditingController();
   FocusNode commentNode = FocusNode();
-  List<Widget> pages = [
-    Container(
-      child: Center(
-        child: Text("page 1"),
-      ),
-    ),
-    Container(
-      color: Colors.blue,
-      child: Center(
-        child: Text("page 2"),
-      ),
-    ),
-    Container(
-      color: Colors.orange,
-      child: Center(
-        child: Text("page 3"),
-      ),
-    )
-  ];
+
   Widget build(BuildContext context) {
     return Scaffold(
         body: StreamBuilder<QuerySnapshot>(
@@ -72,12 +49,12 @@ class _eventpageState extends State<eventpage> {
                                     event[index]["image"],
                                   ))),
                         ),
-                        Positioned(
+                        const Positioned(
+                          top: 50,
+                          right: 30,
                           child: CircleAvatar(
                             radius: 15,
                           ),
-                          top: 50,
-                          right: 30,
                         ),
                         Positioned(
                           left: 0,
@@ -94,7 +71,7 @@ class _eventpageState extends State<eventpage> {
                                 children: [
                                   Text(
                                     "Event Name :- ${event[index]["eventName"]}",
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                         fontSize: 15,
                                         fontWeight: FontWeight.w500,
                                         color: Colors.white),
@@ -104,14 +81,13 @@ class _eventpageState extends State<eventpage> {
                                         vertical: 10),
                                     child: Text(
                                       event[index]["eventDescription"],
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                           fontWeight: FontWeight.w500,
                                           color: Colors.white),
                                     ),
                                   ),
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 10),
+                                  const Padding(
+                                    padding: EdgeInsets.symmetric(vertical: 10),
                                     child: Text(
                                       "Event Address:- addis abeba ",
                                       style: TextStyle(
@@ -128,11 +104,18 @@ class _eventpageState extends State<eventpage> {
                                     child: Container(
                                       height: 40,
                                       width: 250,
-                                      child: Align(
+                                      decoration: BoxDecoration(
+                                          color: const Color.fromARGB(
+                                              255, 66, 106, 90),
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          border: Border.all(
+                                              color: const Color.fromARGB(
+                                                  255, 66, 106, 90))),
+                                      child: const Align(
                                         alignment: Alignment.centerRight,
                                         child: Padding(
-                                          padding:
-                                              const EdgeInsets.only(right: 15),
+                                          padding: EdgeInsets.only(right: 15),
                                           child: Text(
                                             "show location on map >",
                                             style: TextStyle(
@@ -141,14 +124,6 @@ class _eventpageState extends State<eventpage> {
                                           ),
                                         ),
                                       ),
-                                      decoration: BoxDecoration(
-                                          color:
-                                              Color.fromARGB(255, 66, 106, 90),
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          border: Border.all(
-                                              color: Color.fromARGB(
-                                                  255, 66, 106, 90))),
                                     ),
                                   )
                                 ],
@@ -229,11 +204,11 @@ class _eventpageState extends State<eventpage> {
                                                                           [
                                                                           CommentIndex][0];
                                                                   return Container(
-                                                                    margin: EdgeInsets
-                                                                        .all(
+                                                                    margin:
+                                                                        const EdgeInsets.all(
                                                                             15),
                                                                     decoration:
-                                                                        BoxDecoration(
+                                                                        const BoxDecoration(
                                                                             border:
                                                                                 Border(bottom: BorderSide(width: 1, color: Colors.black38))),
                                                                     child:
@@ -293,7 +268,7 @@ class _eventpageState extends State<eventpage> {
                                                                           left:
                                                                               15),
                                                                       child: ElevatedButton(
-                                                                          style: ElevatedButton.styleFrom(shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)), backgroundColor: Color.fromARGB(255, 229, 143, 101)),
+                                                                          style: ElevatedButton.styleFrom(shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)), backgroundColor: const Color.fromARGB(255, 229, 143, 101)),
                                                                           onPressed: () {
                                                                             addComment(event[index]["uid"].toString().trim());
                                                                           },
@@ -307,13 +282,13 @@ class _eventpageState extends State<eventpage> {
                                                         ));
                                                   });
                                             },
-                                            icon: Icon(
+                                            icon: const Icon(
                                               Icons.comment_bank,
                                               color: Colors.black,
                                             )),
                                         Text(
                                           "(${event[index]["comments"].length})",
-                                          style: TextStyle(
+                                          style: const TextStyle(
                                               fontWeight: FontWeight.w500),
                                         )
                                       ],

@@ -1,11 +1,6 @@
 import 'package:final_project/widgets/comment.dart';
 import 'package:flutter/material.dart';
-import 'package:shimmer/shimmer.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:final_project/widgets/MostRated.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import '../../widgets/BpInfo.dart';
 
 class businessPage extends StatefulWidget {
   businessPage({
@@ -21,7 +16,7 @@ class _businessPageState extends State<businessPage>
   @override
   Widget build(BuildContext context) {
     TextEditingController comment = TextEditingController();
-    double? Rating;
+
     final TabController tabcontroller3 = TabController(length: 3, vsync: this);
     return Scaffold(
         body: StreamBuilder<DocumentSnapshot>(

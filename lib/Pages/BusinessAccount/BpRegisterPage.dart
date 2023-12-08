@@ -1,18 +1,8 @@
-import 'dart:io';
-import 'dart:typed_data';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
-import 'package:final_project/Pages/BusinessAccount/accountCheckPage.dart';
 import 'package:final_project/Pages/BusinessAccount/waitingPage.dart';
-import 'package:final_project/widgets/LoginTab.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:final_project/models/imagepicker.dart';
 import 'package:get/get.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:final_project/models/storagemethod.dart';
 import 'package:final_project/models/businessaa.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:latlong2/latlong.dart';
 
 import '../IndividualAccount/IndiAccount.dart';
@@ -45,7 +35,7 @@ class _BpRegisterState extends State<BpRegister> {
   final FocusNode _confirmPasswordNode = FocusNode();
   final FocusNode _phoneNoNode = FocusNode();
   bool _passwordHide = false;
-  PhoneNumber number = PhoneNumber(isoCode: 'NG');
+  PhoneNumber number = PhoneNumber(isoCode: 'ET');
   String? imageurl;
 /*
   Future<void> pickImage(ImageSource source) async {
@@ -76,6 +66,29 @@ class _BpRegisterState extends State<BpRegister> {
     'resturants'
   ];
  */
+  void dispose() {
+    buzName.dispose();
+    _buzNode.dispose();
+    tinNUmber.dispose();
+    _tinNode.dispose();
+    service.dispose();
+    _serviceNode.dispose();
+    firstName.dispose();
+    _firstNameNode.dispose();
+    lastName.dispose();
+    _lastNameNode.dispose();
+    phoneNo.dispose();
+    _phoneNoNode.dispose();
+    password.dispose();
+    _passwordNode.dispose();
+    email.dispose();
+    _emailNode.dispose();
+    confirmPassword.dispose();
+    _confirmPasswordNode.dispose();
+
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -90,13 +103,16 @@ class _BpRegisterState extends State<BpRegister> {
               ),
               Center(
                 child: Padding(
-                  padding: const EdgeInsets.only(top: 110),
+                  padding: EdgeInsets.only(top: 110),
                   child: Material(
                     elevation: 5,
                     child: Container(
                       width: 100,
                       height: 100,
-                      decoration: const BoxDecoration(color: Colors.red),
+                      decoration: const BoxDecoration(
+                          image: DecorationImage(
+                              image: AssetImage('assets/icon.png'),
+                              fit: BoxFit.fill)),
                     ),
                   ),
                 ),
@@ -221,6 +237,9 @@ class _BpRegisterState extends State<BpRegister> {
                           Padding(
                             padding: const EdgeInsets.fromLTRB(10, 5, 30, 10),
                             child: TextFormField(
+                              maxLines: null,
+                              textInputAction: TextInputAction.newline,
+                              keyboardType: TextInputType.multiline,
                               focusNode: _serviceNode,
                               validator: (value) {
                                 String? message;
@@ -593,7 +612,8 @@ class _BpRegisterState extends State<BpRegister> {
                                           ratingList: [],
                                           followerIdList: [],
                                           rateUids: []);
-                                      await Get.to(() => const WaitingPage());
+                                      await Get.to(() => const WaitingPage(),
+                                          transition: Transition.fade);
                                     } else {
                                       ScaffoldMessenger.of(context)
                                           .showSnackBar(const SnackBar(

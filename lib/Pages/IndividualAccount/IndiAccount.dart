@@ -1,12 +1,7 @@
 import 'package:final_project/Pages/BusinessAccount/BpRegisterPage.dart';
-import 'package:final_project/mainPage.dart';
-import 'package:final_project/models/businessaa.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:final_project/models/individualacc.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 
 class IndiAccount extends StatefulWidget {
@@ -77,8 +72,8 @@ class _IndiAccountState extends State<IndiAccount> {
           Stack(
             children: [
               Container(
-                decoration:
-                    BoxDecoration(color: Color.fromARGB(255, 229, 143, 101)),
+                decoration: const BoxDecoration(
+                    color: Color.fromARGB(255, 229, 143, 101)),
                 height: 150,
               ),
               Center(
@@ -89,23 +84,23 @@ class _IndiAccountState extends State<IndiAccount> {
                     child: Container(
                       width: 100,
                       height: 100,
-                      decoration: BoxDecoration(color: Colors.red),
+                      decoration: const BoxDecoration(color: Colors.red),
                     ),
                   ),
                 ),
               )
             ],
           ),
-          Padding(
-            padding: const EdgeInsets.only(top: 30),
+          const Padding(
+            padding: EdgeInsets.only(top: 30),
             child: Center(
                 child: Text(
               "Welcome To Yet",
               style: TextStyle(fontSize: 40),
             )),
           ),
-          Padding(
-            padding: const EdgeInsets.only(top: 30),
+          const Padding(
+            padding: EdgeInsets.only(top: 30),
             child: Center(
                 child: Text(
               "Create your Individual Account",
@@ -113,7 +108,7 @@ class _IndiAccountState extends State<IndiAccount> {
             )),
           ),
           Padding(
-            padding: EdgeInsets.only(top: 21),
+            padding: const EdgeInsets.only(top: 21),
             child: SizedBox(
               height: 920,
               width: MediaQuery.of(context).size.width,
@@ -123,7 +118,7 @@ class _IndiAccountState extends State<IndiAccount> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Padding(
+                        const Padding(
                           padding: EdgeInsets.fromLTRB(15, 15, 0, 10),
                           child: Text(
                             'First Name',
@@ -142,9 +137,9 @@ class _IndiAccountState extends State<IndiAccount> {
                               }
                               return message;
                             },
-                            cursorColor: Color.fromARGB(255, 66, 106, 90),
+                            cursorColor: const Color.fromARGB(255, 66, 106, 90),
                             controller: firstName,
-                            decoration: InputDecoration(
+                            decoration: const InputDecoration(
                                 focusedBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
                                         width: 1.5,
@@ -161,7 +156,7 @@ class _IndiAccountState extends State<IndiAccount> {
                                 )),
                           ),
                         ),
-                        Padding(
+                        const Padding(
                           padding: EdgeInsets.fromLTRB(15, 15, 0, 10),
                           child: Text(
                             'Last Name',
@@ -180,9 +175,9 @@ class _IndiAccountState extends State<IndiAccount> {
                               }
                               return message;
                             },
-                            cursorColor: Color.fromARGB(255, 66, 106, 90),
+                            cursorColor: const Color.fromARGB(255, 66, 106, 90),
                             controller: lastName,
-                            decoration: InputDecoration(
+                            decoration: const InputDecoration(
                                 focusedBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
                                         width: 1.5,
@@ -199,7 +194,7 @@ class _IndiAccountState extends State<IndiAccount> {
                                 )),
                           ),
                         ),
-                        Padding(
+                        const Padding(
                           padding: EdgeInsets.fromLTRB(15, 15, 0, 10),
                           child: Text(
                             'Email',
@@ -218,9 +213,9 @@ class _IndiAccountState extends State<IndiAccount> {
                               }
                               return message;
                             },
-                            cursorColor: Color.fromARGB(255, 66, 106, 90),
+                            cursorColor: const Color.fromARGB(255, 66, 106, 90),
                             controller: email,
-                            decoration: InputDecoration(
+                            decoration: const InputDecoration(
                                 focusedBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
                                         width: 1.5,
@@ -237,7 +232,7 @@ class _IndiAccountState extends State<IndiAccount> {
                                 )),
                           ),
                         ),
-                        Padding(
+                        const Padding(
                           padding: EdgeInsets.fromLTRB(15, 15, 0, 10),
                           child: Text(
                             'Phone Number',
@@ -256,9 +251,9 @@ class _IndiAccountState extends State<IndiAccount> {
                               }
                               return message;
                             },
-                            cursorColor: Color.fromARGB(255, 66, 106, 90),
+                            cursorColor: const Color.fromARGB(255, 66, 106, 90),
                             controller: phoneNo,
-                            decoration: InputDecoration(
+                            decoration: const InputDecoration(
                                 focusedBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
                                         width: 1.5,
@@ -275,7 +270,7 @@ class _IndiAccountState extends State<IndiAccount> {
                                 )),
                           ),
                         ),
-                        Padding(
+                        const Padding(
                           padding: EdgeInsets.fromLTRB(15, 15, 0, 10),
                           child: Text(
                             'Password',
@@ -288,7 +283,7 @@ class _IndiAccountState extends State<IndiAccount> {
                           child: TextFormField(
                             focusNode: _passwordNode,
                             obscureText: !_passwordHide,
-                            cursorColor: Color.fromARGB(255, 66, 106, 90),
+                            cursorColor: const Color.fromARGB(255, 66, 106, 90),
                             keyboardType: TextInputType.emailAddress,
                             controller: password,
                             validator: (value) {
@@ -309,28 +304,29 @@ class _IndiAccountState extends State<IndiAccount> {
                                       _passwordHide = !_passwordHide;
                                     });
                                   },
-                                  color: Color.fromARGB(255, 229, 143, 101),
+                                  color:
+                                      const Color.fromARGB(255, 229, 143, 101),
                                   icon: Icon(_passwordHide
                                       ? Icons.visibility
                                       : Icons.visibility_off),
                                 ),
-                                focusedBorder: OutlineInputBorder(
+                                focusedBorder: const OutlineInputBorder(
                                     borderSide: BorderSide(
                                         width: 1.5,
                                         color:
                                             Color.fromARGB(255, 66, 106, 90))),
-                                enabledBorder: OutlineInputBorder(
+                                enabledBorder: const OutlineInputBorder(
                                     borderSide: BorderSide(
                                         width: 1.5,
                                         color:
                                             Color.fromARGB(255, 66, 106, 90))),
-                                border: OutlineInputBorder(
+                                border: const OutlineInputBorder(
                                   borderSide: BorderSide(
                                       color: Color.fromARGB(255, 66, 106, 90)),
                                 )),
                           ),
                         ),
-                        Padding(
+                        const Padding(
                           padding: EdgeInsets.fromLTRB(15, 15, 0, 10),
                           child: Text('Confirm Password',
                               style: TextStyle(
@@ -341,7 +337,7 @@ class _IndiAccountState extends State<IndiAccount> {
                           child: TextFormField(
                             focusNode: _confirmPasswordNode,
                             obscureText: !_passwordHide,
-                            cursorColor: Color.fromARGB(255, 66, 106, 90),
+                            cursorColor: const Color.fromARGB(255, 66, 106, 90),
                             keyboardType: TextInputType.emailAddress,
                             controller: confirmPassword,
                             validator: (value) {
@@ -364,22 +360,23 @@ class _IndiAccountState extends State<IndiAccount> {
                                       _passwordHide = !_passwordHide;
                                     });
                                   },
-                                  color: Color.fromARGB(255, 229, 143, 101),
+                                  color:
+                                      const Color.fromARGB(255, 229, 143, 101),
                                   icon: Icon(_passwordHide
                                       ? Icons.visibility
                                       : Icons.visibility_off),
                                 ),
-                                focusedBorder: OutlineInputBorder(
+                                focusedBorder: const OutlineInputBorder(
                                     borderSide: BorderSide(
                                         width: 1.5,
                                         color:
                                             Color.fromARGB(255, 66, 106, 90))),
-                                enabledBorder: OutlineInputBorder(
+                                enabledBorder: const OutlineInputBorder(
                                     borderSide: BorderSide(
                                         width: 1.5,
                                         color:
                                             Color.fromARGB(255, 66, 106, 90))),
-                                border: OutlineInputBorder(
+                                border: const OutlineInputBorder(
                                   borderSide: BorderSide(
                                       color: Color.fromARGB(255, 66, 106, 90)),
                                 )),
@@ -407,19 +404,19 @@ class _IndiAccountState extends State<IndiAccount> {
                                         userInterest: []);
                                   } else {
                                     ScaffoldMessenger.of(context)
-                                        .showSnackBar(SnackBar(
+                                        .showSnackBar(const SnackBar(
                                       content: Text("error"),
                                     ));
                                   }
                                 },
-                                child: Text('Register')),
+                                child: const Text('Register')),
                           ),
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(3, 15, 0, 3),
+                            const Padding(
+                              padding: EdgeInsets.fromLTRB(3, 15, 0, 3),
                               child: Text(
                                 'What to create an business account',
                                 style: TextStyle(fontWeight: FontWeight.w200),
@@ -428,7 +425,7 @@ class _IndiAccountState extends State<IndiAccount> {
                             Padding(
                               padding: const EdgeInsets.fromLTRB(3, 15, 20, 3),
                               child: GestureDetector(
-                                child: Text(
+                                child: const Text(
                                   'Register',
                                   style: TextStyle(fontWeight: FontWeight.bold),
                                 ),

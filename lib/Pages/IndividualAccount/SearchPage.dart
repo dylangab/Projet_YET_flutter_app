@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:material_floating_search_bar_2/material_floating_search_bar_2.dart';
 
 import '../BusinessAccount/buzpage1.dart';
 
@@ -45,14 +44,14 @@ class _searchPageState extends State<searchPage> {
                   builder: (context, snapshots) {
                     return (snapshots.connectionState ==
                             ConnectionState.waiting)
-                        ? Center(
+                        ? const Center(
                             child: CircularProgressIndicator(),
                           )
-                        : Container(
+                        : SizedBox(
                             height: MediaQuery.sizeOf(context).height,
                             child: query.isEmpty
                                 ? Container(
-                                    child: Center(
+                                    child: const Center(
                                         child: Text("Search any business")),
                                   )
                                 : ListView.builder(
@@ -80,7 +79,8 @@ class _searchPageState extends State<searchPage> {
                                                                 BorderRadius
                                                                     .circular(
                                                                         5),
-                                                            side: BorderSide(
+                                                            side:
+                                                                const BorderSide(
                                                               width: 1,
                                                               color: Color
                                                                   .fromARGB(

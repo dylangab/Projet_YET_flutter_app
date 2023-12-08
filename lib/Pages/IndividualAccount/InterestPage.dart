@@ -50,7 +50,7 @@ class _InterestPageState extends State<InterestPage> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    Text('Choose Your Interest',
+                    const Text('Choose Your Interest',
                         style: TextStyle(fontSize: 18)),
                     const SizedBox(height: 5.0),
                     Wrap(
@@ -80,17 +80,17 @@ class _InterestPageState extends State<InterestPage> {
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10)),
                               backgroundColor:
-                                  Color.fromARGB(255, 229, 143, 101)),
+                                  const Color.fromARGB(255, 229, 143, 101)),
                           onPressed: () {
                             uploadUserInterest(_auth);
                           },
-                          child: Text("Save")),
+                          child: const Text("Save")),
                     )
                   ],
                 ),
               );
             } else {
-              return CircularProgressIndicator();
+              return const CircularProgressIndicator();
             }
           },
         ));

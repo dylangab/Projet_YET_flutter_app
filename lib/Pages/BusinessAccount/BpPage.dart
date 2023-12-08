@@ -1,7 +1,5 @@
 import 'dart:io';
 
-import 'package:final_project/Pages/BusinessAccount/Annoucmentpage.dart';
-import 'package:final_project/Pages/BusinessAccount/PostEventPage.dart';
 import 'package:final_project/Pages/BusinessAccount/chooseLocation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -10,11 +8,10 @@ import 'package:geocoding/geocoding.dart';
 import 'package:get/get.dart';
 import 'package:lorem_ipsum/lorem_ipsum.dart';
 import '../../models/getX.dart';
-import '../../widgets/LoginTab.dart';
+
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:image_picker/image_picker.dart';
 
 class BpPage extends StatefulWidget {
   const BpPage({super.key});
@@ -58,6 +55,20 @@ class _BpPageState extends State<BpPage> {
   String? phoneNo;
   String? address;
   LatLng? coordinates;
+  void dispose() {
+    _annoucment.dispose();
+    _eventCatagory.dispose();
+    _eventDescription.dispose();
+    _eventName.dispose();
+    _title.dispose();
+    _annoucmentNode.dispose();
+    _eventCatagoryNode.dispose();
+    _titleNode.dispose();
+    _annoucmentNode.dispose();
+    _eventNodeDescription.dispose();
+    _eventNameNode.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -1050,7 +1061,7 @@ class _BpPageState extends State<BpPage> {
     } catch (e) {}
   }
 
-  bool imageCheck(XFile image) {
+  bool imageCheck(XFile? image) {
     if (image != null) {
       imagechecker = true;
     } else {

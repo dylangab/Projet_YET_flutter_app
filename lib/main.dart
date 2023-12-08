@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:final_project/Pages/BusinessAccount/BusinessProfile.dart';
-import 'package:final_project/Pages/BusinessAccount/PostEventPage.dart';
+
 import 'package:final_project/Pages/BusinessAccount/accountCheckPage.dart';
 import 'package:final_project/Pages/BusinessAccount/buzpage1.dart';
 import 'package:final_project/Pages/BusinessAccount/chooseLocation.dart';
@@ -15,6 +15,7 @@ import 'package:final_project/Pages/IndividualAccount/MessagePage.dart';
 import 'package:final_project/Pages/IndividualAccount/NotificationPage.dart';
 import 'package:final_project/Pages/IndividualAccount/Oops.dart';
 import 'package:final_project/Pages/IndividualAccount/SearchPage.dart';
+import 'package:final_project/Pages/IndividualAccount/explorepage.dart';
 import 'package:final_project/Pages/IndividualAccount/getLocationPage.dart';
 import 'package:final_project/localnoti.dart';
 import 'package:final_project/mainPage.dart';
@@ -28,7 +29,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:final_project/Pages/BusinessAccount/BpRegisterPage.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:final_project/Pages/BusinessAccount/Annoucmentpage.dart';
+
 import 'package:final_project/Pages/BusinessAccount/businesspage.dart';
 import 'package:final_project/widgets/LoginTab.dart';
 import 'package:final_project/Pages/IndividualAccount/homepage.dart';
@@ -55,7 +56,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primaryColor: Colors.white,
       ),
-      home: const mainPage(),
+      home: const FinishProPage(),
     );
   }
 }

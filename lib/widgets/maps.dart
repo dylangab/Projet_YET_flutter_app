@@ -65,7 +65,7 @@ class _MyMapState extends State<MyMap> {
                   Container(
                     width: 40,
                     height: 40,
-                    child: Icon(
+                    child: const Icon(
                       Icons.location_on,
                       color: Color.fromARGB(255, 229, 143, 101),
                     ),
@@ -73,13 +73,13 @@ class _MyMapState extends State<MyMap> {
                   SizedBox(height: 4), // Adjust spacing between icon and label
                   GestureDetector(
                     onTap: () async {
-                      var data = await Get.to(() => buzpage(),
+                      await Get.to(() => buzpage(),
                           arguments: mapMarker.profileId);
                     },
                     child: Text(
                       mapMarker.name,
-                      style:
-                          TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                      style: const TextStyle(
+                          fontSize: 12, fontWeight: FontWeight.bold),
                     ),
                   ),
                 ],

@@ -3,9 +3,6 @@ import 'package:final_project/Pages/IndividualAccount/selectedCatagory.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
-import 'package:get/get.dart';
-
-import '../BusinessAccount/buzpage1.dart';
 
 class CatagoryPage extends StatefulWidget {
   const CatagoryPage({super.key});
@@ -85,7 +82,7 @@ class _CatagoryPageState extends State<CatagoryPage> {
                                 itemBuilder: (context, index) {
                                   return GestureDetector(
                                       onTap: () async {
-                                        var data = await Get.to(
+                                        await Get.to(
                                             () => const SelectedCatagoryPage(),
                                             arguments: _catagoryList[index]);
                                       },
@@ -99,7 +96,7 @@ class _CatagoryPageState extends State<CatagoryPage> {
                                 }); // Use snapshot.data with a fallback value
                           } else {
                             // The asynchronous operations are still in progress
-                            return Scaffold(
+                            return const Scaffold(
                                 body: Center(
                                     child:
                                         CircularProgressIndicator())); // You can show a loading indicator here
@@ -121,7 +118,7 @@ class _CatagoryPageState extends State<CatagoryPage> {
                               itemBuilder: (context, index) {
                                 return GestureDetector(
                                   onTap: () async {
-                                    var data = await Get.to(
+                                    await Get.to(
                                         () => const SelectedCatagoryPage(),
                                         arguments: _catagoryList[index]);
                                   },
@@ -136,7 +133,7 @@ class _CatagoryPageState extends State<CatagoryPage> {
                               }); // Use snapshot.data with a fallback value
                         } else {
                           // The asynchronous operations are still in progress
-                          return Scaffold(
+                          return const Scaffold(
                               body: Center(
                                   child:
                                       CircularProgressIndicator())); // You can show a loading indicator here

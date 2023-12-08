@@ -1,10 +1,5 @@
-import 'package:final_project/Pages/BusinessAccount/BusinessProfile.dart';
 import 'package:flutter/material.dart';
-import 'package:shimmer/shimmer.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:final_project/models/models.dart';
-import 'package:final_project/Pages/BusinessAccount/businesspage.dart';
 import 'package:get/get.dart';
 
 import '../Pages/BusinessAccount/buzpage1.dart';
@@ -43,7 +38,7 @@ class _RecentlyAddedState extends State<RecentlyAdded> {
                     itemBuilder: (context, index) {
                       return GestureDetector(
                         onTap: () async {
-                          var data = await Get.to(() => buzpage(),
+                          await Get.to(() => buzpage(),
                               arguments: RecentlyAdded[index]["bid"]);
                         },
                         child: SizedBox(
@@ -53,7 +48,7 @@ class _RecentlyAddedState extends State<RecentlyAdded> {
                                 Container(
                                   padding: const EdgeInsets.all(10),
                                   margin: const EdgeInsets.all(1),
-                                  child: Text(''),
+                                  child: const Text(''),
                                   decoration: BoxDecoration(
                                     image: DecorationImage(
                                         image: NetworkImage(
@@ -70,7 +65,7 @@ class _RecentlyAddedState extends State<RecentlyAdded> {
                                     left: 25,
                                     child: Text(
                                         '${RecentlyAdded[index]["Business Name"]}',
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                             color: Colors.white,
                                             fontSize: 15,
                                             fontWeight: FontWeight.bold)))

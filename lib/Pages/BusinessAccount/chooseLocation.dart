@@ -1,4 +1,3 @@
-import 'package:final_project/Pages/BusinessAccount/finishProfilePage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:get/get.dart';
@@ -13,7 +12,7 @@ class ChooseLocationPage extends StatefulWidget {
   State<ChooseLocationPage> createState() => _ChooseLocationPageState();
 }
 
-LatLng selectedCoordinates = const LatLng(37.7749, -122.4194);
+LatLng? selectedCoordinates = const LatLng(37.7749, -122.4194);
 late TapPosition tapPosition;
 
 class _ChooseLocationPageState extends State<ChooseLocationPage> {

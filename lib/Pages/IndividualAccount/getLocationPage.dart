@@ -1,8 +1,6 @@
 import 'package:final_project/mainPage.dart';
 import 'package:final_project/models/getX.dart';
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:geocoding/geocoding.dart';
 import 'package:get/get.dart';
 
 class GetLocation extends StatefulWidget {
@@ -30,7 +28,8 @@ class _GetLocationState extends State<GetLocation> {
           return const mainPage();
         } else {
           return Container(
-              alignment: Alignment.center, child: CircularProgressIndicator());
+              alignment: Alignment.center,
+              child: const CircularProgressIndicator());
         }
       },
     ));

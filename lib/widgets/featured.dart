@@ -46,14 +46,14 @@ class _featuredState extends State<featured> {
                             child: Padding(
                                 padding: const EdgeInsets.all(9),
                                 child: Shimmer.fromColors(
+                                  baseColor: Colors.grey,
+                                  highlightColor: Colors.white,
                                   child: Container(
                                     padding: const EdgeInsets.all(10),
                                     margin: const EdgeInsets.all(1),
                                     width: 150,
                                     height: 300,
                                   ),
-                                  baseColor: Colors.grey,
-                                  highlightColor: Colors.white,
                                 )),
                           );
                         }),
@@ -79,7 +79,6 @@ class _featuredState extends State<featured> {
                                   Container(
                                     padding: const EdgeInsets.all(10),
                                     margin: const EdgeInsets.all(1),
-                                    child: Text(''),
                                     decoration: BoxDecoration(
                                       image: DecorationImage(
                                           image: NetworkImage(
@@ -89,13 +88,14 @@ class _featuredState extends State<featured> {
                                     ),
                                     width: 150,
                                     height: 300,
+                                    child: Text(''),
                                   ),
                                   Positioned(
                                       bottom: 20,
                                       left: 20,
                                       child: Text(
                                           '${fearured[index]["Business Name"]}',
-                                          style: TextStyle(
+                                          style: const TextStyle(
                                               color: Colors.white,
                                               fontSize: 15,
                                               fontWeight: FontWeight.bold)))
@@ -104,7 +104,7 @@ class _featuredState extends State<featured> {
                         );
                       });
                 } else {
-                  return SizedBox(
+                  return const SizedBox(
                     height: 300,
                     child: Center(
                       child: Text("Server Error!!"),

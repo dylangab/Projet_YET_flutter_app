@@ -53,6 +53,16 @@ String? coordinateText;
 final GetMapController controller = Get.put(GetMapController());
 
 class _ProfileEditPageState extends State<ProfileEditPage> {
+  void dispose() {
+    buzName.dispose();
+    firstNameController.dispose();
+    lastNameController.dispose();
+    descriptionController.dispose();
+    serviceController.dispose();
+    phoneNoController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -6,10 +6,7 @@ import 'package:final_project/Pages/IndividualAccount/homepage.dart';
 import 'package:final_project/Pages/IndividualAccount/EventPage.dart';
 import 'package:final_project/Pages/IndividualAccount/Catagory.dart';
 import 'package:final_project/Pages/IndividualAccount/NotificationPage.dart';
-import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import 'models/getX.dart';
 
 class mainPage extends StatefulWidget {
   const mainPage({super.key});
@@ -59,16 +56,18 @@ class _mainPageState extends State<mainPage> {
             elevation: 0,
             onTap: onTap,
             items: [
-              BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-              BottomNavigationBarItem(
+              const BottomNavigationBarItem(
+                  icon: Icon(Icons.home), label: 'Home'),
+              const BottomNavigationBarItem(
                   icon: Icon(Icons.menu), label: 'Catagory'),
-              BottomNavigationBarItem(icon: Icon(Icons.event), label: 'Event'),
+              const BottomNavigationBarItem(
+                  icon: Icon(Icons.event), label: 'Event'),
               BottomNavigationBarItem(
                   icon: Badge(
-                    child: Icon(
+                    label: Text("$counter"),
+                    child: const Icon(
                       Icons.notifications,
                     ),
-                    label: Text("$counter"),
                   ),
                   label: 'Annocmnet'),
             ]),

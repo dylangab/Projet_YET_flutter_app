@@ -1,4 +1,3 @@
-import 'package:final_project/Pages/BusinessAccount/finishProfilePage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:get/get.dart';
@@ -13,7 +12,7 @@ class ShowOnMap extends StatefulWidget {
   State<ShowOnMap> createState() => _ShowOnMapState();
 }
 
-LatLng selectedCoordinates = const LatLng(37.7749, -122.4194);
+LatLng? selectedCoordinates = const LatLng(37.7749, -122.4194);
 late TapPosition tapPosition;
 
 class _ShowOnMapState extends State<ShowOnMap> {
@@ -49,7 +48,7 @@ class _ShowOnMapState extends State<ShowOnMap> {
                   width: 30.0,
                   height: 30.0,
                   point: Get.arguments,
-                  builder: (ctx) => Container(
+                  builder: (ctx) => const SizedBox(
                     child: Icon(
                       Icons.location_on,
                       color: Colors.red,

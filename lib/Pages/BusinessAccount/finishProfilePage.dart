@@ -4,15 +4,13 @@ import 'package:final_project/Pages/BusinessAccount/chooseLocation.dart';
 import 'package:final_project/models/businessaa.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:final_project/models/imagepicker.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:flutter_animated_button/flutter_animated_button.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:switcher_button/switcher_button.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:geocoding/geocoding.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -51,12 +49,22 @@ class _FinishProPageState extends State<FinishProPage> {
   String? profilePicUrl;
   String? covorPhotoUrl;
   String? coordinateText;
+  bool proPic = false;
+  bool coverPic = false;
+  XFile? proFile;
+  XFile? coverFile;
 
   @override
   void initState() {
     super.initState();
     fetchCatagory();
     coordinateToText();
+  }
+
+  void dispose() {
+    buzDescription.dispose();
+    _buzDescription.dispose();
+    super.dispose();
   }
 
   @override
@@ -79,7 +87,10 @@ class _FinishProPageState extends State<FinishProPage> {
                     child: Container(
                       width: 100,
                       height: 100,
-                      decoration: const BoxDecoration(color: Colors.red),
+                      decoration: const BoxDecoration(
+                          image: DecorationImage(
+                              image: AssetImage('assets/icon.png'),
+                              fit: BoxFit.fill)),
                     ),
                   ),
                 ),
@@ -125,28 +136,40 @@ class _FinishProPageState extends State<FinishProPage> {
                 decoration: const BoxDecoration(
                     color: Color.fromARGB(255, 238, 240, 235),
                     shape: BoxShape.circle),
-                child: Center(
-                  child: IconButton(
-                      onPressed: () async {
-                        ImagePicker imagePicker = ImagePicker();
-                        XFile? file = await imagePicker.pickImage(
-                            source: ImageSource.gallery);
-                        print('${file?.path}');
-                        String filename =
-                            DateTime.now().microsecondsSinceEpoch.toString();
+                child: proPic
+                    ? Image.file(
+                        File(proFile!.path),
+                        fit: BoxFit.fill,
+                      )
+                    : Center(
+                        child: IconButton(
+                            onPressed: () async {
+                              ImagePicker imagePicker = ImagePicker();
+                              proFile = await imagePicker.pickImage(
+                                  source: ImageSource.gallery);
+                              print('${proFile?.path}');
+                              String filename = DateTime.now()
+                                  .microsecondsSinceEpoch
+                                  .toString();
 
-                        Reference reference = FirebaseStorage.instance.ref();
-                        Reference referenceimage = reference.child('images');
-                        Reference referenceupload =
-                            referenceimage.child(filename);
-                        try {
-                          await referenceupload.putFile(File(file!.path));
-                          profilePicUrl =
-                              await referenceupload.getDownloadURL();
-                        } catch (e) {}
-                      },
-                      icon: const Icon(Icons.add_a_photo)),
-                ),
+                              Reference reference =
+                                  FirebaseStorage.instance.ref();
+                              Reference referenceimage =
+                                  reference.child('images');
+                              Reference referenceupload =
+                                  referenceimage.child(filename);
+                              try {
+                                await referenceupload
+                                    .putFile(File(proFile!.path));
+                                profilePicUrl =
+                                    await referenceupload.getDownloadURL();
+                                setState(() {
+                                  proPic = true;
+                                });
+                              } catch (e) {}
+                            },
+                            icon: const Icon(Icons.add_a_photo)),
+                      ),
               ),
             ),
           ),
@@ -168,28 +191,37 @@ class _FinishProPageState extends State<FinishProPage> {
                 decoration: const BoxDecoration(
                     color: Color.fromARGB(255, 238, 240, 235),
                     shape: BoxShape.circle),
-                child: Center(
-                  child: IconButton(
-                      onPressed: () async {
-                        ImagePicker imagePicker = ImagePicker();
-                        XFile? file = await imagePicker.pickImage(
-                            source: ImageSource.gallery);
-                        print('${file?.path}');
-                        String filename =
-                            DateTime.now().microsecondsSinceEpoch.toString();
+                child: coverPic
+                    ? Image.file(File(coverFile!.path), fit: BoxFit.fill)
+                    : Center(
+                        child: IconButton(
+                            onPressed: () async {
+                              ImagePicker imagePicker = ImagePicker();
+                              coverFile = await imagePicker.pickImage(
+                                  source: ImageSource.gallery);
+                              print('${coverFile?.path}');
+                              String filename = DateTime.now()
+                                  .microsecondsSinceEpoch
+                                  .toString();
 
-                        Reference reference = FirebaseStorage.instance.ref();
-                        Reference referenceimage = reference.child('images');
-                        Reference referenceupload =
-                            referenceimage.child(filename);
-                        try {
-                          await referenceupload.putFile(File(file!.path));
-                          covorPhotoUrl =
-                              await referenceupload.getDownloadURL();
-                        } catch (e) {}
-                      },
-                      icon: const Icon(Icons.add_a_photo)),
-                ),
+                              Reference reference =
+                                  FirebaseStorage.instance.ref();
+                              Reference referenceimage =
+                                  reference.child('images');
+                              Reference referenceupload =
+                                  referenceimage.child(filename);
+                              try {
+                                await referenceupload
+                                    .putFile(File(coverFile!.path));
+                                covorPhotoUrl =
+                                    await referenceupload.getDownloadURL();
+                                setState(() {
+                                  coverPic = true;
+                                });
+                              } catch (e) {}
+                            },
+                            icon: const Icon(Icons.add_a_photo)),
+                      ),
               ),
             ),
           ),
@@ -218,6 +250,9 @@ class _FinishProPageState extends State<FinishProPage> {
                               width: 1.5,
                               color: const Color.fromARGB(255, 66, 106, 90))),
                       child: TextFormField(
+                          maxLines: null,
+                          keyboardType: TextInputType.multiline,
+                          textInputAction: TextInputAction.newline,
                           focusNode: _buzDescription,
                           validator: (value) {
                             String? message;
@@ -876,87 +911,72 @@ class _FinishProPageState extends State<FinishProPage> {
                     backgroundColor: MaterialStatePropertyAll(
                         Color.fromARGB(255, 229, 143, 101)),
                   ),
-                  onPressed: () {
-                    if (_formkey.currentState!.validate()) {
-                      Map<String, dynamic> businessHours = {
-                        'Monday': {
-                          'Opens': _formBuilderOpenTimeKey
-                              .currentState!.fields['Monday_Opentime']!.value
-                              .toString(),
-                          'Closes': _formBuilderCloseTimeKey
-                              .currentState!.fields['Monday_Closetime']!.value
-                              .toString(),
-                        },
-                        'Tuesday': {
-                          'Opens': _formBuilderOpenTimeKey
-                              .currentState!.fields['tuesday_Opentime']!.value
-                              .toString(),
-                          'Closes': _formBuilderCloseTimeKey
-                              .currentState!.fields['tuesday_Closetime']!.value
-                              .toString(),
-                        },
-                        'Wednesday': {
-                          'Opens': _formBuilderOpenTimeKey
-                              .currentState!.fields['Wednesday_Opentime']!.value
-                              .toString(),
-                          'Closes': _formBuilderCloseTimeKey.currentState!
-                              .fields['Wednesday_Closetime']!.value
-                              .toString(),
-                        },
-                        'Thursday': {
-                          'Opens': _formBuilderCloseTimeKey
-                              .currentState!.fields['Thursday_Opentime']!.value
-                              .toString(),
-                          'Closes': _formBuilderCloseTimeKey
-                              .currentState!.fields['Thursday_Closetime']!.value
-                              .toString(),
-                        },
-                        'Friday': {
-                          'Opens': _formBuilderCloseTimeKey
-                              .currentState!.fields['Friday_Opentime']!.value
-                              .toString(),
-                          'Closes': _formBuilderCloseTimeKey
-                              .currentState!.fields['Friday_Closetime']!.value
-                              .toString(),
-                        },
-                        'Saturnday': {
-                          'Opens': _formBuilderCloseTimeKey
-                              .currentState!.fields['Saturday_Opentime']!.value
-                              .toString(),
-                          'Closes': _formBuilderCloseTimeKey
-                              .currentState!.fields['Saturday_Closetime']!.value
-                              .toString(),
-                        },
-                        'Sunday': {
-                          'Opens': _formBuilderCloseTimeKey
-                              .currentState!.fields['Sunday_Opentime']!.value
-                              .toString(),
-                          'Closes': _formBuilderCloseTimeKey
-                              .currentState!.fields['Sunday_Closetime']!.value
-                              .toString(),
-                        },
-                      };
-                      Businessacc()
-                          .finishAccount(
-                            businessaddress: coordinateText.toString(),
-                            profilefinish: "yes",
-                            description: buzDescription.value.text,
-                            coverPhoto: covorPhotoUrl!,
-                            bcatagory: selectedValue!,
-                            profilePic: profilePicUrl!,
-                            website: _website.value.text,
-                            coordinates: LatLng(
-                              controller.coordinates!.value.latitude,
-                              controller.coordinates!.value.longitude,
-                            ),
-                          )
-                          .then((value) => FirebaseFirestore.instance
-                              .collection('Business Accounts Requests')
-                              .doc(_auth.currentUser!.uid)
-                              .collection('bussiness_Hours')
-                              .doc(_auth.currentUser!.uid)
-                              .set(businessHours));
-                    }
+                  onPressed: () async {
+                    Map<String, dynamic> businessHours = {
+                      'Monday': {
+                        'Opens': _formBuilderOpenTimeKey
+                            .currentState!.fields['Monday_Opentime']?.value
+                            .toString(),
+                        'Closes': _formBuilderCloseTimeKey
+                            .currentState!.fields['Monday_Closetime']?.value
+                            .toString(),
+                      },
+                      'Tuesday': {
+                        'Opens': _formBuilderOpenTimeKey
+                            .currentState!.fields['tuesday_Opentime']?.value
+                            .toString(),
+                        'Closes': _formBuilderCloseTimeKey
+                            .currentState!.fields['tuesday_Closetime']?.value
+                            .toString(),
+                      },
+                      'Wednesday': {
+                        'Opens': _formBuilderOpenTimeKey
+                            .currentState!.fields['Wednesday_Opentime']?.value
+                            .toString(),
+                        'Closes': _formBuilderCloseTimeKey
+                            .currentState!.fields['Wednesday_Closetime']?.value
+                            .toString(),
+                      },
+                      'Thursday': {
+                        'Opens': _formBuilderOpenTimeKey
+                            .currentState!.fields['Thursday_Opentime']?.value
+                            .toString(),
+                        'Closes': _formBuilderCloseTimeKey
+                            .currentState!.fields['Thursday_Closetime']?.value
+                            .toString(),
+                      },
+                      'Friday': {
+                        'Opens': _formBuilderOpenTimeKey
+                            .currentState!.fields['Friday_Opentime']?.value
+                            .toString(),
+                        'Closes': _formBuilderCloseTimeKey
+                            .currentState!.fields['Friday_Closetime']?.value
+                            .toString(),
+                      },
+                      'Saturnday': {
+                        'Opens': _formBuilderOpenTimeKey
+                            .currentState!.fields['Saturday_Opentime']?.value
+                            .toString(),
+                        'Closes': _formBuilderCloseTimeKey
+                            .currentState!.fields['Saturday_Closetime']?.value
+                            .toString(),
+                      },
+                      'Sunday': {
+                        'Opens': _formBuilderOpenTimeKey
+                            .currentState!.fields['Sunday_Opentime']?.value
+                            .toString(),
+                        'Closes': _formBuilderCloseTimeKey
+                            .currentState!.fields['Sunday_Closetime']?.value
+                            .toString(),
+                      },
+                    };
+                    await finishAccount(_auth.currentUser!.uid);
+                    await FirebaseFirestore.instance
+                        .collection('Business Accounts Requests')
+                        .doc(_auth.currentUser!.uid)
+                        .collection('bussiness_Hours')
+                        .doc(_auth.currentUser!.uid)
+                        .set(businessHours);
                   },
                   child: const Text('Submit')),
             ),
@@ -989,6 +1009,24 @@ class _FinishProPageState extends State<FinishProPage> {
     Placemark placemark = placemarks.first;
     setState(() {
       coordinateText = " ${placemark.locality}, ${placemark.country}, ";
+    });
+  }
+
+  Future<void> finishAccount(String bid) async {
+    LatLng coordinate = LatLng(controller.coordinates!.value.latitude,
+        controller.coordinates!.value.longitude);
+    await FirebaseFirestore.instance
+        .collection('Business Accounts Requests')
+        .doc(bid)
+        .update({
+      'Business Address': coordinateText.toString(),
+      'profile_Pic': profilePicUrl!,
+      'description': buzDescription.value.text,
+      'businesscatagory': selectedValue!,
+      'coverPhoto': covorPhotoUrl!,
+      'profile_finish': "yes",
+      'website': _website.value.text,
+      'coordinates': coordinate.toString(),
     });
   }
 }

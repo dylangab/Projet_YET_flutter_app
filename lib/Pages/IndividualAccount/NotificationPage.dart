@@ -1,12 +1,10 @@
 import 'package:final_project/Pages/BusinessAccount/buzpage1.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:final_project/widgets/RecentlyAdded.dart';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:lorem_ipsum/lorem_ipsum.dart';
-
-import '../../models/notiservice.dart';
 
 class indiannoucmnetpage extends StatefulWidget {
   const indiannoucmnetpage({super.key});
@@ -22,7 +20,6 @@ class _indiannoucmnetpageState extends State<indiannoucmnetpage> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   String text = loremIpsum(words: 20, initWithLorem: true);
   Widget build(BuildContext context) {
-    Future<int> counter = messageCounter();
     return Scaffold(
         appBar: AppBar(
           elevation: 0,
@@ -122,9 +119,8 @@ class _indiannoucmnetpageState extends State<indiannoucmnetpage> {
                                                     CrossAxisAlignment.start,
                                                 children: [
                                                   Padding(
-                                                    padding:
-                                                        EdgeInsets.fromLTRB(
-                                                            20, 8, 0, 10),
+                                                    padding: const EdgeInsets
+                                                        .fromLTRB(20, 8, 0, 10),
                                                     child: CircleAvatar(
                                                       backgroundImage:
                                                           NetworkImage(annoucmnet[
@@ -135,10 +131,12 @@ class _indiannoucmnetpageState extends State<indiannoucmnetpage> {
                                                     ),
                                                   ),
                                                   Padding(
-                                                    padding: EdgeInsets.all(20),
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            20),
                                                     child: Text(
                                                       "${annoucmnet[index]["timestamp"].toString()}",
-                                                      style: TextStyle(
+                                                      style: const TextStyle(
                                                           fontSize: 13,
                                                           fontWeight:
                                                               FontWeight.w300),
@@ -153,7 +151,7 @@ class _indiannoucmnetpageState extends State<indiannoucmnetpage> {
                                 );
                               },
                             )
-                          : Center(
+                          : const Center(
                               child: Text("No messages yet..."),
                             );
                     }),

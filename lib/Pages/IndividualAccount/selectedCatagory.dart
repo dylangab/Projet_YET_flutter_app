@@ -38,7 +38,7 @@ class _SelectedCatagoryPageState extends State<SelectedCatagoryPage> {
                     itemBuilder: (context, index) {
                       return GestureDetector(
                         onTap: () async {
-                          var data = await Get.to(() => buzpage(),
+                          await Get.to(() => buzpage(),
                               arguments: selectedCatagory[index]["bid"]);
                         },
                         child: SizedBox(
@@ -65,7 +65,7 @@ class _SelectedCatagoryPageState extends State<SelectedCatagoryPage> {
                                     left: 20,
                                     child: Text(
                                       '${selectedCatagory[index]["Business Name"]}',
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                           color: Colors.white,
                                           fontSize: 15,
                                           fontWeight: FontWeight.bold),

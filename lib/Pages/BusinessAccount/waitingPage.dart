@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:final_project/Pages/BusinessAccount/finishProfilePage.dart';
+import 'package:final_project/Pages/IndividualAccount/Drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:get/get.dart';
 
 class WaitingPage extends StatefulWidget {
   const WaitingPage({super.key});
@@ -19,7 +19,8 @@ class _WaitingPageState extends State<WaitingPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: StreamBuilder(
+      drawer: const DrawerPage(),
+      body: /*StreamBuilder(
       stream: FirebaseFirestore.instance
           .collection("Business Accounts Requests")
           .doc(_auth.currentUser!.uid)
@@ -68,10 +69,10 @@ class _WaitingPageState extends State<WaitingPage> {
               ))
             : const FinishProPage();
       },
-    )
+    ) */
 
-        /*   Container(
-          child: const Padding(
+          Container(
+              child: const Padding(
         padding: EdgeInsets.all(15.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -98,7 +99,7 @@ class _WaitingPageState extends State<WaitingPage> {
             ),
           ],
         ),
-      )), */
-        );
+      )),
+    );
   }
 }

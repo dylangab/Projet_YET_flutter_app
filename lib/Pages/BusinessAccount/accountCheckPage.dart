@@ -1,11 +1,10 @@
 import 'package:final_project/Pages/BusinessAccount/BpPage.dart';
 import 'package:final_project/Pages/BusinessAccount/finishProfilePage.dart';
 import 'package:final_project/Pages/BusinessAccount/waitingPage.dart';
-import 'package:final_project/Pages/IndividualAccount/homepage.dart';
+
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:get/get.dart';
 
 import '../../mainPage.dart';
 import '../../widgets/LoginTab.dart';
@@ -21,7 +20,7 @@ class _AccountCheckPageState extends State<AccountCheckPage> {
   @override
   void initState() {
     super.initState();
-    accountCheck();
+    //   accountCheck();
   }
 
   User? user;
@@ -46,19 +45,33 @@ class _AccountCheckPageState extends State<AccountCheckPage> {
                 snapshot.data ?? 0]; // Use snapshot.data with a fallback value
           } else {
             // The asynchronous operations are still in progress
-            return Scaffold(
-                body: Center(
-                    child:
-                        CircularProgressIndicator())); // You can show a loading indicator here
+            return const Scaffold(
+                body: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 40),
+                  child: Image(
+                    height: 300,
+                    image: AssetImage('assets/landingpage.png'),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 40),
+                  child: CircularProgressIndicator(
+                      color: Color.fromARGB(255, 229, 143, 101)),
+                ),
+              ],
+            )); // You can show a loading indicator here
           }
         });
   }
 
   Future<User> getUser() async {
     FirebaseAuth auth = FirebaseAuth.instance;
-    User? user = auth.currentUser;
+    User user = auth.currentUser!;
 
-    return user!;
+    return user;
   }
 
   Future<bool> roleChecker(String? user) async {
@@ -69,6 +82,8 @@ class _AccountCheckPageState extends State<AccountCheckPage> {
           .doc('${user}');
       DocumentSnapshot documentSnapshot = await documentReference.get();
       exists = documentSnapshot.exists;
+    } else {
+      exists == false;
     }
     return exists!;
   }
@@ -103,8 +118,8 @@ class _AccountCheckPageState extends State<AccountCheckPage> {
       exists = await roleChecker(user!.uid.toString());
       index = await pageBuilder(user!.uid.toString(), exists!);
     } else {
-      index = 0;
+      index = 4;
     }
-    return index!;
+    return index;
   }
 }

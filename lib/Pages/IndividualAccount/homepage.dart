@@ -4,8 +4,6 @@ import '../../widgets/RecentlyAdded.dart';
 import 'package:final_project/widgets/featured.dart';
 import 'package:final_project/widgets/MostRated.dart';
 import 'package:final_project/Pages/IndividualAccount/Drawer.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});

@@ -107,6 +107,9 @@ flutter:
   assets:
     - assets/under.webp
     - assets/waiting.gif
+    - assets/icon.png
+    - assets/logo.png
+    - assets/landingpage.png
     
 
   # An image asset can refer to one or more resolution-specific "variants", see

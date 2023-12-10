@@ -23,8 +23,10 @@ class _MyMapState extends State<MyMap> {
   void fetchMarkerDataFromFirestore() async {
     FirebaseFirestore firestore = FirebaseFirestore.instance;
 
-    QuerySnapshot querySnapshot =
-        await firestore.collection("Business Accounts Requests").get();
+    QuerySnapshot querySnapshot = await firestore
+        .collection("Business Accounts Requests")
+        .where('profile_finish', isEqualTo: 'yes')
+        .get();
 
     List<MapMarker> markers = querySnapshot.docs.map((doc) {
       Map<String, dynamic> data = doc.data() as Map<String, dynamic>;

@@ -56,7 +56,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primaryColor: Colors.white,
       ),
-      home: const FinishProPage(),
+      home: const LoginTab(),
     );
   }
 }

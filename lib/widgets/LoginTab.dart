@@ -68,7 +68,10 @@ class _LoginTabState extends State<LoginTab> with TickerProviderStateMixin {
                 child: Container(
                   width: 100,
                   height: 100,
-                  decoration: const BoxDecoration(color: Colors.red),
+                  decoration: const BoxDecoration(
+                      image: DecorationImage(
+                          image: AssetImage('assets/icon.png'),
+                          fit: BoxFit.fill)),
                 ),
               ),
             ),
@@ -472,9 +475,9 @@ class _LoginTabState extends State<LoginTab> with TickerProviderStateMixin {
                                             .signInWithEmailAndPassword(
                                                 email: buzemail.value.text,
                                                 password: buzpass.value.text)
-                                            .then((value) => isDocumentExists(
-                                                "Business Accounts Requests",
-                                                value.user!.uid));
+                                            .then((value) => Get.to(
+                                                () => AccountCheckPage(),
+                                                arguments: value));
                                       } on FirebaseAuthException catch (e) {
                                         if (e.code == 'user-not-found') {
                                           ScaffoldMessenger.of(context)
@@ -549,7 +552,7 @@ class _LoginTabState extends State<LoginTab> with TickerProviderStateMixin {
     } else if (index == 1) {
       indiclicked = false;
     }
-    return indiclicked!;
+    return indiclicked;
   }
 
   Future<void> isDocumentExists(String collection, String documentId) async {

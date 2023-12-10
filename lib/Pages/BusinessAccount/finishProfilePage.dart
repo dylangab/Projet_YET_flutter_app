@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:final_project/Pages/BusinessAccount/BpPage.dart';
 import 'package:final_project/Pages/BusinessAccount/chooseLocation.dart';
 import 'package:final_project/models/businessaa.dart';
 import 'package:flutter/material.dart';
@@ -127,49 +128,40 @@ class _FinishProPageState extends State<FinishProPage> {
           ),
           Padding(
             padding: const EdgeInsets.only(top: 21),
-            child: Material(
-              shape: const CircleBorder(),
-              elevation: 3,
-              child: Container(
-                width: 50,
-                height: 120,
-                decoration: const BoxDecoration(
-                    color: Color.fromARGB(255, 238, 240, 235),
-                    shape: BoxShape.circle),
-                child: proPic
-                    ? Image.file(
-                        File(proFile!.path),
-                        fit: BoxFit.fill,
-                      )
-                    : Center(
-                        child: IconButton(
-                            onPressed: () async {
-                              ImagePicker imagePicker = ImagePicker();
-                              proFile = await imagePicker.pickImage(
-                                  source: ImageSource.gallery);
-                              print('${proFile?.path}');
-                              String filename = DateTime.now()
-                                  .microsecondsSinceEpoch
-                                  .toString();
+            child: GestureDetector(
+              onTap: () async {
+                ImagePicker imagePicker = ImagePicker();
+                proFile =
+                    await imagePicker.pickImage(source: ImageSource.gallery);
+                print('${proFile?.path}');
+                String filename =
+                    DateTime.now().microsecondsSinceEpoch.toString();
 
-                              Reference reference =
-                                  FirebaseStorage.instance.ref();
-                              Reference referenceimage =
-                                  reference.child('images');
-                              Reference referenceupload =
-                                  referenceimage.child(filename);
-                              try {
-                                await referenceupload
-                                    .putFile(File(proFile!.path));
-                                profilePicUrl =
-                                    await referenceupload.getDownloadURL();
-                                setState(() {
-                                  proPic = true;
-                                });
-                              } catch (e) {}
-                            },
-                            icon: const Icon(Icons.add_a_photo)),
-                      ),
+                Reference reference = FirebaseStorage.instance.ref();
+                Reference referenceimage = reference.child('images');
+                Reference referenceupload = referenceimage.child(filename);
+                try {
+                  await referenceupload.putFile(File(proFile!.path));
+                  profilePicUrl = await referenceupload.getDownloadURL();
+                  setState(() {
+                    proPic = true;
+                  });
+                } catch (e) {}
+              },
+              child: Material(
+                shape: const CircleBorder(),
+                elevation: 3,
+                child: CircleAvatar(
+                  backgroundColor: Color.fromARGB(255, 238, 240, 235),
+                  radius: 60,
+                  child: proPic
+                      ? Image.file(File(proFile!.path), fit: BoxFit.contain)
+                      : Center(
+                          child: IconButton(
+                              onPressed: () async {},
+                              icon: const Icon(Icons.add_a_photo)),
+                        ),
+                ),
               ),
             ),
           ),
@@ -181,47 +173,44 @@ class _FinishProPageState extends State<FinishProPage> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(top: 15),
-            child: Material(
-              shape: const CircleBorder(),
-              elevation: 3,
-              child: Container(
-                width: 20,
-                height: 120,
-                decoration: const BoxDecoration(
-                    color: Color.fromARGB(255, 238, 240, 235),
-                    shape: BoxShape.circle),
-                child: coverPic
-                    ? Image.file(File(coverFile!.path), fit: BoxFit.fill)
-                    : Center(
-                        child: IconButton(
-                            onPressed: () async {
-                              ImagePicker imagePicker = ImagePicker();
-                              coverFile = await imagePicker.pickImage(
-                                  source: ImageSource.gallery);
-                              print('${coverFile?.path}');
-                              String filename = DateTime.now()
-                                  .microsecondsSinceEpoch
-                                  .toString();
+            padding: const EdgeInsets.fromLTRB(30, 15, 30, 0),
+            child: GestureDetector(
+              onTap: () async {
+                ImagePicker imagePicker = ImagePicker();
+                coverFile =
+                    await imagePicker.pickImage(source: ImageSource.gallery);
+                print('${coverFile?.path}');
+                String filename =
+                    DateTime.now().microsecondsSinceEpoch.toString();
 
-                              Reference reference =
-                                  FirebaseStorage.instance.ref();
-                              Reference referenceimage =
-                                  reference.child('images');
-                              Reference referenceupload =
-                                  referenceimage.child(filename);
-                              try {
-                                await referenceupload
-                                    .putFile(File(coverFile!.path));
-                                covorPhotoUrl =
-                                    await referenceupload.getDownloadURL();
-                                setState(() {
-                                  coverPic = true;
-                                });
-                              } catch (e) {}
-                            },
-                            icon: const Icon(Icons.add_a_photo)),
-                      ),
+                Reference reference = FirebaseStorage.instance.ref();
+                Reference referenceimage = reference.child('images');
+                Reference referenceupload = referenceimage.child(filename);
+                try {
+                  await referenceupload.putFile(File(coverFile!.path));
+                  covorPhotoUrl = await referenceupload.getDownloadURL();
+                  setState(() {
+                    coverPic = true;
+                  });
+                } catch (e) {}
+              },
+              child: Material(
+                shape: const RoundedRectangleBorder(),
+                elevation: 3,
+                child: Container(
+                  width: 150,
+                  height: 120,
+                  decoration: const BoxDecoration(
+                      color: Color.fromARGB(255, 238, 240, 235),
+                      shape: BoxShape.rectangle),
+                  child: coverPic
+                      ? Image.file(File(coverFile!.path), fit: BoxFit.fill)
+                      : Center(
+                          child: IconButton(
+                              onPressed: () async {},
+                              icon: const Icon(Icons.add_a_photo)),
+                        ),
+                ),
               ),
             ),
           ),
@@ -977,6 +966,7 @@ class _FinishProPageState extends State<FinishProPage> {
                         .collection('bussiness_Hours')
                         .doc(_auth.currentUser!.uid)
                         .set(businessHours);
+                    Get.to(() => const BpPage());
                   },
                   child: const Text('Submit')),
             ),
@@ -1027,6 +1017,7 @@ class _FinishProPageState extends State<FinishProPage> {
       'profile_finish': "yes",
       'website': _website.value.text,
       'coordinates': coordinate.toString(),
+      'reviews': "No Reviews yet"
     });
   }
 }

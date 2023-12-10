@@ -1,20 +1,17 @@
 import 'package:flutter/material.dart';
 
-class WaitingPage extends StatefulWidget {
-  const WaitingPage({super.key});
+class RejectedPage extends StatefulWidget {
+  const RejectedPage({super.key});
 
   @override
-  State<WaitingPage> createState() => _WaitingPageState();
+  State<RejectedPage> createState() => _RejectedPageState();
 }
 
-int? index;
-
-class _WaitingPageState extends State<WaitingPage> {
+class _RejectedPageState extends State<RejectedPage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-          child: const Padding(
+    return const Scaffold(
+      body: Padding(
         padding: EdgeInsets.all(15.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -41,7 +38,7 @@ class _WaitingPageState extends State<WaitingPage> {
             ),
           ],
         ),
-      )),
+      ),
     );
   }
 }

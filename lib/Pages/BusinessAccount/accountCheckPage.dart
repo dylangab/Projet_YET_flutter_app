@@ -1,4 +1,5 @@
 import 'package:final_project/Pages/BusinessAccount/BpPage.dart';
+import 'package:final_project/Pages/BusinessAccount/RejectedPage.dart';
 import 'package:final_project/Pages/BusinessAccount/finishProfilePage.dart';
 import 'package:final_project/Pages/BusinessAccount/waitingPage.dart';
 
@@ -33,6 +34,7 @@ class _AccountCheckPageState extends State<AccountCheckPage> {
     const FinishProPage(),
     const BpPage(),
     const mainPage(),
+    const RejectedPage()
   ];
   @override
   Widget build(BuildContext context) {
@@ -101,6 +103,9 @@ class _AccountCheckPageState extends State<AccountCheckPage> {
       } else if (documentSnapshot.get('approvalStatus') == "approved" &&
           documentSnapshot.get('profile_finish') == "unfinished") {
         num = 2;
+      } else if (documentSnapshot.get('approvalStatus') == "Rejected" &&
+          documentSnapshot.get('profile_finish') == "unfinished") {
+        num = 5;
       } else if (documentSnapshot.get('approvalStatus') == "approved" &&
           documentSnapshot.get('profile_finish') == "yes") {
         num = 3;

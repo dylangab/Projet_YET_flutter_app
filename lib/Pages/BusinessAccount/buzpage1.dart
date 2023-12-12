@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:lorem_ipsum/lorem_ipsum.dart';
 
+import '../IndividualAccount/MessagePage.dart';
 import '../IndividualAccount/showOnMap.dart';
 
 class buzpage extends StatefulWidget {
@@ -74,6 +75,20 @@ class _buzpageState extends State<buzpage> with TickerProviderStateMixin {
                                 image: NetworkImage(snapshot.data!["image"]))),
                         height: 130,
                       )),
+                      Positioned(
+                          top: 10,
+                          right: 10,
+                          child: IconButton(
+                            onPressed: () {
+                              Get.to(() => MessagePage(), arguments: {
+                                'propic': snapshot.data!["profile_Pic"],
+                                'buzName': snapshot.data!["Business Name"],
+                                'bid': snapshot.data!["bid"]
+                              });
+                            },
+                            icon: const Icon(Icons.message_sharp,
+                                color: Color.fromARGB(255, 229, 143, 101)),
+                          )),
                       Positioned(
                           top: 100,
                           left: 30,
@@ -869,9 +884,14 @@ class _buzpageState extends State<buzpage> with TickerProviderStateMixin {
                                                     FirebaseAuth
                                                         .instance.currentUser!.uid
                                                   ]),*/
-                                                  'reviews':
-                                                      FieldValue.arrayUnion(
-                                                          [comment.value.text]),
+                                                  'reviews': {
+                                                    'review':
+                                                        FieldValue.arrayUnion([
+                                                      comment.value.text
+                                                    ]),
+                                                    'timestamp':
+                                                        "${DateTime.now()}"
+                                                  }
                                                 });
                                               },
                                               child:

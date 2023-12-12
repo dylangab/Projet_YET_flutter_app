@@ -111,6 +111,7 @@ class Businessacc {
     required List? followerIdList,
     required String? website,
     required List rateUids,
+    required reviews,
   }) async {
     String res = "error occured";
     try {
@@ -131,7 +132,7 @@ class Businessacc {
           'Email': email,
           'Phone Number': phoneno,
           'Business Name': businessname,
-          'Address': businessaddress,
+          'reviews': reviews,
           'Password': password,
           'bid': cred.user!.uid,
           'timestamp': FieldValue.serverTimestamp(),

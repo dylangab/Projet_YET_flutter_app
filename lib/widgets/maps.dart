@@ -34,7 +34,7 @@ class _MyMapState extends State<MyMap> {
       return MapMarker(
         profileId: data['bid'] as String,
         name: data['Business Name'] as String,
-        coordinates: data['coordinates'],
+        coordinates: LatLng(data['latitude'], data['longitude']),
       );
     }).toList();
 

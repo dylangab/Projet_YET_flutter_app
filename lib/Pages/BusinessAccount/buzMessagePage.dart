@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:final_project/widgets/LoginTab.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lorem_ipsum/lorem_ipsum.dart';
@@ -15,15 +16,10 @@ class _MessagePageState extends State<MessagePage> {
   String text = loremIpsum(words: 20, initWithLorem: true);
   List<DocumentSnapshot> message = [];
   TextEditingController _message = TextEditingController();
-  Map<String, dynamic> argument = Get.arguments as Map<String, dynamic>;
-
   String? time;
 
   @override
   Widget build(BuildContext context) {
-    String proPic = argument['propic'].toString();
-    String buzName = argument['buzName'].toString();
-    String bid = argument['bid'].toString();
     return Scaffold(
       drawer: const Drawer(),
       appBar: AppBar(
@@ -46,25 +42,24 @@ class _MessagePageState extends State<MessagePage> {
               240,
               235,
             ),
-            child: Padding(
-              padding: const EdgeInsets.all(10.0),
+            child: const Padding(
+              padding: EdgeInsets.all(10.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.only(left: 25),
+                    padding: EdgeInsets.only(left: 25),
                     child: CircleAvatar(
-                      backgroundImage: NetworkImage(proPic),
                       radius: 50,
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(top: 40, right: 70),
+                    padding: EdgeInsets.only(top: 40, right: 70),
                     child: Text(
-                      buzName,
-                      style: const TextStyle(
-                          fontSize: 30, fontWeight: FontWeight.bold),
+                      "Ras Coffee",
+                      style:
+                          TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
                     ),
                   )
                 ],
@@ -75,8 +70,6 @@ class _MessagePageState extends State<MessagePage> {
             height: 400,
             child: StreamBuilder<QuerySnapshot>(
                 stream: FirebaseFirestore.instance
-                    .collection("Business Accounts Requests")
-                    .doc(bid)
                     .collection("message")
                     .snapshots(),
                 builder: (context, snapshot) {

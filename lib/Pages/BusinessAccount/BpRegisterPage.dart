@@ -611,6 +611,7 @@ class _BpRegisterState extends State<BpRegister> {
                                           rating: 0,
                                           ratingList: [],
                                           followerIdList: [],
+                                          reviews: [],
                                           rateUids: []);
                                       await Get.to(() => const WaitingPage(),
                                           transition: Transition.fade);

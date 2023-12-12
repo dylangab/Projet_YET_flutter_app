@@ -39,6 +39,13 @@ class _FinishProPageState extends State<FinishProPage> {
   final _formkey = GlobalKey<FormState>();
   final _formBuilderOpenTimeKey = GlobalKey<FormBuilderState>();
   final _formBuilderCloseTimeKey = GlobalKey<FormBuilderState>();
+  bool enableMonday = false;
+  bool enableTuesday = false;
+  bool enablewenday = false;
+  bool enableThrusday = false;
+  bool enableFriday = false;
+  bool enableSatrunday = false;
+  bool enableSunday = false;
 
   TextEditingController buzDescription = TextEditingController();
   final GetMapController controller = Get.put(GetMapController());
@@ -54,6 +61,7 @@ class _FinishProPageState extends State<FinishProPage> {
   bool coverPic = false;
   XFile? proFile;
   XFile? coverFile;
+  final Map<String, dynamic> businessHours = {};
 
   @override
   void initState() {
@@ -403,6 +411,7 @@ class _FinishProPageState extends State<FinishProPage> {
                                         ? _mondaytext = const Color.fromARGB(
                                             255, 229, 143, 101)
                                         : _mondaytext = Colors.black;
+                                    enableMonday = !enableMonday;
                                   });
                                 },
                                 size: 40,
@@ -420,6 +429,7 @@ class _FinishProPageState extends State<FinishProPage> {
                                           ? _tuesdaytext = const Color.fromARGB(
                                               255, 229, 143, 101)
                                           : _tuesdaytext = Colors.black;
+                                      enableTuesday = !enableTuesday;
                                     });
                                   },
                                   size: 40,
@@ -438,6 +448,7 @@ class _FinishProPageState extends State<FinishProPage> {
                                           ? _wendaytext = const Color.fromARGB(
                                               255, 229, 143, 101)
                                           : _wendaytext = Colors.black;
+                                      enablewenday = !enablewenday;
                                     });
                                   },
                                   size: 40,
@@ -456,6 +467,7 @@ class _FinishProPageState extends State<FinishProPage> {
                                           ? _thurstext = const Color.fromARGB(
                                               255, 229, 143, 101)
                                           : _thurstext = Colors.black;
+                                      enableThrusday = !enableThrusday;
                                     });
                                   },
                                   size: 40,
@@ -474,6 +486,7 @@ class _FinishProPageState extends State<FinishProPage> {
                                           ? _fridaytext = const Color.fromARGB(
                                               255, 229, 143, 101)
                                           : _fridaytext = Colors.black;
+                                      enableFriday = !enableFriday;
                                     });
                                   },
                                   size: 40,
@@ -493,6 +506,7 @@ class _FinishProPageState extends State<FinishProPage> {
                                               const Color.fromARGB(
                                                   255, 229, 143, 101)
                                           : _saturndaytext = Colors.black;
+                                      enableSatrunday = !enableSatrunday;
                                     });
                                   },
                                   size: 40,
@@ -511,6 +525,7 @@ class _FinishProPageState extends State<FinishProPage> {
                                           ? _sundaytext = const Color.fromARGB(
                                               255, 229, 143, 101)
                                           : _sundaytext = Colors.black;
+                                      enableSunday = !enableSunday;
                                     });
                                   },
                                   size: 40,
@@ -601,6 +616,7 @@ class _FinishProPageState extends State<FinishProPage> {
                                     width: 50,
                                     height: 30,
                                     child: FormBuilderDateTimePicker(
+                                      enabled: enableMonday,
                                       style: const TextStyle(
                                           fontSize: 10,
                                           fontWeight: FontWeight.w500),
@@ -618,6 +634,9 @@ class _FinishProPageState extends State<FinishProPage> {
                                     width: 50,
                                     height: 30,
                                     child: FormBuilderDateTimePicker(
+                                      enabled: enableTuesday,
+                                      timePickerInitialEntryMode:
+                                          TimePickerEntryMode.inputOnly,
                                       style: const TextStyle(
                                           fontSize: 10,
                                           fontWeight: FontWeight.w500),
@@ -634,6 +653,7 @@ class _FinishProPageState extends State<FinishProPage> {
                                     width: 50,
                                     height: 30,
                                     child: FormBuilderDateTimePicker(
+                                      enabled: enablewenday,
                                       style: const TextStyle(
                                           fontSize: 10,
                                           fontWeight: FontWeight.w500),
@@ -651,6 +671,7 @@ class _FinishProPageState extends State<FinishProPage> {
                                     width: 50,
                                     height: 30,
                                     child: FormBuilderDateTimePicker(
+                                      enabled: enableThrusday,
                                       style: const TextStyle(
                                           fontSize: 10,
                                           fontWeight: FontWeight.w500),
@@ -667,6 +688,7 @@ class _FinishProPageState extends State<FinishProPage> {
                                     width: 50,
                                     height: 30,
                                     child: FormBuilderDateTimePicker(
+                                      enabled: enableFriday,
                                       style: const TextStyle(
                                           fontSize: 10,
                                           fontWeight: FontWeight.w500),
@@ -684,6 +706,7 @@ class _FinishProPageState extends State<FinishProPage> {
                                     width: 50,
                                     height: 30,
                                     child: FormBuilderDateTimePicker(
+                                      enabled: enableSatrunday,
                                       style: const TextStyle(
                                           fontSize: 10,
                                           fontWeight: FontWeight.w500),
@@ -700,6 +723,7 @@ class _FinishProPageState extends State<FinishProPage> {
                                     width: 50,
                                     height: 30,
                                     child: FormBuilderDateTimePicker(
+                                      enabled: enableSunday,
                                       style: const TextStyle(
                                           fontSize: 10,
                                           fontWeight: FontWeight.w500),
@@ -728,6 +752,7 @@ class _FinishProPageState extends State<FinishProPage> {
                                     width: 50,
                                     height: 30,
                                     child: FormBuilderDateTimePicker(
+                                      enabled: enableMonday,
                                       style: const TextStyle(
                                           fontSize: 10,
                                           fontWeight: FontWeight.w500),
@@ -745,6 +770,7 @@ class _FinishProPageState extends State<FinishProPage> {
                                     width: 50,
                                     height: 30,
                                     child: FormBuilderDateTimePicker(
+                                      enabled: enableTuesday,
                                       style: const TextStyle(
                                           fontSize: 10,
                                           fontWeight: FontWeight.w500),
@@ -761,6 +787,7 @@ class _FinishProPageState extends State<FinishProPage> {
                                     width: 50,
                                     height: 30,
                                     child: FormBuilderDateTimePicker(
+                                      enabled: enablewenday,
                                       style: const TextStyle(
                                           fontSize: 10,
                                           fontWeight: FontWeight.w500),
@@ -778,6 +805,7 @@ class _FinishProPageState extends State<FinishProPage> {
                                     width: 50,
                                     height: 30,
                                     child: FormBuilderDateTimePicker(
+                                      enabled: enableThrusday,
                                       style: const TextStyle(
                                           fontSize: 10,
                                           fontWeight: FontWeight.w500),
@@ -794,6 +822,7 @@ class _FinishProPageState extends State<FinishProPage> {
                                     width: 50,
                                     height: 30,
                                     child: FormBuilderDateTimePicker(
+                                      enabled: enableFriday,
                                       style: const TextStyle(
                                           fontSize: 10,
                                           fontWeight: FontWeight.w500),
@@ -811,6 +840,7 @@ class _FinishProPageState extends State<FinishProPage> {
                                     width: 50,
                                     height: 30,
                                     child: FormBuilderDateTimePicker(
+                                      enabled: enableSatrunday,
                                       style: const TextStyle(
                                           fontSize: 10,
                                           fontWeight: FontWeight.w500),
@@ -827,6 +857,7 @@ class _FinishProPageState extends State<FinishProPage> {
                                     width: 50,
                                     height: 30,
                                     child: FormBuilderDateTimePicker(
+                                      enabled: enableSunday,
                                       style: const TextStyle(
                                           fontSize: 10,
                                           fontWeight: FontWeight.w500),
@@ -901,7 +932,7 @@ class _FinishProPageState extends State<FinishProPage> {
                         Color.fromARGB(255, 229, 143, 101)),
                   ),
                   onPressed: () async {
-                    Map<String, dynamic> businessHours = {
+                    /*    Map<String, dynamic> businessHours = {
                       'Monday': {
                         'Opens': _formBuilderOpenTimeKey
                             .currentState!.fields['Monday_Opentime']?.value
@@ -958,14 +989,15 @@ class _FinishProPageState extends State<FinishProPage> {
                             .currentState!.fields['Sunday_Closetime']?.value
                             .toString(),
                       },
-                    };
+                    }; */
                     await finishAccount(_auth.currentUser!.uid);
-                    await FirebaseFirestore.instance
-                        .collection('Business Accounts Requests')
-                        .doc(_auth.currentUser!.uid)
-                        .collection('bussiness_Hours')
-                        .doc(_auth.currentUser!.uid)
-                        .set(businessHours);
+                    await createBusinessHoursMap().then((value) =>
+                        FirebaseFirestore.instance
+                            .collection('Business Accounts Requests')
+                            .doc(_auth.currentUser!.uid)
+                            .collection('bussiness_Hours')
+                            .doc(_auth.currentUser!.uid)
+                            .set(value));
                     Get.to(() => const BpPage());
                   },
                   child: const Text('Submit')),
@@ -998,7 +1030,7 @@ class _FinishProPageState extends State<FinishProPage> {
 
     Placemark placemark = placemarks.first;
     setState(() {
-      coordinateText = " ${placemark.locality}, ${placemark.country}, ";
+      coordinateText = "${placemark.locality}".toLowerCase();
     });
   }
 
@@ -1016,8 +1048,96 @@ class _FinishProPageState extends State<FinishProPage> {
       'coverPhoto': covorPhotoUrl!,
       'profile_finish': "yes",
       'website': _website.value.text,
-      'coordinates': coordinate.toString(),
-      'reviews': "No Reviews yet"
+      'latitude': coordinate.latitude,
+      'longitude': coordinate.longitude,
     });
+  }
+
+  Future<Map<String, dynamic>> createBusinessHoursMap() async {
+    if (enableMonday == true) {
+      businessHours.addEntries({
+        'Monday': {
+          'Opens': _formBuilderOpenTimeKey
+              .currentState!.fields['Monday_Opentime']?.value
+              .toString(),
+          'Closes': _formBuilderCloseTimeKey
+              .currentState!.fields['Monday_Closetime']?.value
+              .toString(),
+        }
+      }.entries);
+    }
+    if (enableTuesday == true) {
+      businessHours.addEntries({
+        'Tuesday': {
+          'Opens': _formBuilderOpenTimeKey
+              .currentState!.fields['tuesday_Opentime']?.value
+              .toString(),
+          'Closes': _formBuilderCloseTimeKey
+              .currentState!.fields['tuesday_Closetime']?.value
+              .toString(),
+        }
+      }.entries);
+    }
+    if (enablewenday == true) {
+      businessHours.addEntries({
+        'Wednesday': {
+          'Opens': _formBuilderOpenTimeKey
+              .currentState!.fields['Wednesday_Opentime']?.value
+              .toString(),
+          'Closes': _formBuilderCloseTimeKey
+              .currentState!.fields['Wednesday_Closetime']?.value
+              .toString(),
+        }
+      }.entries);
+    }
+    if (enableThrusday == true) {
+      businessHours.addEntries({
+        'Thursday': {
+          'Opens': _formBuilderOpenTimeKey
+              .currentState!.fields['Thursday_Opentime']?.value
+              .toString(),
+          'Closes': _formBuilderCloseTimeKey
+              .currentState!.fields['Thursday_Closetime']?.value
+              .toString(),
+        }
+      }.entries);
+    }
+    if (enableFriday == true) {
+      businessHours.addEntries({
+        'Friday': {
+          'Opens': _formBuilderOpenTimeKey
+              .currentState!.fields['Friday_Opentime']?.value
+              .toString(),
+          'Closes': _formBuilderCloseTimeKey
+              .currentState!.fields['Friday_Closetime']?.value
+              .toString(),
+        }
+      }.entries);
+    }
+    if (enableSatrunday == true) {
+      businessHours.addEntries({
+        'Saturnday': {
+          'Opens': _formBuilderOpenTimeKey
+              .currentState!.fields['Saturday_Opentime']?.value
+              .toString(),
+          'Closes': _formBuilderCloseTimeKey
+              .currentState!.fields['Saturday_Closetime']?.value
+              .toString(),
+        }
+      }.entries);
+    }
+    if (enableSunday == true) {
+      businessHours.addEntries({
+        'Sunday': {
+          'Opens': _formBuilderOpenTimeKey
+              .currentState!.fields['Sunday_Opentime']?.value
+              .toString(),
+          'Closes': _formBuilderCloseTimeKey
+              .currentState!.fields['Sunday_Closetime']?.value
+              .toString(),
+        }
+      }.entries);
+    }
+    return businessHours;
   }
 }

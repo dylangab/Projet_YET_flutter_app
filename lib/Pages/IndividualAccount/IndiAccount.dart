@@ -1,4 +1,5 @@
 import 'package:final_project/Pages/BusinessAccount/BpRegisterPage.dart';
+import 'package:final_project/Pages/IndividualAccount/InterestPage.dart';
 import 'package:flutter/material.dart';
 import 'package:final_project/models/individualacc.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -405,6 +406,7 @@ class _IndiAccountState extends State<IndiAccount> {
                                         password: password.value.text.trim(),
                                         phoneno: phoneNo.value.text.trim(),
                                         userInterest: []);
+                                    Get.to(() => InterestPage());
                                   } else {
                                     ScaffoldMessenger.of(context)
                                         .showSnackBar(const SnackBar(

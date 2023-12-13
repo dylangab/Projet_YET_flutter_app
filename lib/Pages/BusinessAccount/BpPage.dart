@@ -589,9 +589,15 @@ class _BpPageState extends State<BpPage> {
                                                     String propic =
                                                         await snapshot.data![
                                                             "profile_Pic"];
+                                                    LatLng coordinate = LatLng(
+                                                        controller.coordinates!
+                                                            .value.latitude,
+                                                        controller.coordinates!
+                                                            .value.longitude);
 
                                                     String bid =
                                                         _auth.currentUser!.uid;
+
                                                     await FirebaseFirestore
                                                         .instance
                                                         .collection('Events')
@@ -608,15 +614,12 @@ class _BpPageState extends State<BpPage> {
                                                       'photoUrl': photoUrl,
                                                       'comments': [],
                                                       'likeduid': [],
-                                                      'coodinates': LatLng(
-                                                          controller
-                                                              .coordinates!
-                                                              .value
-                                                              .latitude,
-                                                          controller
-                                                              .coordinates!
-                                                              .value
-                                                              .longitude),
+                                                      'coodinates': {
+                                                        'latitude':
+                                                            coordinate.latitude,
+                                                        'longitude':
+                                                            coordinate.longitude
+                                                      },
                                                       'address': _coordinateText
                                                           .toString(),
                                                     });
@@ -973,41 +976,7 @@ class _BpPageState extends State<BpPage> {
                                       )
                                     : const Center(
                                         child: Text("No Photos Yet...."),
-                                      )
-
-                                /* GridView.count(
-                              crossAxisCount: 3,
-                              mainAxisSpacing: 5,
-                              crossAxisSpacing: 5,
-                              children: [
-                                Container(
-                                  color: const Color.fromARGB(255, 238, 240, 235),
-                                  height: 70,
-                                  width: 70,
-                                ),
-                                Container(
-                                  color: const Color.fromARGB(255, 238, 240, 235),
-                                  height: 70,
-                                  width: 70,
-                                ),
-                                Container(
-                                  color: const Color.fromARGB(255, 238, 240, 235),
-                                  height: 70,
-                                  width: 70,
-                                ),
-                                Container(
-                                  color: const Color.fromARGB(255, 238, 240, 235),
-                                  height: 70,
-                                  width: 70,
-                                ),
-                                Container(
-                                  color: const Color.fromARGB(255, 238, 240, 235),
-                                  height: 70,
-                                  width: 70,
-                                )
-                              ],
-                            ),*/
-                                ),
+                                      )),
                           ),
                         ],
                       ),

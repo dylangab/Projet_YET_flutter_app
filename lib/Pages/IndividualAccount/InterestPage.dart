@@ -82,7 +82,7 @@ class _InterestPageState extends State<InterestPage> {
                               backgroundColor:
                                   const Color.fromARGB(255, 229, 143, 101)),
                           onPressed: () {
-                            uploadUserInterest(_auth);
+                            uploadUserInterest(_auth.trim());
                           },
                           child: const Text("Save")),
                     )
@@ -98,11 +98,9 @@ class _InterestPageState extends State<InterestPage> {
 
   void uploadUserInterest(String uid) {
     FirebaseFirestore.instance
-        .collection("Individual Accounts")
+        .collection('Indivdual Accounts')
         .doc(uid)
-        .update({
-      'userInterest': FieldValue.arrayUnion([selectedIntersts])
-    });
+        .update({'userInterest': selectedIntersts});
   }
 
   Future<void> fetchInterest() async {

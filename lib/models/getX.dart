@@ -93,10 +93,9 @@ class individualAccountFetch extends GetxController {
   RxString userName = "".obs;
   RxList userInterests = [].obs;
 
-  Future<void> firebaseService() async {
-    final DocumentReference reference = FirebaseFirestore.instance
-        .collection("Indivdual Accounts")
-        .doc("vGM1BF3bW7bcIYgrGLvY6vzClRu1");
+  Future<void> firebaseService(String uid) async {
+    final DocumentReference reference =
+        FirebaseFirestore.instance.collection("Indivdual Accounts").doc(uid);
     late Stream<DocumentSnapshot> stream;
     late DocumentSnapshot documentSnapshot;
 
@@ -107,7 +106,8 @@ class individualAccountFetch extends GetxController {
       documentSnapshot = event;
       userName.value =
           "${documentSnapshot.get('First Name') + documentSnapshot.get('Last Name')}";
-      userInterests = documentSnapshot.get('userInterest');
+      userInterests.value = documentSnapshot.get('userInterest');
+      print(userName.value);
     });
   }
 }

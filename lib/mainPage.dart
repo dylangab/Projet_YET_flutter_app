@@ -7,6 +7,8 @@ import 'package:final_project/Pages/IndividualAccount/EventPage.dart';
 import 'package:final_project/Pages/IndividualAccount/Catagory.dart';
 import 'package:final_project/Pages/IndividualAccount/NotificationPage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:get/get.dart';
+import 'models/getX.dart';
 
 class mainPage extends StatefulWidget {
   const mainPage({super.key});
@@ -21,6 +23,8 @@ class _mainPageState extends State<mainPage> {
     super.initState();
     messageCheck();
     messageCounter();
+    final individualAccountFetch controller = Get.put(individualAccountFetch());
+    print(controller.userName.value);
   }
 
   final Future<SharedPreferences> _preferences =

@@ -5,6 +5,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:lorem_ipsum/lorem_ipsum.dart';
 
+import '../../models/getX.dart';
+
 class eventpage extends StatefulWidget {
   const eventpage({super.key});
 
@@ -23,7 +25,7 @@ class _eventpageState extends State<eventpage> {
   String text = loremIpsum(words: 10, initWithLorem: true);
   TextEditingController commentController = TextEditingController();
   FocusNode commentNode = FocusNode();
-
+  final individualAccountFetch controller = Get.put(individualAccountFetch());
   Widget build(BuildContext context) {
     return Scaffold(
         body: StreamBuilder<QuerySnapshot>(
@@ -191,53 +193,60 @@ class _eventpageState extends State<eventpage> {
                                                                 itemBuilder:
                                                                     (context,
                                                                         CommentIndex) {
-                                                                  var comments =
-                                                                      event[index]
+                                                                  if (event[index]
                                                                               [
                                                                               "comments"]
-                                                                          [
-                                                                          CommentIndex];
-                                                                  var userAvatar =
-                                                                      event[index]
-                                                                              [
-                                                                              "userName"]
-                                                                          [
-                                                                          CommentIndex][0];
-                                                                  return Container(
-                                                                    margin:
-                                                                        const EdgeInsets.all(
-                                                                            15),
-                                                                    decoration:
-                                                                        const BoxDecoration(
-                                                                            border:
-                                                                                Border(bottom: BorderSide(width: 1, color: Colors.black38))),
-                                                                    child:
-                                                                        Padding(
-                                                                      padding:
+                                                                          .length ==
+                                                                      0) {
+                                                                    return Container(
+                                                                      alignment:
+                                                                          Alignment
+                                                                              .center,
+                                                                      child: const Text(
+                                                                          "No comments yet..."),
+                                                                    );
+                                                                  } else {
+                                                                    var comments =
+                                                                        event[index]["comments"]
+                                                                            [
+                                                                            CommentIndex];
+                                                                    var userAvatar =
+                                                                        event[index]["userName"]
+                                                                            [
+                                                                            CommentIndex];
+                                                                    return Container(
+                                                                      margin:
                                                                           const EdgeInsets.all(
-                                                                              8.0),
+                                                                              15),
+                                                                      decoration:
+                                                                          const BoxDecoration(
+                                                                              border: Border(bottom: BorderSide(width: 1, color: Colors.black38))),
                                                                       child:
-                                                                          SizedBox(
-                                                                        child: Row(
-                                                                            crossAxisAlignment:
-                                                                                CrossAxisAlignment.start,
-                                                                            children: [
-                                                                              CircleAvatar(
-                                                                                child: Text(userAvatar),
-                                                                              ),
-                                                                              Padding(
-                                                                                padding: const EdgeInsets.all(8.0),
-                                                                                child: SizedBox(
-                                                                                  width: 250,
-                                                                                  child: Text(
-                                                                                    comments,
-                                                                                  ),
+                                                                          Padding(
+                                                                        padding:
+                                                                            const EdgeInsets.all(8.0),
+                                                                        child:
+                                                                            SizedBox(
+                                                                          child: Row(
+                                                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                                                              children: [
+                                                                                CircleAvatar(
+                                                                                  child: Text(userAvatar),
                                                                                 ),
-                                                                              )
-                                                                            ]),
+                                                                                Padding(
+                                                                                  padding: const EdgeInsets.all(8.0),
+                                                                                  child: SizedBox(
+                                                                                    width: 250,
+                                                                                    child: Text(
+                                                                                      comments,
+                                                                                    ),
+                                                                                  ),
+                                                                                )
+                                                                              ]),
+                                                                        ),
                                                                       ),
-                                                                    ),
-                                                                  );
+                                                                    );
+                                                                  }
                                                                 },
                                                               ),
                                                             ),
@@ -270,7 +279,8 @@ class _eventpageState extends State<eventpage> {
                                                                       child: ElevatedButton(
                                                                           style: ElevatedButton.styleFrom(shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)), backgroundColor: const Color.fromARGB(255, 229, 143, 101)),
                                                                           onPressed: () {
-                                                                            addComment(event[index]["uid"].toString().trim());
+                                                                            addComment(event[index]["uid"].toString().trim(),
+                                                                                event[index]['userName']);
                                                                           },
                                                                           child: const Text("submit")),
                                                                     )
@@ -303,54 +313,13 @@ class _eventpageState extends State<eventpage> {
             }));
   }
 
-  /* void _commetSection(context){
-    showBottomSheet(context: context, builder: 
-    
-)
+  Future<void> addComment(uid, userList) async {
+    List userName = uidList;
 
-
-
-  
-
-  void uidChecker() {
-    if (uidList.contains("e")) {
-      value = true;
-    } else {
-      value = false;
-    }
-  }
-
-  void likeButtonUpdater() {
-    if (value = true) {
-      unlikePost(uid);
-    } else if (value = false) {
-      likePost(uid);
-    }
-  }
-
-  void unlikePost(String uid) {
-    // remove the user's uid
-    FirebaseFirestore.instance.collection('Events').doc(uid).update({
-      'likeduid': FieldValue.arrayRemove(['e']),
-    });
-  }
-
-  void likePost(uid) {
-    FirebaseFirestore.instance.collection('Events').doc(uid).update({
-      'likeduid': FieldValue.arrayUnion(['e'])
-    });
-  }
-*/
-  void addComment(uid) {
+    userName.add(controller.userName.value[0]);
     FirebaseFirestore.instance.collection('Events').doc(uid).update({
       'comments': FieldValue.arrayUnion([commentController.value.text]),
-      'userName': FieldValue.arrayUnion([])
+      'userName': userName
     });
   }
-
-  /* Widget buildCommentSection() {
-    return Container(
-      child: showBottomSheet(context: context, builder: builder),
-    );
-  }*/
 }

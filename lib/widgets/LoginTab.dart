@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:final_project/Pages/BusinessAccount/accountCheckPage.dart';
+import 'package:final_project/Pages/IndividualAccount/InterestPage.dart';
 import 'package:final_project/Pages/IndividualAccount/homepage.dart';
 import 'package:final_project/models/getX.dart';
 import 'package:final_project/models/individualacc.dart';
@@ -284,7 +285,7 @@ class _LoginTabState extends State<LoginTab> with TickerProviderStateMixin {
                                                       .trim())
                                               .then(
                                                 (value) => isDocumentExists(
-                                                    "Individual Accounts",
+                                                    'Indivdual Accounts',
                                                     value.user!.uid),
                                               );
                                         } on FirebaseAuthException catch (e) {
@@ -566,7 +567,7 @@ class _LoginTabState extends State<LoginTab> with TickerProviderStateMixin {
     // Check if the document exists
     _exists = docSnapshot.exists;
     if (_exists == true) {
-      controller.firebaseService.call();
+      controller.firebaseService.call(documentId);
       Get.to(() => const mainPage());
     } else {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(

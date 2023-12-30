@@ -24,7 +24,7 @@ class _localNotiState extends State<localNoti> {
                       body: 'this better work,',
                       payload: 'adadad');
                 },
-                child: Text("click")),
+                child: const Text("click")),
           )
         ]),
       ),

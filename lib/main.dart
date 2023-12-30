@@ -50,7 +50,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Get.put(PropertyController());
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(

@@ -288,35 +288,37 @@ class _FinishProPageState extends State<FinishProPage> {
                           TextStyle(fontSize: 16, fontWeight: FontWeight.w300),
                     ),
                   ),
-                  Padding(
-                      padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-                      child: Container(
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(5),
-                            border: Border.all(
-                                width: 1.5,
-                                color: const Color.fromARGB(255, 66, 106, 90))),
-                        child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.all(10.0),
-                                child: Text(coordinateText.toString()),
-                              ),
-                              IconButton(
-                                  onPressed: () {
-                                    Get.to(() => const ChooseLocationPage());
-                                    coordinateToText();
-                                    setState(() {});
-                                  },
-                                  icon: const Icon(
-                                    Icons.map_sharp,
-                                    color: Colors.black,
-                                    size: 20,
-                                  )),
-                            ]),
-                      )),
+                  Obx(
+                    () => Padding(
+                        padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+                        child: Container(
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(5),
+                              border: Border.all(
+                                  width: 1.5,
+                                  color:
+                                      const Color.fromARGB(255, 66, 106, 90))),
+                          child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.all(10.0),
+                                  child: Text(controller.place.value),
+                                ),
+                                IconButton(
+                                    onPressed: () {
+                                      Get.to(() => const ChooseLocationPage());
+                                      // coordinateToText();
+                                    },
+                                    icon: const Icon(
+                                      Icons.map_sharp,
+                                      color: Colors.black,
+                                      size: 20,
+                                    )),
+                              ]),
+                        )),
+                  ),
                   const Padding(
                     padding: EdgeInsets.only(top: 21, left: 15),
                     child: Text(

@@ -18,10 +18,27 @@ class PropertyController extends GetxController {
 
 class GetMapController extends GetxController {
   Rx<LatLng>? coordinates = LatLng(37.7749, -122.4194).obs;
+  RxString place = "".obs;
 
-  void setCoordinates(LatLng point) {
+  void setCoordinates(LatLng point) async {
     coordinates!.value = point;
+    try {
+      // Perform reverse geocoding
+      List<Placemark> placemarks = await placemarkFromCoordinates(
+        point.latitude,
+        point.longitude,
+        localeIdentifier: 'en',
+      );
+
+      Placemark placemark = placemarks.first;
+
+      place.value = "${placemark.locality}".toLowerCase();
+    } catch (e) {
+      print("Error getting location: $e");
+    }
   }
+
+  void getplace(LatLng coordinates) async {}
 }
 
 class FirestoreDataService extends GetxController {
@@ -68,6 +85,7 @@ class GetAddress extends GetxController {
 
     try {
       // Get user's current position
+
       Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high,
       );
@@ -81,7 +99,7 @@ class GetAddress extends GetxController {
 
       Placemark placemark = placemarks.first;
 
-      currentAddress.value = "${placemark.locality}";
+      currentAddress.value = "${placemark.locality}".toLowerCase();
     } catch (e) {
       print("Error getting location: $e");
     }

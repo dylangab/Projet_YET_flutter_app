@@ -841,7 +841,7 @@ class _BpPageState extends State<BpPage> {
                           const EdgeInsets.only(left: 10, right: 10, top: 21),
                       child: SizedBox(
                         height: 300,
-                        /*   child: check(snapshot.data!["reviews"])
+                        child: check(snapshot.data!["reviews"])
                             ? ListView.builder(
                                 itemCount: snapshot.data!["reviews"].length,
                                 itemBuilder: (context, index) {
@@ -915,7 +915,7 @@ class _BpPageState extends State<BpPage> {
                                 child: Center(
                                   child: Text("No Reviews Yet...."),
                                 ),
-                              ), */
+                              ),
                       ),
                     ),
                     Padding(

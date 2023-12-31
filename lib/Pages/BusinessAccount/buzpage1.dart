@@ -80,7 +80,7 @@ class _buzpageState extends State<buzpage> with TickerProviderStateMixin {
                           right: 10,
                           child: IconButton(
                             onPressed: () {
-                              Get.to(() => MessagePage(), arguments: {
+                              Get.to(() => const MessagePage(), arguments: {
                                 'propic': snapshot.data!["profile_Pic"],
                                 'buzName': snapshot.data!["Business Name"],
                                 'bid': snapshot.data!["bid"]
@@ -117,7 +117,7 @@ class _buzpageState extends State<buzpage> with TickerProviderStateMixin {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Container(
-                            margin: EdgeInsets.only(left: 30),
+                            margin: const EdgeInsets.only(left: 30),
                             alignment: Alignment.centerRight,
                             child: Row(
                               crossAxisAlignment: CrossAxisAlignment.center,
@@ -126,17 +126,18 @@ class _buzpageState extends State<buzpage> with TickerProviderStateMixin {
                                 Column(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: <Widget>[
-                                    Padding(
+                                    const Padding(
                                         padding: EdgeInsets.only(top: 15),
                                         child: Icon(
                                           Icons.star_rate,
                                           color: Colors.yellow,
                                         )),
                                     Padding(
-                                        padding: EdgeInsets.only(bottom: 10),
+                                        padding:
+                                            const EdgeInsets.only(bottom: 10),
                                         child: Text(
                                           snapshot.data!['rating'].toString(),
-                                          style: TextStyle(
+                                          style: const TextStyle(
                                               fontWeight: FontWeight.w400),
                                         )),
                                   ],
@@ -158,8 +159,8 @@ class _buzpageState extends State<buzpage> with TickerProviderStateMixin {
                                               MainAxisAlignment.start,
                                           children: <Widget>[
                                             Padding(
-                                                padding:
-                                                    EdgeInsets.only(top: 0),
+                                                padding: const EdgeInsets.only(
+                                                    top: 0),
                                                 child: IconButton(
                                                     onPressed: () {
                                                       print("rate");
@@ -167,7 +168,7 @@ class _buzpageState extends State<buzpage> with TickerProviderStateMixin {
                                                         context: context,
                                                         builder: (context) {
                                                           return AlertDialog(
-                                                            title: Text(
+                                                            title: const Text(
                                                                 "Give rate"),
                                                             content: RatingBar
                                                                 .builder(
@@ -229,16 +230,16 @@ class _buzpageState extends State<buzpage> with TickerProviderStateMixin {
                                                                         snapshot
                                                                             .data!["rateUids"]);
                                                                   },
-                                                                  child: Text(
+                                                                  child: const Text(
                                                                       "Submit"))
                                                             ],
                                                           );
                                                         },
                                                       );
                                                     },
-                                                    icon: Icon(
+                                                    icon: const Icon(
                                                         Icons.star_border))),
-                                            Padding(
+                                            const Padding(
                                                 padding:
                                                     EdgeInsets.only(bottom: 0),
                                                 child: Text(
@@ -252,7 +253,7 @@ class _buzpageState extends State<buzpage> with TickerProviderStateMixin {
                                       ); // Use snapshot.data with a fallback value
                                     } else {
                                       // The asynchronous operations are still in progress
-                                      return Center(
+                                      return const Center(
                                           child:
                                               CircularProgressIndicator()); // You can show a loading indicator here
                                     }
@@ -264,7 +265,7 @@ class _buzpageState extends State<buzpage> with TickerProviderStateMixin {
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: <Widget>[
                                       Padding(
-                                          padding: EdgeInsets.fromLTRB(
+                                          padding: const EdgeInsets.fromLTRB(
                                               0, 20, 100, 0),
                                           child: Text(
                                             "(${snapshot.data!["followerIds"].length})",
@@ -649,23 +650,23 @@ class _buzpageState extends State<buzpage> with TickerProviderStateMixin {
                                       fontWeight: FontWeight.w400),
                                 ),
                               ),
-                              Padding(
-                                padding: const EdgeInsets.fromLTRB(5, 10, 5, 0),
+                              const Padding(
+                                padding: EdgeInsets.fromLTRB(5, 10, 5, 0),
                                 child: Padding(
-                                  padding: const EdgeInsets.all(10.0),
+                                  padding: EdgeInsets.all(10.0),
                                   child: Text(
                                     "webite:- www.abc.com",
-                                    style: const TextStyle(
+                                    style: TextStyle(
                                         fontSize: 15,
                                         fontWeight: FontWeight.w300),
                                   ),
                                 ),
                               ),
-                              Padding(
-                                padding: const EdgeInsets.all(10.0),
+                              const Padding(
+                                padding: EdgeInsets.all(10.0),
                                 child: Text(
                                   "Address:- Addis Abeba",
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                       fontSize: 15,
                                       fontWeight: FontWeight.w300),
                                 ),
@@ -681,7 +682,7 @@ class _buzpageState extends State<buzpage> with TickerProviderStateMixin {
                                       left: 10, right: 30),
                                   child: Container(
                                     height: 40,
-                                    child: Align(
+                                    child: const Align(
                                       alignment: Alignment.centerLeft,
                                       child: Padding(
                                         padding: EdgeInsets.only(left: 15),
@@ -694,10 +695,11 @@ class _buzpageState extends State<buzpage> with TickerProviderStateMixin {
                                       ),
                                     ),
                                     decoration: BoxDecoration(
-                                        color: Color.fromARGB(255, 66, 106, 90),
+                                        color: const Color.fromARGB(
+                                            255, 66, 106, 90),
                                         borderRadius: BorderRadius.circular(10),
                                         border: Border.all(
-                                            color: Color.fromARGB(
+                                            color: const Color.fromARGB(
                                                 255, 66, 106, 90))),
                                   ),
                                 ),
@@ -711,26 +713,25 @@ class _buzpageState extends State<buzpage> with TickerProviderStateMixin {
                                       fontWeight: FontWeight.w400),
                                 ),
                               ),
-                              Padding(
-                                padding: const EdgeInsets.fromLTRB(5, 10, 5, 0),
+                              const Padding(
+                                padding: EdgeInsets.fromLTRB(5, 10, 5, 0),
                                 child: Padding(
-                                  padding: const EdgeInsets.all(10.0),
+                                  padding: EdgeInsets.all(10.0),
                                   child: Text(
                                     "Full Name:- Eren Yeager",
-                                    style: const TextStyle(
+                                    style: TextStyle(
                                         fontSize: 15,
                                         fontWeight: FontWeight.w300),
                                   ),
                                 ),
                               ),
-                              Padding(
-                                padding: const EdgeInsets.fromLTRB(5, 10, 5, 0),
+                              const Padding(
+                                padding: EdgeInsets.fromLTRB(5, 10, 5, 0),
                                 child: Padding(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(10, 0, 10, 50),
+                                  padding: EdgeInsets.fromLTRB(10, 0, 10, 50),
                                   child: Text(
                                     "Phone No:- 0932323222",
-                                    style: const TextStyle(
+                                    style: TextStyle(
                                         fontSize: 15,
                                         fontWeight: FontWeight.w300),
                                   ),
@@ -742,7 +743,7 @@ class _buzpageState extends State<buzpage> with TickerProviderStateMixin {
                         Padding(
                           padding: const EdgeInsets.only(left: 10, right: 10),
                           child: Column(children: [
-                            Container(
+                            SizedBox(
                               height: 300,
                               child: check(snapshot.data!["reviews"])
                                   ? ListView.builder(
@@ -819,7 +820,7 @@ class _buzpageState extends State<buzpage> with TickerProviderStateMixin {
                                       },
                                     )
                                   : Container(
-                                      child: Center(
+                                      child: const Center(
                                         child: Text("No Reviews Yet...."),
                                       ),
                                     ),

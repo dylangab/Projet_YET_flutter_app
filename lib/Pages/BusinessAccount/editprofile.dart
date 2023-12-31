@@ -81,7 +81,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                   child: Stack(fit: StackFit.loose, children: [
                     Positioned(
                         child: Container(
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                           /*  image: DecorationImage(
                                     fit: BoxFit.cover,
                                     image: NetworkImage(''))  */
@@ -94,12 +94,12 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                         child: Row(
                           children: [
                             CircleAvatar(
+                              radius: 50,
                               child: Center(
                                 child: IconButton(
                                     onPressed: () {},
-                                    icon: Icon(Icons.add_a_photo_sharp)),
+                                    icon: const Icon(Icons.add_a_photo_sharp)),
                               ),
-                              radius: 50,
                             ),
                             Padding(
                               padding: const EdgeInsets.only(left: 15, top: 10),
@@ -109,19 +109,18 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                                       child: TextFormField(
                                         initialValue: "Business Name",
                                         controller: buzName,
-                                        decoration: InputDecoration(),
+                                        decoration: const InputDecoration(),
                                       ))
                                   : SizedBox(
                                       child:
                                           Stack(fit: StackFit.loose, children: [
-                                        SizedBox(
+                                        const SizedBox(
                                           height: 50,
                                           width: 200,
                                           child: Padding(
-                                            padding:
-                                                const EdgeInsets.only(top: 15),
+                                            padding: EdgeInsets.only(top: 15),
                                             child: Text("Business Name",
-                                                style: const TextStyle(
+                                                style: TextStyle(
                                                     fontSize: 25,
                                                     fontWeight:
                                                         FontWeight.bold)),
@@ -136,7 +135,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                                                     editbuzName = !editbuzName;
                                                   });
                                                 },
-                                                icon: Icon(
+                                                icon: const Icon(
                                                   Icons.edit,
                                                   size: 18,
                                                 )))
@@ -148,14 +147,14 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                   ]),
                 ),
                 Padding(
-                  padding: EdgeInsets.fromLTRB(10, 5, 0, 0),
+                  padding: const EdgeInsets.fromLTRB(10, 5, 0, 0),
                   child: SizedBox(
                     child: Stack(children: [
                       Container(
                         width: 200,
                         height: 50,
-                        child: Padding(
-                          padding: const EdgeInsets.only(top: 20),
+                        child: const Padding(
+                          padding: EdgeInsets.only(top: 20),
                           child: Text(
                             "Description",
                             style: TextStyle(
@@ -173,7 +172,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                                   editdecription = !editdecription;
                                 });
                               },
-                              icon: Icon(
+                              icon: const Icon(
                                 Icons.edit,
                                 size: 18,
                               )))
@@ -198,7 +197,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                                     maxLines: null,
                                     keyboardType: TextInputType.multiline,
                                     textInputAction: TextInputAction.newline,
-                                    decoration: InputDecoration())),
+                                    decoration: const InputDecoration())),
                           ),
                         ),
                       )
@@ -211,14 +210,14 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                         ),
                       ),
                 Padding(
-                  padding: EdgeInsets.fromLTRB(10, 5, 0, 0),
+                  padding: const EdgeInsets.fromLTRB(10, 5, 0, 0),
                   child: SizedBox(
                     child: Stack(children: [
                       Container(
                         width: 200,
                         height: 50,
-                        child: Padding(
-                          padding: const EdgeInsets.only(top: 20),
+                        child: const Padding(
+                          padding: EdgeInsets.only(top: 20),
                           child: Text(
                             "Service",
                             style: TextStyle(
@@ -236,7 +235,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                                   editService = !editService;
                                 });
                               },
-                              icon: Icon(
+                              icon: const Icon(
                                 Icons.edit,
                                 size: 18,
                               )))
@@ -261,7 +260,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                                     maxLines: null,
                                     keyboardType: TextInputType.multiline,
                                     textInputAction: TextInputAction.newline,
-                                    decoration: InputDecoration())),
+                                    decoration: const InputDecoration())),
                           ),
                         ),
                       )
@@ -274,14 +273,14 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                         ),
                       ),
                 Padding(
-                  padding: EdgeInsets.fromLTRB(10, 5, 0, 0),
+                  padding: const EdgeInsets.fromLTRB(10, 5, 0, 0),
                   child: SizedBox(
                     child: Stack(children: [
                       Container(
                         width: 200,
                         height: 50,
-                        child: Padding(
-                          padding: const EdgeInsets.only(top: 20),
+                        child: const Padding(
+                          padding: EdgeInsets.only(top: 20),
                           child: Text(
                             "Business Hours",
                             style: TextStyle(
@@ -299,7 +298,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                                   editBusinesshours = !editBusinesshours;
                                 });
                               },
-                              icon: Icon(
+                              icon: const Icon(
                                 Icons.edit,
                                 size: 18,
                               )))
@@ -309,7 +308,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                 editBusinesshours
                     ? SizedBox(
                         child: Column(children: [
-                          Padding(
+                          const Padding(
                             padding: EdgeInsets.symmetric(vertical: 0),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -1021,15 +1020,15 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                         ),
                       ),
                 Padding(
-                  padding: EdgeInsets.fromLTRB(10, 5, 0, 0),
+                  padding: const EdgeInsets.fromLTRB(10, 5, 0, 0),
                   child: SizedBox(
                     child: Stack(children: [
                       Container(
                         color: Colors.red,
                         width: 200,
                         height: 50,
-                        child: Padding(
-                          padding: const EdgeInsets.only(top: 20),
+                        child: const Padding(
+                          padding: EdgeInsets.only(top: 20),
                           child: Text(
                             "Owner Information",
                             style: TextStyle(
@@ -1047,7 +1046,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                                   editOwnerInfo = !editOwnerInfo;
                                 });
                               },
-                              icon: Icon(
+                              icon: const Icon(
                                 Icons.edit,
                                 size: 18,
                               )))
@@ -1062,51 +1061,52 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                             TextFormField(
                               controller: buzName,
                               decoration:
-                                  InputDecoration(hintText: "First Name"),
+                                  const InputDecoration(hintText: "First Name"),
                             ),
                             TextFormField(
                               controller: buzName,
                               decoration:
-                                  InputDecoration(hintText: "Last Name"),
+                                  const InputDecoration(hintText: "Last Name"),
                             ),
                             TextFormField(
                               controller: buzName,
-                              decoration: InputDecoration(hintText: "PhoneNo"),
+                              decoration:
+                                  const InputDecoration(hintText: "PhoneNo"),
                             ),
                           ],
                         ))
-                    : Padding(
-                        padding: const EdgeInsets.fromLTRB(5, 10, 5, 0),
+                    : const Padding(
+                        padding: EdgeInsets.fromLTRB(5, 10, 5, 0),
                         child: Padding(
-                          padding: const EdgeInsets.all(10.0),
+                          padding: EdgeInsets.all(10.0),
                           child: Text(
                             "Full Name:- Eren Yeager",
-                            style: const TextStyle(
+                            style: TextStyle(
                                 fontSize: 15, fontWeight: FontWeight.w300),
                           ),
                         ),
                       ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(5, 10, 5, 0),
+                const Padding(
+                  padding: EdgeInsets.fromLTRB(5, 10, 5, 0),
                   child: Padding(
-                    padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                    padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                     child: Text(
                       "Phone No:- 0932323222",
-                      style: const TextStyle(
-                          fontSize: 15, fontWeight: FontWeight.w300),
+                      style:
+                          TextStyle(fontSize: 15, fontWeight: FontWeight.w300),
                     ),
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.fromLTRB(10, 5, 0, 0),
+                  padding: const EdgeInsets.fromLTRB(10, 5, 0, 0),
                   child: SizedBox(
                     child: Stack(children: [
                       Container(
                         color: Colors.red,
                         width: 200,
                         height: 50,
-                        child: Padding(
-                          padding: const EdgeInsets.only(top: 20),
+                        child: const Padding(
+                          padding: EdgeInsets.only(top: 20),
                           child: Text(
                             "Additional Information",
                             style: TextStyle(
@@ -1124,7 +1124,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                                   editAddInfo = !editAddInfo;
                                 });
                               },
-                              icon: Icon(
+                              icon: const Icon(
                                 Icons.edit,
                                 size: 18,
                               )))
@@ -1162,11 +1162,11 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                                     )),
                               ]),
                         ))
-                    : Padding(
-                        padding: const EdgeInsets.all(10.0),
+                    : const Padding(
+                        padding: EdgeInsets.all(10.0),
                         child: Text(
                           "Address:- Addis Abeba",
-                          style: const TextStyle(
+                          style: TextStyle(
                               fontSize: 15, fontWeight: FontWeight.w300),
                         ),
                       ),

@@ -23,7 +23,7 @@ class LoginTab extends StatefulWidget {
 class _LoginTabState extends State<LoginTab> with TickerProviderStateMixin {
   bool _passwordHide = false;
   bool _emailerror = false;
-  final PropertyController propertyController = Get.find();
+
   final _formkey = GlobalKey<FormState>();
   final _formkey2 = GlobalKey<FormState>();
   final FocusNode _focusNode = FocusNode();

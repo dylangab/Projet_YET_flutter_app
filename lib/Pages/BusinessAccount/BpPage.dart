@@ -460,35 +460,37 @@ class _BpPageState extends State<BpPage> {
                                                         color: const Color
                                                                 .fromARGB(
                                                             255, 66, 106, 90))),
-                                                child: Row(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceBetween,
-                                                    children: [
-                                                      Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .all(10.0),
-                                                        child: Text(
-                                                            _coordinateText
-                                                                .toString()),
-                                                      ),
-                                                      IconButton(
-                                                          onPressed: () {
-                                                            Get.to(() =>
-                                                                const ChooseLocationPage());
-                                                            coordinateToText();
-                                                            setState(() {});
-                                                          },
-                                                          icon: const Icon(
-                                                            Icons.map_sharp,
-                                                            color: Colors.black,
-                                                            size: 20,
-                                                          )),
-                                                    ]),
+                                                child: Obx(
+                                                  () => Row(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceBetween,
+                                                      children: [
+                                                        Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(10.0),
+                                                          child: Text(controller
+                                                              .place.value),
+                                                        ),
+                                                        IconButton(
+                                                            onPressed: () {
+                                                              Get.to(() =>
+                                                                  const ChooseLocationPage());
+                                                              coordinateToText();
+                                                              setState(() {});
+                                                            },
+                                                            icon: const Icon(
+                                                              Icons.map_sharp,
+                                                              color:
+                                                                  Colors.black,
+                                                              size: 20,
+                                                            )),
+                                                      ]),
+                                                ),
                                               )),
                                           const Padding(
                                             padding: EdgeInsets.fromLTRB(
@@ -620,8 +622,8 @@ class _BpPageState extends State<BpPage> {
                                                         'longitude':
                                                             coordinate.longitude
                                                       },
-                                                      'address': _coordinateText
-                                                          .toString(),
+                                                      'address': controller
+                                                          .place.value,
                                                     });
                                                   },
                                                   style: ElevatedButton.styleFrom(

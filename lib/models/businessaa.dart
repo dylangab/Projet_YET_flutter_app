@@ -1,5 +1,5 @@
+// Importing necessary Dart and Flutter packages
 import 'dart:typed_data';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -8,10 +8,13 @@ import 'storagemethod.dart';
 import 'package:final_project/Services.dart/imagepicker.dart';
 import 'package:latlong2/latlong.dart';
 
+// Defining a class named Businessacc
 class Businessacc {
+  // Creating instances of Firebase authentication and Firestore
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
+  // Method for registering a business account
   Future<String> regiserbusiness({
     required String businessname,
     required String businessaddress,
@@ -22,16 +25,20 @@ class Businessacc {
     required String phoneno,
     required String bcatagory,
   }) async {
-    String res = "error occured";
+    // Initializing the result string
+    String res = "error occurred";
     try {
+      // Checking if required fields are not empty
       if (firstname.isNotEmpty ||
           lastname.isNotEmpty ||
           email.isNotEmpty ||
           password.isNotEmpty ||
           phoneno.isNotEmpty) {
+        // Creating a user with email and password
         UserCredential cred = await _auth.createUserWithEmailAndPassword(
             email: email, password: password);
 
+        // Storing business account details in Firestore
         await _firestore
             .collection('Business Accounts')
             .doc(cred.user!.uid)
@@ -46,11 +53,14 @@ class Businessacc {
         });
       }
     } catch (e) {
+      // Catching and storing any exceptions
       res = e.toString();
     }
+    // Returning the result string
     return res;
   }
 
+  // Method for finishing the business account profile
   Future<String> finishAccount({
     required String businessaddress,
     required String profilefinish,
@@ -61,14 +71,14 @@ class Businessacc {
     required String? website,
     required LatLng coordinates,
   }) async {
-    String res = "error occured";
+    // Initializing the result string
+    String res = "error occurred";
     try {
+      // Checking if required fields are not empty
       if (businessaddress.isNotEmpty ||
           description.isNotEmpty ||
           bcatagory.isNotEmpty) {
-        /* String photourl =
-            await storagemethod().uplodimage('photos', file, false);*/
-
+        // Updating business account details in Firestore
         await _firestore
             .collection('Business Accounts Requests')
             .doc(_auth.currentUser!.uid)
@@ -84,11 +94,14 @@ class Businessacc {
         });
       }
     } catch (e) {
+      // Catching and storing any exceptions
       res = e.toString();
     }
+    // Returning the result string
     return res;
   }
 
+  // Method for requesting a business account
   Future<String> requestaccount({
     required String businessname,
     required String businessaddress,
@@ -113,16 +126,20 @@ class Businessacc {
     required List rateUids,
     required reviews,
   }) async {
-    String res = "error occured";
+    // Initializing the result string
+    String res = "error occurred";
     try {
+      // Checking if required fields are not empty
       if (firstname.isNotEmpty ||
           lastname.isNotEmpty ||
           email.isNotEmpty ||
           password.isNotEmpty ||
           phoneno.isNotEmpty) {
+        // Creating a user with email and password
         UserCredential cred = await _auth.createUserWithEmailAndPassword(
             email: email, password: password);
 
+        // Storing business account request details in Firestore
         _firestore
             .collection("Business Accounts Requests")
             .doc(cred.user!.uid)
@@ -153,8 +170,10 @@ class Businessacc {
         });
       }
     } catch (e) {
+      // Catching and storing any exceptions
       res = e.toString();
     }
+    // Returning the result string
     return res;
   }
 }

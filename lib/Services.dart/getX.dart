@@ -1,3 +1,4 @@
+// Importing necessary Dart and Flutter packages
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
@@ -5,21 +6,13 @@ import 'package:latlong2/latlong.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
 
-class PropertyController extends GetxController {
-  var primaryColor = const Color.fromARGB(0, 229, 143, 101).obs;
-  var secondaryColor = const Color.fromARGB(0, 66, 106, 90).obs;
-  var surfaceColor1 = const Color.fromARGB(0, 238, 240, 235).obs;
-  var surfaceColor2 = const Color.fromARGB(0, 244, 249, 233).obs;
-  var header1 = 0.obs;
-  var header2 = 0.obs;
-  var header3 = 0.obs;
-  var text = 0.obs;
-}
-
+// Controller for managing map-related data
 class GetMapController extends GetxController {
+  // Observable variables for map coordinates and place
   Rx<LatLng>? coordinates = LatLng(37.7749, -122.4194).obs;
   RxString place = "".obs;
 
+  // Method to set coordinates and perform reverse geocoding
   void setCoordinates(LatLng point) async {
     coordinates!.value = point;
     try {
@@ -37,23 +30,23 @@ class GetMapController extends GetxController {
       print("Error getting location: $e");
     }
   }
-
-  void getplace(LatLng coordinates) async {}
 }
 
+// Controller for interacting with Firestore data related to individual accounts
 class FirestoreDataService extends GetxController {
+  // Observable variable for the user name
   RxString userName = "".obs;
 
+  // Method to fetch individual account data from Firestore
   void fetchIndiAccount(String uid) {
     final DocumentReference _myDocument =
         FirebaseFirestore.instance.collection("Individual Accounts").doc(uid);
     late Stream<DocumentSnapshot> myDocumentStream;
     late DocumentSnapshot myDocumentData;
+
     // Get initial data
     _myDocument.get().then((DocumentSnapshot snapshot) {
       myDocumentData = snapshot;
-
-      // Fetch a specific field from the document
     });
 
     // Listen to changes in the document
@@ -73,9 +66,12 @@ class FirestoreDataService extends GetxController {
   }
 }
 
+// Controller for getting the current address based on the user's location
 class GetAddress extends GetxController {
+  // Observable variable for the current address
   RxString currentAddress = "".obs;
 
+  // Method to get the current address based on the user's location
   Future<String> getCurrentAddress() async {
     LocationPermission permission = await Geolocator.requestPermission();
     if (permission == LocationPermission.denied ||
@@ -85,7 +81,6 @@ class GetAddress extends GetxController {
 
     try {
       // Get user's current position
-
       Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high,
       );
@@ -107,10 +102,13 @@ class GetAddress extends GetxController {
   }
 }
 
+// Controller for fetching individual account data from Firestore
 class individualAccountFetch extends GetxController {
+  // Observable variables for user name and interests
   RxString userName = "".obs;
   RxList userInterests = [].obs;
 
+  // Method to interact with Firebase service to fetch individual account data
   Future<void> firebaseService(String uid) async {
     final DocumentReference reference =
         FirebaseFirestore.instance.collection("Indivdual Accounts").doc(uid);

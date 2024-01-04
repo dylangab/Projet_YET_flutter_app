@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:final_project/models/models.dart';
+
 import 'package:firebase_auth/firebase_auth.dart';
 
 class InterestPage extends StatefulWidget {
@@ -19,13 +19,7 @@ class _InterestPageState extends State<InterestPage> {
 
   bool selected = false;
   List<String> _interestList = [];
-  final List<ItemModel> chiplist = [
-    ItemModel("Hotel", Colors.blueGrey, false),
-    ItemModel("Cafe", Colors.blueGrey, false),
-    ItemModel("Game zone", Colors.blueGrey, false),
-    ItemModel("Beauty salon", Colors.blueGrey, false),
-    ItemModel("barbor shop", Colors.blueGrey, false),
-  ];
+
   List<String> interests = [
     'Hotel',
     'Cafe',

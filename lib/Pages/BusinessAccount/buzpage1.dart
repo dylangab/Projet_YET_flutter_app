@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
-
+import 'package:get_time_ago/get_time_ago.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:lorem_ipsum/lorem_ipsum.dart';
 
@@ -31,7 +31,7 @@ class _buzpageState extends State<buzpage> with TickerProviderStateMixin {
   List<double> flutterlist = [];
   double? average;
   String _text = loremIpsum(words: 60, initWithLorem: true);
-
+  List<Map<String, dynamic>> businessHoursList = [];
   bool? checker;
   bool? idCheck;
   bool rateCheck = true;
@@ -40,6 +40,7 @@ class _buzpageState extends State<buzpage> with TickerProviderStateMixin {
   void initState() {
     super.initState();
     bid = Get.arguments;
+    fetchData();
   }
 
   @override
@@ -51,12 +52,13 @@ class _buzpageState extends State<buzpage> with TickerProviderStateMixin {
         body: StreamBuilder<DocumentSnapshot>(
             stream: FirebaseFirestore.instance
                 .collection("Business Accounts Requests")
-                .doc("${Get.arguments}")
+                .doc(bid)
                 .snapshots(),
             builder: (context, snapshot) {
               print(snapshot);
+
               checkUid(FirebaseAuth.instance.currentUser!.uid.toString().trim(),
-                  snapshot.data!["followerIds"]);
+                  snapshot.data!["followerIdList"]);
 
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -72,7 +74,8 @@ class _buzpageState extends State<buzpage> with TickerProviderStateMixin {
                         decoration: BoxDecoration(
                             image: DecorationImage(
                                 fit: BoxFit.cover,
-                                image: NetworkImage(snapshot.data!["image"]))),
+                                image: NetworkImage(
+                                    snapshot.data!["coverPhoto"]))),
                         height: 130,
                       )),
                       Positioned(
@@ -94,17 +97,24 @@ class _buzpageState extends State<buzpage> with TickerProviderStateMixin {
                           left: 30,
                           child: Row(
                             children: [
-                              const CircleAvatar(
+                              CircleAvatar(
+                                backgroundImage:
+                                    NetworkImage(snapshot.data!["profile_Pic"]),
                                 radius: 50,
                               ),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.only(left: 15, top: 10),
-                                child: Text(
-                                    snapshot.data!["Business Name"].toString(),
-                                    style: const TextStyle(
-                                        fontSize: 25,
-                                        fontWeight: FontWeight.bold)),
+                              SizedBox(
+                                height: 65,
+                                width: 250,
+                                child: Padding(
+                                  padding:
+                                      const EdgeInsets.only(left: 15, top: 10),
+                                  child: Text(
+                                      snapshot.data!["Business Name"]
+                                          .toString(),
+                                      style: const TextStyle(
+                                          fontSize: 25,
+                                          fontWeight: FontWeight.bold)),
+                                ),
                               )
                             ],
                           )),
@@ -268,7 +278,7 @@ class _buzpageState extends State<buzpage> with TickerProviderStateMixin {
                                           padding: const EdgeInsets.fromLTRB(
                                               0, 20, 100, 0),
                                           child: Text(
-                                            "(${snapshot.data!["followerIds"].length})",
+                                            "(${snapshot.data!["followerIdList"].length})",
                                             style: const TextStyle(
                                                 fontWeight: FontWeight.w400),
                                           )),
@@ -304,7 +314,7 @@ class _buzpageState extends State<buzpage> with TickerProviderStateMixin {
                                 .doc("${Get.arguments}")
                                 .update(
                               {
-                                'followerIds': FieldValue.arrayUnion([
+                                'followerIdList': FieldValue.arrayUnion([
                                   FirebaseAuth.instance.currentUser!.uid
                                       .toString()
                                 ])
@@ -316,7 +326,7 @@ class _buzpageState extends State<buzpage> with TickerProviderStateMixin {
                                 .doc("${Get.arguments}")
                                 .update(
                               {
-                                'followerIds': FieldValue.arrayRemove([
+                                'followerIdList': FieldValue.arrayRemove([
                                   FirebaseAuth.instance.currentUser!.uid
                                       .toString()
                                 ])
@@ -330,7 +340,7 @@ class _buzpageState extends State<buzpage> with TickerProviderStateMixin {
                                 FirebaseAuth.instance.currentUser!.uid
                                     .toString()
                                     .trim(),
-                                snapshot.data!["followerIds"])
+                                snapshot.data!["followerIdList"])
                             ? const Text(
                                 'Following',
                                 style: TextStyle(color: Colors.white),
@@ -396,7 +406,7 @@ class _buzpageState extends State<buzpage> with TickerProviderStateMixin {
                               Padding(
                                 padding: const EdgeInsets.fromLTRB(5, 10, 5, 0),
                                 child: Text(
-                                  _text,
+                                  snapshot.data!["description"],
                                   style: const TextStyle(
                                       fontSize: 15,
                                       fontWeight: FontWeight.w300),
@@ -414,7 +424,7 @@ class _buzpageState extends State<buzpage> with TickerProviderStateMixin {
                               Padding(
                                 padding: const EdgeInsets.fromLTRB(5, 10, 5, 0),
                                 child: Text(
-                                  _text,
+                                  snapshot.data!["service"],
                                   style: const TextStyle(
                                       fontSize: 15,
                                       fontWeight: FontWeight.w300),
@@ -430,215 +440,24 @@ class _buzpageState extends State<buzpage> with TickerProviderStateMixin {
                                 ),
                               ),
                               Padding(
-                                padding: const EdgeInsets.all(10.0),
-                                child: Table(
-                                  children: const [
-                                    TableRow(children: [
-                                      Text(
-                                        'Days',
-                                        style: TextStyle(
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.w400),
-                                      ),
-                                      Text("Opening Hours",
-                                          style: TextStyle(
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.w400)),
-                                      Text("Closing Hours",
-                                          style: TextStyle(
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.w400)),
-                                    ]),
-                                    TableRow(children: [
-                                      Padding(
-                                        padding: EdgeInsets.only(top: 10),
-                                        child: Text(
-                                          'Monday',
-                                          style: TextStyle(
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.w300),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding:
-                                            EdgeInsets.only(top: 10, left: 10),
-                                        child: Text("1:00",
-                                            style: TextStyle(
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.w300)),
-                                      ),
-                                      Padding(
-                                        padding:
-                                            EdgeInsets.only(top: 10, left: 10),
-                                        child: Text("1:00",
-                                            style: TextStyle(
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.w300)),
-                                      ),
-                                    ]),
-                                    TableRow(children: [
-                                      Padding(
-                                        padding: EdgeInsets.only(top: 10),
-                                        child: Text(
-                                          'Tuesday',
-                                          style: TextStyle(
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.w300),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding:
-                                            EdgeInsets.only(top: 10, left: 10),
-                                        child: Text("1:00",
-                                            style: TextStyle(
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.w300)),
-                                      ),
-                                      Padding(
-                                        padding:
-                                            EdgeInsets.only(top: 10, left: 10),
-                                        child: Text("1:00",
-                                            style: TextStyle(
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.w300)),
-                                      ),
-                                    ]),
-                                    TableRow(children: [
-                                      Padding(
-                                        padding: EdgeInsets.only(top: 10),
-                                        child: Text(
-                                          'Wednesday',
-                                          style: TextStyle(
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.w300),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding:
-                                            EdgeInsets.only(top: 10, left: 10),
-                                        child: Text("1:00",
-                                            style: TextStyle(
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.w300)),
-                                      ),
-                                      Padding(
-                                        padding:
-                                            EdgeInsets.only(top: 10, left: 10),
-                                        child: Text("1:00",
-                                            style: TextStyle(
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.w300)),
-                                      ),
-                                    ]),
-                                    TableRow(children: [
-                                      Padding(
-                                        padding: EdgeInsets.only(top: 10),
-                                        child: Text(
-                                          'Thursday',
-                                          style: TextStyle(
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.w300),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding:
-                                            EdgeInsets.only(top: 10, left: 10),
-                                        child: Text("1:00",
-                                            style: TextStyle(
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.w300)),
-                                      ),
-                                      Padding(
-                                        padding:
-                                            EdgeInsets.only(top: 10, left: 10),
-                                        child: Text("1:00",
-                                            style: TextStyle(
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.w300)),
-                                      ),
-                                    ]),
-                                    TableRow(children: [
-                                      Padding(
-                                        padding: EdgeInsets.only(top: 10),
-                                        child: Text(
-                                          'Friday',
-                                          style: TextStyle(
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.w300),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding:
-                                            EdgeInsets.only(top: 10, left: 10),
-                                        child: Text("1:00",
-                                            style: TextStyle(
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.w300)),
-                                      ),
-                                      Padding(
-                                        padding:
-                                            EdgeInsets.only(top: 10, left: 10),
-                                        child: Text("1:00",
-                                            style: TextStyle(
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.w300)),
-                                      ),
-                                    ]),
-                                    TableRow(children: [
-                                      Padding(
-                                        padding: EdgeInsets.only(top: 10),
-                                        child: Text(
-                                          'Saturnday',
-                                          style: TextStyle(
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.w300),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding:
-                                            EdgeInsets.only(top: 10, left: 10),
-                                        child: Text("1:00",
-                                            style: TextStyle(
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.w300)),
-                                      ),
-                                      Padding(
-                                        padding:
-                                            EdgeInsets.only(top: 10, left: 10),
-                                        child: Text("1:00",
-                                            style: TextStyle(
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.w300)),
-                                      ),
-                                    ]),
-                                    TableRow(children: [
-                                      Padding(
-                                        padding: EdgeInsets.only(top: 10),
-                                        child: Text(
-                                          'Sunday',
-                                          style: TextStyle(
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.w300),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding:
-                                            EdgeInsets.only(top: 10, left: 10),
-                                        child: Text("1:00",
-                                            style: TextStyle(
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.w300)),
-                                      ),
-                                      Padding(
-                                        padding:
-                                            EdgeInsets.only(top: 10, left: 10),
-                                        child: Text("1:00",
-                                            style: TextStyle(
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.w300)),
-                                      ),
-                                    ]),
+                                padding: const EdgeInsets.only(top: 10),
+                                child: DataTable(
+                                  columns: [
+                                    DataColumn(label: Text('Day')),
+                                    DataColumn(label: Text('Opens')),
+                                    DataColumn(label: Text('Closes')),
                                   ],
+                                  rows: businessHoursList.map((dayData) {
+                                    return DataRow(
+                                      cells: [
+                                        DataCell(Text(dayData['Day'])),
+                                        DataCell(
+                                            Text(dayData['Data']['Opens'])),
+                                        DataCell(
+                                            Text(dayData['Data']['Closes'])),
+                                      ],
+                                    );
+                                  }).toList(),
                                 ),
                               ),
                               const Padding(
@@ -650,32 +469,34 @@ class _buzpageState extends State<buzpage> with TickerProviderStateMixin {
                                       fontWeight: FontWeight.w400),
                                 ),
                               ),
-                              const Padding(
-                                padding: EdgeInsets.fromLTRB(5, 10, 5, 0),
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(5, 10, 5, 0),
                                 child: Padding(
-                                  padding: EdgeInsets.all(10.0),
+                                  padding: const EdgeInsets.all(10.0),
                                   child: Text(
-                                    "webite:- www.abc.com",
-                                    style: TextStyle(
+                                    "webite:- ${snapshot.data!["website"]} ",
+                                    style: const TextStyle(
                                         fontSize: 15,
                                         fontWeight: FontWeight.w300),
                                   ),
                                 ),
                               ),
-                              const Padding(
-                                padding: EdgeInsets.all(10.0),
+                              Padding(
+                                padding: const EdgeInsets.all(10.0),
                                 child: Text(
-                                  "Address:- Addis Abeba",
-                                  style: TextStyle(
+                                  "Address:- ${snapshot.data!["Business Address"]}",
+                                  style: const TextStyle(
                                       fontSize: 15,
                                       fontWeight: FontWeight.w300),
                                 ),
                               ),
                               GestureDetector(
                                 onTap: () {
-                                  Get.to(
-                                    () => const ShowOnMap(),
-                                  );
+                                  Get.to(() => const ShowOnMap(), arguments: {
+                                    'latitude': snapshot.data!["profile_Pic"],
+                                    'longitude':
+                                        snapshot.data!["Business Name"],
+                                  });
                                 },
                                 child: Padding(
                                   padding: const EdgeInsets.only(
@@ -713,25 +534,26 @@ class _buzpageState extends State<buzpage> with TickerProviderStateMixin {
                                       fontWeight: FontWeight.w400),
                                 ),
                               ),
-                              const Padding(
-                                padding: EdgeInsets.fromLTRB(5, 10, 5, 0),
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(5, 10, 5, 0),
                                 child: Padding(
-                                  padding: EdgeInsets.all(10.0),
+                                  padding: const EdgeInsets.all(10.0),
                                   child: Text(
-                                    "Full Name:- Eren Yeager",
-                                    style: TextStyle(
+                                    "Full Name:-${snapshot.data!["First Name"]} ${snapshot.data!["Last Name"]}",
+                                    style: const TextStyle(
                                         fontSize: 15,
                                         fontWeight: FontWeight.w300),
                                   ),
                                 ),
                               ),
-                              const Padding(
-                                padding: EdgeInsets.fromLTRB(5, 10, 5, 0),
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(5, 10, 5, 0),
                                 child: Padding(
-                                  padding: EdgeInsets.fromLTRB(10, 0, 10, 50),
+                                  padding:
+                                      const EdgeInsets.fromLTRB(10, 0, 10, 50),
                                   child: Text(
-                                    "Phone No:- 0932323222",
-                                    style: TextStyle(
+                                    "Phone No:- ${snapshot.data!["Phone Number"]}",
+                                    style: const TextStyle(
                                         fontSize: 15,
                                         fontWeight: FontWeight.w300),
                                   ),
@@ -770,32 +592,22 @@ class _buzpageState extends State<buzpage> with TickerProviderStateMixin {
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.start,
                                                 children: [
-                                                  const Row(
+                                                  Row(
                                                     crossAxisAlignment:
                                                         CrossAxisAlignment
                                                             .start,
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
                                                     children: [
-                                                      CircleAvatar(
-                                                        radius: 15,
-                                                        child: Center(
-                                                          child: Text(
-                                                            "M",
-                                                            style: TextStyle(
-                                                                fontSize: 15),
-                                                          ),
-                                                        ),
-                                                      ),
+                                                      SizedBox(),
                                                       Padding(
                                                         padding:
                                                             EdgeInsets.all(5.0),
-                                                        child: Text(
-                                                          "Sara chakamola",
-                                                          style: TextStyle(
-                                                              fontSize: 16,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w400),
-                                                        ),
+                                                        child: getTime(snapshot
+                                                            .data!['reviews']
+                                                                ['timestamp']
+                                                            .toString()),
                                                       ),
                                                     ],
                                                   ),
@@ -805,7 +617,7 @@ class _buzpageState extends State<buzpage> with TickerProviderStateMixin {
                                                             8.0),
                                                     child: Text(
                                                       snapshot.data!["reviews"]
-                                                          [index],
+                                                          ['review'][index],
                                                       style: const TextStyle(
                                                           fontSize: 16,
                                                           fontWeight:
@@ -1175,5 +987,46 @@ class _buzpageState extends State<buzpage> with TickerProviderStateMixin {
   Future<String> getBid() async {
     bid = await Get.arguments;
     return bid!;
+  }
+
+  Future<void> fetchData() async {
+    try {
+      String userId = bid!; // Assuming `_auth` is your authentication instance.
+      DocumentSnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore
+          .instance
+          .collection('Business Accounts Requests')
+          .doc(userId)
+          .collection('bussiness_Hours')
+          .doc(userId)
+          .get();
+
+      if (snapshot.exists) {
+        Map<String, dynamic> businessHoursMap = snapshot.data()!;
+        businessHoursList = businessHoursMap.entries.map((entry) {
+          return {'Day': entry.key, 'Data': entry.value};
+        }).toList();
+        setState(() {}); // Trigger a rebuild after fetching the data
+      } else {
+        // Handle the case where the document doesn't exist.
+      }
+    } catch (e) {
+      // Handle any errors that occurred during the fetch.
+      print("Error fetching business hours: $e");
+    }
+  }
+
+  Widget getTime(String snaphot) {
+    String serverTime = snaphot;
+
+    var time = DateTime.parse(serverTime);
+    var result = GetTimeAgo.parse(time);
+
+    return Padding(
+      padding: const EdgeInsets.only(top: 30, left: 5),
+      child: Text(
+        result,
+        style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w300),
+      ),
+    );
   }
 }

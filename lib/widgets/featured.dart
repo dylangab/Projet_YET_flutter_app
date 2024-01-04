@@ -1,14 +1,12 @@
-import 'package:final_project/Pages/BusinessAccount/BusinessProfile.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:final_project/models/models.dart';
+
 import 'package:final_project/Pages/BusinessAccount/businesspage.dart';
 import 'package:get/get.dart';
-
 import '../Pages/BusinessAccount/buzpage1.dart';
-import '../models/getX.dart';
+import 'package:final_project/Services.dart/getX.dart';
 
 class featured extends StatefulWidget {
   @override
@@ -17,7 +15,7 @@ class featured extends StatefulWidget {
 
 class _featuredState extends State<featured> {
   List<DocumentSnapshot> fearured = [];
-  List dd = ["resturants", "educational", "barbor"];
+  List dd = [];
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +30,8 @@ class _featuredState extends State<featured> {
           child: StreamBuilder<QuerySnapshot>(
               stream: FirebaseFirestore.instance
                   .collection("Business Accounts Requests")
-                  .where('businesscatagory', whereIn: dd)
+                  .where('profile_finish', isEqualTo: 'yes')
+                  .where('businesscatagory', whereIn: bb)
                   .snapshots(),
               builder: (context, snapshot) {
                 print(snapshot);
@@ -82,7 +81,7 @@ class _featuredState extends State<featured> {
                                     decoration: BoxDecoration(
                                       image: DecorationImage(
                                           image: NetworkImage(
-                                              fearured[index]["image"]),
+                                              fearured[index]["coverPhoto"]),
                                           fit: BoxFit.cover),
                                       borderRadius: BorderRadius.circular(15),
                                     ),

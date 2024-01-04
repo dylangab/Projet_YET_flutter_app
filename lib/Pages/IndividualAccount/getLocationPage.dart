@@ -1,5 +1,5 @@
 import 'package:final_project/mainPage.dart';
-import 'package:final_project/models/getX.dart';
+import 'package:final_project/Services.dart/getX.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -25,7 +25,12 @@ class _GetLocationState extends State<GetLocation> {
           address = snapshot.toString();
 
           //  Get.to(mainPage(), arguments: address);
-          return const mainPage();
+          return Container(
+            child: SizedBox(
+                height: 100,
+                child: Center(
+                    child: Text(controller.currentAddress.value + address))),
+          ); //mainPage();
         } else {
           return Container(
               alignment: Alignment.center,

@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:final_project/models/notiservice.dart';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:final_project/Pages/IndividualAccount/homepage.dart';
@@ -8,7 +8,8 @@ import 'package:final_project/Pages/IndividualAccount/Catagory.dart';
 import 'package:final_project/Pages/IndividualAccount/NotificationPage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:get/get.dart';
-import 'models/getX.dart';
+import 'package:final_project/Services.dart/getX.dart';
+import 'package:final_project/Services.dart/notiservice.dart';
 
 class mainPage extends StatefulWidget {
   const mainPage({super.key});

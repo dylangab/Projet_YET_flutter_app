@@ -5,7 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'storagemethod.dart';
-import 'package:final_project/models/imagepicker.dart';
+import 'package:final_project/Services.dart/imagepicker.dart';
 import 'package:latlong2/latlong.dart';
 
 class Businessacc {

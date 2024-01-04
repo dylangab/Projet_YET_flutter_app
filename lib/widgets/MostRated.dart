@@ -23,7 +23,7 @@ class _MostRatedState extends State<MostRated> {
           child: StreamBuilder<QuerySnapshot>(
               stream: FirebaseFirestore.instance
                   .collection("Business Accounts Requests")
-                  .where('businesscatagory', isEqualTo: 'hotel')
+                  .where('profile_finish', isEqualTo: 'yes')
                   .snapshots(),
               builder: (context, snapshot) {
                 print(snapshot);
@@ -75,7 +75,8 @@ class _MostRatedState extends State<MostRated> {
                                         decoration: BoxDecoration(
                                           image: DecorationImage(
                                               image: NetworkImage(
-                                                  mostrated[index]["image"]),
+                                                  mostrated[index]
+                                                      ["coverPhoto"]),
                                               fit: BoxFit.cover),
                                           borderRadius:
                                               BorderRadius.circular(15),

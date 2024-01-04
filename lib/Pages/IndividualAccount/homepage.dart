@@ -187,7 +187,7 @@ class _MyHomePage extends State<MyHomePage> with TickerProviderStateMixin {
                 )
               ],
             ),
-            featured()
+            //  featured()
           ],
         ),
       ),

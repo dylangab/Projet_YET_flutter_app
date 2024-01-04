@@ -22,8 +22,9 @@ class _RecentlyAddedState extends State<RecentlyAdded> {
           child: StreamBuilder<QuerySnapshot>(
               stream: FirebaseFirestore.instance
                   .collection("Business Accounts Requests")
+                  .where('profile_finish', isEqualTo: 'yes')
                   .orderBy('timestamp', descending: true)
-                  .limit(10)
+                  .limit(2)
                   .snapshots(),
               builder: (context, snapshot) {
                 print(snapshot);
@@ -34,7 +35,7 @@ class _RecentlyAddedState extends State<RecentlyAdded> {
 
                 return ListView.builder(
                     scrollDirection: Axis.horizontal,
-                    itemCount: snapshot.data!.docs.length,
+                    itemCount: RecentlyAdded.length,
                     itemBuilder: (context, index) {
                       return GestureDetector(
                         onTap: () async {
@@ -52,7 +53,7 @@ class _RecentlyAddedState extends State<RecentlyAdded> {
                                   decoration: BoxDecoration(
                                     image: DecorationImage(
                                         image: NetworkImage(
-                                            RecentlyAdded[index]["image"]),
+                                            RecentlyAdded[index]["coverPhoto"]),
                                         fit: BoxFit.cover),
                                     borderRadius: BorderRadius.circular(15),
                                     color: Colors.red,

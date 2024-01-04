@@ -3,7 +3,6 @@ import 'package:shimmer/shimmer.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-import 'package:final_project/Pages/BusinessAccount/businesspage.dart';
 import 'package:get/get.dart';
 import '../Pages/BusinessAccount/buzpage1.dart';
 import 'package:final_project/Services.dart/getX.dart';

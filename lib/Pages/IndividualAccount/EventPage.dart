@@ -4,8 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:lorem_ipsum/lorem_ipsum.dart';
-
-import '../../models/getX.dart';
+import 'package:final_project/Services.dart/getX.dart';
 
 class eventpage extends StatefulWidget {
   const eventpage({super.key});
@@ -48,14 +47,16 @@ class _eventpageState extends State<eventpage> {
                               image: DecorationImage(
                                   fit: BoxFit.fill,
                                   image: NetworkImage(
-                                    event[index]["image"],
+                                    event[index]["photoUrl"],
                                   ))),
                         ),
-                        const Positioned(
+                        Positioned(
                           top: 50,
                           right: 30,
                           child: CircleAvatar(
                             radius: 15,
+                            backgroundImage:
+                                NetworkImage(event[index]['profilePic']),
                           ),
                         ),
                         Positioned(
@@ -88,11 +89,11 @@ class _eventpageState extends State<eventpage> {
                                           color: Colors.white),
                                     ),
                                   ),
-                                  const Padding(
+                                  Padding(
                                     padding: EdgeInsets.symmetric(vertical: 10),
                                     child: Text(
-                                      "Event Address:- addis abeba ",
-                                      style: TextStyle(
+                                      "Event Address:- ${event[index]['address']}",
+                                      style: const TextStyle(
                                           fontWeight: FontWeight.w300,
                                           color: Colors.white),
                                     ),
@@ -100,8 +101,12 @@ class _eventpageState extends State<eventpage> {
                                   GestureDetector(
                                     onTap: () {
                                       Get.to(() => const ShowOnMap(),
-                                          arguments: event[index]
-                                              ["coodinates"]);
+                                          arguments: {
+                                            "latitude": event[index]
+                                                ["coodinates"]['latitude'],
+                                            "longitude": event[index]
+                                                ["coodinates"]['longitude']
+                                          });
                                     },
                                     child: Container(
                                       height: 40,
@@ -162,7 +167,7 @@ class _eventpageState extends State<eventpage> {
                                                   Icons.thumb_up_alt_sharp)),
                                         ),*/
                                         Text(
-                                            "(${event[index]["likedUids"].length})")
+                                            "(${event[index]["likeduid"].length})")
                                       ],
                                     ),
                                   ),
@@ -210,10 +215,15 @@ class _eventpageState extends State<eventpage> {
                                                                         event[index]["comments"]
                                                                             [
                                                                             CommentIndex];
-                                                                    var userAvatar =
-                                                                        event[index]["userName"]
+                                                                    var time = event[index]
                                                                             [
-                                                                            CommentIndex];
+                                                                            "timestamp"]
+                                                                        [
+                                                                        CommentIndex];
+                                                                    // var userAvatar =
+                                                                    //     event[index]["userName"]
+                                                                    //         [
+                                                                    //         CommentIndex];
                                                                     return Container(
                                                                       margin:
                                                                           const EdgeInsets.all(
@@ -230,18 +240,16 @@ class _eventpageState extends State<eventpage> {
                                                                           child: Row(
                                                                               crossAxisAlignment: CrossAxisAlignment.start,
                                                                               children: [
-                                                                                CircleAvatar(
-                                                                                  child: Text(userAvatar),
-                                                                                ),
                                                                                 Padding(
                                                                                   padding: const EdgeInsets.all(8.0),
                                                                                   child: SizedBox(
-                                                                                    width: 250,
+                                                                                    //  width: 250,
                                                                                     child: Text(
                                                                                       comments,
                                                                                     ),
                                                                                   ),
-                                                                                )
+                                                                                ),
+                                                                                Text(time)
                                                                               ]),
                                                                         ),
                                                                       ),
@@ -319,7 +327,8 @@ class _eventpageState extends State<eventpage> {
     userName.add(controller.userName.value[0]);
     FirebaseFirestore.instance.collection('Events').doc(uid).update({
       'comments': FieldValue.arrayUnion([commentController.value.text]),
-      'userName': userName
+      // 'userName': userName
+      'timestamp': "${DateTime.now()}"
     });
   }
 }

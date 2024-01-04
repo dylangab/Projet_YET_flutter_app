@@ -1,5 +1,5 @@
 import 'dart:io';
-
+import 'package:intl/intl.dart';
 import 'package:final_project/Pages/BusinessAccount/BpPage.dart';
 import 'package:final_project/Pages/BusinessAccount/chooseLocation.dart';
 import 'package:final_project/models/businessaa.dart';
@@ -15,7 +15,7 @@ import 'package:switcher_button/switcher_button.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-import '../../models/getX.dart';
+import 'package:final_project/Services.dart/getX.dart';
 
 class FinishProPage extends StatefulWidget {
   const FinishProPage({super.key});
@@ -864,6 +864,7 @@ class _FinishProPageState extends State<FinishProPage> {
                                           fontSize: 10,
                                           fontWeight: FontWeight.w500),
                                       name: 'Sunday_Closetime',
+                                      format: DateFormat.jm(),
                                       inputType: InputType.time,
                                       decoration: const InputDecoration(
                                           border: OutlineInputBorder()),
@@ -934,64 +935,6 @@ class _FinishProPageState extends State<FinishProPage> {
                         Color.fromARGB(255, 229, 143, 101)),
                   ),
                   onPressed: () async {
-                    /*    Map<String, dynamic> businessHours = {
-                      'Monday': {
-                        'Opens': _formBuilderOpenTimeKey
-                            .currentState!.fields['Monday_Opentime']?.value
-                            .toString(),
-                        'Closes': _formBuilderCloseTimeKey
-                            .currentState!.fields['Monday_Closetime']?.value
-                            .toString(),
-                      },
-                      'Tuesday': {
-                        'Opens': _formBuilderOpenTimeKey
-                            .currentState!.fields['tuesday_Opentime']?.value
-                            .toString(),
-                        'Closes': _formBuilderCloseTimeKey
-                            .currentState!.fields['tuesday_Closetime']?.value
-                            .toString(),
-                      },
-                      'Wednesday': {
-                        'Opens': _formBuilderOpenTimeKey
-                            .currentState!.fields['Wednesday_Opentime']?.value
-                            .toString(),
-                        'Closes': _formBuilderCloseTimeKey
-                            .currentState!.fields['Wednesday_Closetime']?.value
-                            .toString(),
-                      },
-                      'Thursday': {
-                        'Opens': _formBuilderOpenTimeKey
-                            .currentState!.fields['Thursday_Opentime']?.value
-                            .toString(),
-                        'Closes': _formBuilderCloseTimeKey
-                            .currentState!.fields['Thursday_Closetime']?.value
-                            .toString(),
-                      },
-                      'Friday': {
-                        'Opens': _formBuilderOpenTimeKey
-                            .currentState!.fields['Friday_Opentime']?.value
-                            .toString(),
-                        'Closes': _formBuilderCloseTimeKey
-                            .currentState!.fields['Friday_Closetime']?.value
-                            .toString(),
-                      },
-                      'Saturnday': {
-                        'Opens': _formBuilderOpenTimeKey
-                            .currentState!.fields['Saturday_Opentime']?.value
-                            .toString(),
-                        'Closes': _formBuilderCloseTimeKey
-                            .currentState!.fields['Saturday_Closetime']?.value
-                            .toString(),
-                      },
-                      'Sunday': {
-                        'Opens': _formBuilderOpenTimeKey
-                            .currentState!.fields['Sunday_Opentime']?.value
-                            .toString(),
-                        'Closes': _formBuilderCloseTimeKey
-                            .currentState!.fields['Sunday_Closetime']?.value
-                            .toString(),
-                      },
-                    }; */
                     await finishAccount(_auth.currentUser!.uid);
                     await createBusinessHoursMap().then((value) =>
                         FirebaseFirestore.instance

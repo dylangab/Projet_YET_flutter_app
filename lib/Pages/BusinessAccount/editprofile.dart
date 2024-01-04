@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:final_project/models/getX.dart';
+import 'package:final_project/Services.dart/getX.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:geocoding/geocoding.dart';
@@ -51,8 +51,24 @@ final _formBuilderCloseTimeKey = GlobalKey<FormBuilderState>();
 String? coordinateText;
 final GetMapController controller = Get.put(GetMapController());
 final FirebaseAuth _auth = FirebaseAuth.instance;
+bool enableMonday = false;
+bool enableTuesday = false;
+bool enablewenday = false;
+bool enableThrusday = false;
+bool enableFriday = false;
+bool enableSatrunday = false;
+bool enableSunday = false;
+final Map<String, dynamic> businessHours = {};
+List<Map<String, dynamic>> businessHoursList = [];
 
 class _ProfileEditPageState extends State<ProfileEditPage> {
+  @override
+  void initState() {
+    super.initState();
+
+    fetchData();
+  }
+
   void dispose() {
     buzName.dispose();
     firstNameController.dispose();
@@ -80,16 +96,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                   color: const Color.fromARGB(255, 238, 240, 235),
                   child: Stack(fit: StackFit.loose, children: [
                     Positioned(
-                        child: Container(
-                      decoration: const BoxDecoration(
-                          /*  image: DecorationImage(
-                                    fit: BoxFit.cover,
-                                    image: NetworkImage(''))  */
-                          ),
-                      height: 130,
-                    )),
-                    Positioned(
-                        top: 100,
+                        top: 50,
                         left: 30,
                         child: Row(
                           children: [
@@ -106,20 +113,21 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                               child: editbuzName
                                   ? SizedBox(
                                       width: 200,
+                                      height: 50,
                                       child: TextFormField(
-                                        initialValue: "Business Name",
                                         controller: buzName,
                                         decoration: const InputDecoration(),
                                       ))
                                   : SizedBox(
                                       child:
                                           Stack(fit: StackFit.loose, children: [
-                                        const SizedBox(
-                                          height: 50,
+                                        SizedBox(
+                                          height: 80,
                                           width: 200,
                                           child: Padding(
                                             padding: EdgeInsets.only(top: 15),
-                                            child: Text("Business Name",
+                                            child: Text(
+                                                snapshot.data!["Business Name"],
                                                 style: TextStyle(
                                                     fontSize: 25,
                                                     fontWeight:
@@ -204,7 +212,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                     : Padding(
                         padding: const EdgeInsets.fromLTRB(5, 10, 5, 0),
                         child: Text(
-                          _text,
+                          snapshot.data!["description"],
                           style: const TextStyle(
                               fontSize: 15, fontWeight: FontWeight.w300),
                         ),
@@ -267,7 +275,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                     : Padding(
                         padding: const EdgeInsets.fromLTRB(5, 10, 5, 0),
                         child: Text(
-                          _text,
+                          snapshot.data!["service"],
                           style: const TextStyle(
                               fontSize: 15, fontWeight: FontWeight.w300),
                         ),
@@ -290,7 +298,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                       ),
                       Positioned(
                           top: 0,
-                          right: 220,
+                          right: 225,
                           child: IconButton(
                               onPressed: () {
                                 print("ok");
@@ -306,8 +314,8 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                   ),
                 ),
                 editBusinesshours
-                    ? SizedBox(
-                        child: Column(children: [
+                    ? Column(
+                        children: [
                           const Padding(
                             padding: EdgeInsets.symmetric(vertical: 0),
                             child: Row(
@@ -359,6 +367,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                                                     const Color.fromARGB(
                                                         255, 229, 143, 101)
                                                 : _mondaytext = Colors.black;
+                                            enableMonday = !enableMonday;
                                           });
                                         },
                                         size: 40,
@@ -377,6 +386,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                                                       const Color.fromARGB(
                                                           255, 229, 143, 101)
                                                   : _tuesdaytext = Colors.black;
+                                              enableTuesday = !enableTuesday;
                                             });
                                           },
                                           size: 40,
@@ -396,6 +406,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                                                       const Color.fromARGB(
                                                           255, 229, 143, 101)
                                                   : _wendaytext = Colors.black;
+                                              enablewenday = !enablewenday;
                                             });
                                           },
                                           size: 40,
@@ -415,6 +426,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                                                       const Color.fromARGB(
                                                           255, 229, 143, 101)
                                                   : _thurstext = Colors.black;
+                                              enableThrusday = !enableThrusday;
                                             });
                                           },
                                           size: 40,
@@ -434,6 +446,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                                                       const Color.fromARGB(
                                                           255, 229, 143, 101)
                                                   : _fridaytext = Colors.black;
+                                              enableFriday = !enableFriday;
                                             });
                                           },
                                           size: 40,
@@ -454,6 +467,8 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                                                           255, 229, 143, 101)
                                                   : _saturndaytext =
                                                       Colors.black;
+                                              enableSatrunday =
+                                                  !enableSatrunday;
                                             });
                                           },
                                           size: 40,
@@ -473,6 +488,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                                                       const Color.fromARGB(
                                                           255, 229, 143, 101)
                                                   : _sundaytext = Colors.black;
+                                              enableSunday = !enableSunday;
                                             });
                                           },
                                           size: 40,
@@ -574,6 +590,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                                             width: 50,
                                             height: 30,
                                             child: FormBuilderDateTimePicker(
+                                              enabled: enableMonday,
                                               style: const TextStyle(
                                                   fontSize: 10,
                                                   fontWeight: FontWeight.w500),
@@ -591,6 +608,9 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                                             width: 50,
                                             height: 30,
                                             child: FormBuilderDateTimePicker(
+                                              enabled: enableTuesday,
+                                              timePickerInitialEntryMode:
+                                                  TimePickerEntryMode.inputOnly,
                                               style: const TextStyle(
                                                   fontSize: 10,
                                                   fontWeight: FontWeight.w500),
@@ -607,6 +627,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                                             width: 50,
                                             height: 30,
                                             child: FormBuilderDateTimePicker(
+                                              enabled: enablewenday,
                                               style: const TextStyle(
                                                   fontSize: 10,
                                                   fontWeight: FontWeight.w500),
@@ -624,6 +645,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                                             width: 50,
                                             height: 30,
                                             child: FormBuilderDateTimePicker(
+                                              enabled: enableThrusday,
                                               style: const TextStyle(
                                                   fontSize: 10,
                                                   fontWeight: FontWeight.w500),
@@ -640,6 +662,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                                             width: 50,
                                             height: 30,
                                             child: FormBuilderDateTimePicker(
+                                              enabled: enableFriday,
                                               style: const TextStyle(
                                                   fontSize: 10,
                                                   fontWeight: FontWeight.w500),
@@ -657,6 +680,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                                             width: 50,
                                             height: 30,
                                             child: FormBuilderDateTimePicker(
+                                              enabled: enableSatrunday,
                                               style: const TextStyle(
                                                   fontSize: 10,
                                                   fontWeight: FontWeight.w500),
@@ -673,6 +697,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                                             width: 50,
                                             height: 30,
                                             child: FormBuilderDateTimePicker(
+                                              enabled: enableSunday,
                                               style: const TextStyle(
                                                   fontSize: 10,
                                                   fontWeight: FontWeight.w500),
@@ -704,6 +729,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                                             width: 50,
                                             height: 30,
                                             child: FormBuilderDateTimePicker(
+                                              enabled: enableMonday,
                                               style: const TextStyle(
                                                   fontSize: 10,
                                                   fontWeight: FontWeight.w500),
@@ -721,6 +747,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                                             width: 50,
                                             height: 30,
                                             child: FormBuilderDateTimePicker(
+                                              enabled: enableTuesday,
                                               style: const TextStyle(
                                                   fontSize: 10,
                                                   fontWeight: FontWeight.w500),
@@ -737,6 +764,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                                             width: 50,
                                             height: 30,
                                             child: FormBuilderDateTimePicker(
+                                              enabled: enablewenday,
                                               style: const TextStyle(
                                                   fontSize: 10,
                                                   fontWeight: FontWeight.w500),
@@ -754,6 +782,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                                             width: 50,
                                             height: 30,
                                             child: FormBuilderDateTimePicker(
+                                              enabled: enableThrusday,
                                               style: const TextStyle(
                                                   fontSize: 10,
                                                   fontWeight: FontWeight.w500),
@@ -770,6 +799,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                                             width: 50,
                                             height: 30,
                                             child: FormBuilderDateTimePicker(
+                                              enabled: enableFriday,
                                               style: const TextStyle(
                                                   fontSize: 10,
                                                   fontWeight: FontWeight.w500),
@@ -787,6 +817,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                                             width: 50,
                                             height: 30,
                                             child: FormBuilderDateTimePicker(
+                                              enabled: enableSatrunday,
                                               style: const TextStyle(
                                                   fontSize: 10,
                                                   fontWeight: FontWeight.w500),
@@ -803,6 +834,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                                             width: 50,
                                             height: 30,
                                             child: FormBuilderDateTimePicker(
+                                              enabled: enableSunday,
                                               style: const TextStyle(
                                                   fontSize: 10,
                                                   fontWeight: FontWeight.w500),
@@ -819,204 +851,26 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                                 ),
                               ],
                             ),
-                          )
-                        ]),
+                          ),
+                        ],
                       )
                     : Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: Table(
-                          children: const [
-                            TableRow(children: [
-                              Text(
-                                'Days',
-                                style: TextStyle(
-                                    fontSize: 14, fontWeight: FontWeight.w400),
-                              ),
-                              Text("Opening Hours",
-                                  style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w400)),
-                              Text("Closing Hours",
-                                  style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w400)),
-                            ]),
-                            TableRow(children: [
-                              Padding(
-                                padding: EdgeInsets.only(top: 10),
-                                child: Text(
-                                  'Monday',
-                                  style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w300),
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(top: 10, left: 10),
-                                child: Text("1:00",
-                                    style: TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w300)),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(top: 10, left: 10),
-                                child: Text("1:00",
-                                    style: TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w300)),
-                              ),
-                            ]),
-                            TableRow(children: [
-                              Padding(
-                                padding: EdgeInsets.only(top: 10),
-                                child: Text(
-                                  'Tuesday',
-                                  style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w300),
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(top: 10, left: 10),
-                                child: Text("1:00",
-                                    style: TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w300)),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(top: 10, left: 10),
-                                child: Text("1:00",
-                                    style: TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w300)),
-                              ),
-                            ]),
-                            TableRow(children: [
-                              Padding(
-                                padding: EdgeInsets.only(top: 10),
-                                child: Text(
-                                  'Wednesday',
-                                  style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w300),
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(top: 10, left: 10),
-                                child: Text("1:00",
-                                    style: TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w300)),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(top: 10, left: 10),
-                                child: Text("1:00",
-                                    style: TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w300)),
-                              ),
-                            ]),
-                            TableRow(children: [
-                              Padding(
-                                padding: EdgeInsets.only(top: 10),
-                                child: Text(
-                                  'Thursday',
-                                  style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w300),
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(top: 10, left: 10),
-                                child: Text("1:00",
-                                    style: TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w300)),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(top: 10, left: 10),
-                                child: Text("1:00",
-                                    style: TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w300)),
-                              ),
-                            ]),
-                            TableRow(children: [
-                              Padding(
-                                padding: EdgeInsets.only(top: 10),
-                                child: Text(
-                                  'Friday',
-                                  style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w300),
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(top: 10, left: 10),
-                                child: Text("1:00",
-                                    style: TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w300)),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(top: 10, left: 10),
-                                child: Text("1:00",
-                                    style: TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w300)),
-                              ),
-                            ]),
-                            TableRow(children: [
-                              Padding(
-                                padding: EdgeInsets.only(top: 10),
-                                child: Text(
-                                  'Saturnday',
-                                  style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w300),
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(top: 10, left: 10),
-                                child: Text("1:00",
-                                    style: TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w300)),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(top: 10, left: 10),
-                                child: Text("1:00",
-                                    style: TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w300)),
-                              ),
-                            ]),
-                            TableRow(children: [
-                              Padding(
-                                padding: EdgeInsets.only(top: 10),
-                                child: Text(
-                                  'Sunday',
-                                  style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w300),
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(top: 10, left: 10),
-                                child: Text("1:00",
-                                    style: TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w300)),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(top: 10, left: 10),
-                                child: Text("1:00",
-                                    style: TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w300)),
-                              ),
-                            ]),
+                        padding: const EdgeInsets.only(top: 10),
+                        child: DataTable(
+                          columns: [
+                            DataColumn(label: Text('Day')),
+                            DataColumn(label: Text('Opens')),
+                            DataColumn(label: Text('Closes')),
                           ],
+                          rows: businessHoursList.map((dayData) {
+                            return DataRow(
+                              cells: [
+                                DataCell(Text(dayData['Day'])),
+                                DataCell(Text(dayData['Data']['Opens'])),
+                                DataCell(Text(dayData['Data']['Closes'])),
+                              ],
+                            );
+                          }).toList(),
                         ),
                       ),
                 Padding(
@@ -1024,7 +878,6 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                   child: SizedBox(
                     child: Stack(children: [
                       Container(
-                        color: Colors.red,
                         width: 200,
                         height: 50,
                         child: const Padding(
@@ -1075,23 +928,23 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                             ),
                           ],
                         ))
-                    : const Padding(
+                    : Padding(
                         padding: EdgeInsets.fromLTRB(5, 10, 5, 0),
                         child: Padding(
                           padding: EdgeInsets.all(10.0),
                           child: Text(
-                            "Full Name:- Eren Yeager",
+                            "Full Name:- ${snapshot.data!["First Name"]} ${snapshot.data!["Last Name"]}",
                             style: TextStyle(
                                 fontSize: 15, fontWeight: FontWeight.w300),
                           ),
                         ),
                       ),
-                const Padding(
+                Padding(
                   padding: EdgeInsets.fromLTRB(5, 10, 5, 0),
                   child: Padding(
                     padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                     child: Text(
-                      "Phone No:- 0932323222",
+                      "Phone No:-  ${snapshot.data!["Phone Number"]}",
                       style:
                           TextStyle(fontSize: 15, fontWeight: FontWeight.w300),
                     ),
@@ -1102,7 +955,6 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                   child: SizedBox(
                     child: Stack(children: [
                       Container(
-                        color: Colors.red,
                         width: 200,
                         height: 50,
                         child: const Padding(
@@ -1132,40 +984,42 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                   ),
                 ),
                 editAddInfo
-                    ? Padding(
-                        padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-                        child: Container(
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(5),
-                              border: Border.all(
-                                  width: 1.5,
-                                  color:
-                                      const Color.fromARGB(255, 66, 106, 90))),
-                          child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.all(10.0),
-                                  child: Text(coordinateText.toString()),
-                                ),
-                                IconButton(
-                                    onPressed: () {
-                                      Get.to(() => const ChooseLocationPage());
-                                      coordinateToText();
-                                      setState(() {});
-                                    },
-                                    icon: const Icon(
-                                      Icons.map_sharp,
-                                      color: Colors.black,
-                                      size: 20,
-                                    )),
-                              ]),
-                        ))
-                    : const Padding(
+                    ? Obx(
+                        () => Padding(
+                            padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(5),
+                                  border: Border.all(
+                                      width: 1.5,
+                                      color: const Color.fromARGB(
+                                          255, 66, 106, 90))),
+                              child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.all(10.0),
+                                      child: Text(controller.place.value),
+                                    ),
+                                    IconButton(
+                                        onPressed: () {
+                                          Get.to(
+                                              () => const ChooseLocationPage());
+                                        },
+                                        icon: const Icon(
+                                          Icons.map_sharp,
+                                          color: Colors.black,
+                                          size: 20,
+                                        )),
+                                  ]),
+                            )),
+                      )
+                    : Padding(
                         padding: EdgeInsets.all(10.0),
                         child: Text(
-                          "Address:- Addis Abeba",
+                          "Address:- ${snapshot.data!["Business Address"]}",
                           style: TextStyle(
                               fontSize: 15, fontWeight: FontWeight.w300),
                         ),
@@ -1234,6 +1088,94 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
     setState(() {
       coordinateText = " ${placemark.locality}, ${placemark.country}, ";
     });
+  }
+
+  Future<Map<String, dynamic>> createBusinessHoursMap() async {
+    if (enableMonday == true) {
+      businessHours.addEntries({
+        'Monday': {
+          'Opens': _formBuilderOpenTimeKey
+              .currentState!.fields['Monday_Opentime']?.value
+              .toString(),
+          'Closes': _formBuilderCloseTimeKey
+              .currentState!.fields['Monday_Closetime']?.value
+              .toString(),
+        }
+      }.entries);
+    }
+    if (enableTuesday == true) {
+      businessHours.addEntries({
+        'Tuesday': {
+          'Opens': _formBuilderOpenTimeKey
+              .currentState!.fields['tuesday_Opentime']?.value
+              .toString(),
+          'Closes': _formBuilderCloseTimeKey
+              .currentState!.fields['tuesday_Closetime']?.value
+              .toString(),
+        }
+      }.entries);
+    }
+    if (enablewenday == true) {
+      businessHours.addEntries({
+        'Wednesday': {
+          'Opens': _formBuilderOpenTimeKey
+              .currentState!.fields['Wednesday_Opentime']?.value
+              .toString(),
+          'Closes': _formBuilderCloseTimeKey
+              .currentState!.fields['Wednesday_Closetime']?.value
+              .toString(),
+        }
+      }.entries);
+    }
+    if (enableThrusday == true) {
+      businessHours.addEntries({
+        'Thursday': {
+          'Opens': _formBuilderOpenTimeKey
+              .currentState!.fields['Thursday_Opentime']?.value
+              .toString(),
+          'Closes': _formBuilderCloseTimeKey
+              .currentState!.fields['Thursday_Closetime']?.value
+              .toString(),
+        }
+      }.entries);
+    }
+    if (enableFriday == true) {
+      businessHours.addEntries({
+        'Friday': {
+          'Opens': _formBuilderOpenTimeKey
+              .currentState!.fields['Friday_Opentime']?.value
+              .toString(),
+          'Closes': _formBuilderCloseTimeKey
+              .currentState!.fields['Friday_Closetime']?.value
+              .toString(),
+        }
+      }.entries);
+    }
+    if (enableSatrunday == true) {
+      businessHours.addEntries({
+        'Saturnday': {
+          'Opens': _formBuilderOpenTimeKey
+              .currentState!.fields['Saturday_Opentime']?.value
+              .toString(),
+          'Closes': _formBuilderCloseTimeKey
+              .currentState!.fields['Saturday_Closetime']?.value
+              .toString(),
+        }
+      }.entries);
+    }
+    if (enableSunday == true) {
+      businessHours.addEntries({
+        'Sunday': {
+          'Opens': _formBuilderOpenTimeKey
+              .currentState!.fields['Sunday_Opentime']?.value
+              .toString(),
+          'Closes': _formBuilderCloseTimeKey
+              .currentState!.fields['Sunday_Closetime']?.value
+              .toString(),
+        }
+      }.entries);
+    }
+    return businessHours;
   }
 
   bool _buttonVisability() {
@@ -1309,7 +1251,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
         FirebaseFirestore.instance
             .collection("Business Accounts Requests")
             .doc(bid)
-            .update({'address': coordinateText});
+            .update({'Business Address': controller.place.value});
       }
       if (editOwnerInfo == true) {
         FirebaseFirestore.instance
@@ -1345,8 +1287,43 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
           'Business Name': buzName.value.text,
         });
       }
+      if (editBusinesshours == true) {
+        FirebaseFirestore.instance
+            .collection("Business Accounts Requests")
+            .doc(bid)
+            .collection('bussiness_Hours')
+            .doc(bid)
+            .set(businessHours);
+      }
     }
 
     return value;
+  }
+
+  Future<void> fetchData() async {
+    try {
+      String userId =
+          "0yDSrgeDwPPWS9zQFfHWnPYkoTr2"; // Assuming `_auth` is your authentication instance.
+      DocumentSnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore
+          .instance
+          .collection('Business Accounts Requests')
+          .doc(userId)
+          .collection('bussiness_Hours')
+          .doc(userId)
+          .get();
+
+      if (snapshot.exists) {
+        Map<String, dynamic> businessHoursMap = snapshot.data()!;
+        businessHoursList = businessHoursMap.entries.map((entry) {
+          return {'Day': entry.key, 'Data': entry.value};
+        }).toList();
+        setState(() {}); // Trigger a rebuild after fetching the data
+      } else {
+        // Handle the case where the document doesn't exist.
+      }
+    } catch (e) {
+      // Handle any errors that occurred during the fetch.
+      print("Error fetching business hours: $e");
+    }
   }
 }

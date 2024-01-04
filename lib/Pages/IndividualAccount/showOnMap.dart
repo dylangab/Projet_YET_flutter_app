@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:get/get.dart';
 import 'package:latlong2/latlong.dart';
-
-import '../../models/getX.dart';
+import 'package:final_project/Services.dart/getX.dart';
 
 class ShowOnMap extends StatefulWidget {
   const ShowOnMap({super.key});
@@ -14,8 +13,12 @@ class ShowOnMap extends StatefulWidget {
 
 LatLng? selectedCoordinates = const LatLng(37.7749, -122.4194);
 late TapPosition tapPosition;
+Map<String, dynamic> argument = Get.arguments as Map<String, dynamic>;
 
 class _ShowOnMapState extends State<ShowOnMap> {
+  double latitude = double.parse(argument['latitude'] as String);
+  double longitude = double.parse(argument['longitude'] as String);
+
   MapController mapController = MapController();
   final GetMapController controller = Get.put(GetMapController());
 
@@ -47,7 +50,7 @@ class _ShowOnMapState extends State<ShowOnMap> {
                 Marker(
                   width: 30.0,
                   height: 30.0,
-                  point: Get.arguments,
+                  point: LatLng(latitude, longitude),
                   builder: (ctx) => const SizedBox(
                     child: Icon(
                       Icons.location_on,

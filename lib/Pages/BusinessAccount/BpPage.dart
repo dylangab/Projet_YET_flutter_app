@@ -8,7 +8,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:get/get.dart';
 import 'package:lorem_ipsum/lorem_ipsum.dart';
-import '../../models/getX.dart';
+import 'package:final_project/Services.dart/getX.dart';
 
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
@@ -480,8 +480,6 @@ class _BpPageState extends State<BpPage> {
                                                             onPressed: () {
                                                               Get.to(() =>
                                                                   const ChooseLocationPage());
-                                                              coordinateToText();
-                                                              setState(() {});
                                                             },
                                                             icon: const Icon(
                                                               Icons.map_sharp,
@@ -1079,7 +1077,7 @@ class _BpPageState extends State<BpPage> {
       imageUrlList.add(imageurl);
       FirebaseFirestore.instance
           .collection("Business Accounts Requests")
-          .doc("4u3NEAlS8CZOfc7c08j2yRtJjxt2")
+          .doc(_auth.currentUser!.uid)
           .update({
         'photos': FieldValue.arrayUnion([imageurl])
       });

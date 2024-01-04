@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:final_project/Pages/BusinessAccount/accountCheckPage.dart';
 import 'package:final_project/Pages/IndividualAccount/InterestPage.dart';
 import 'package:final_project/Pages/IndividualAccount/homepage.dart';
-import 'package:final_project/models/getX.dart';
+import 'package:final_project/Services.dart/getX.dart';
 import 'package:final_project/models/individualacc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';

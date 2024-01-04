@@ -29,7 +29,7 @@ import 'package:flutter/material.dart';
 import 'package:final_project/Pages/BusinessAccount/BpRegisterPage.dart';
 import 'package:firebase_core/firebase_core.dart';
 
-import 'package:final_project/widgets/LoginTab.dart';
+import 'package:final_project/LoginTab.dart';
 import 'package:final_project/Pages/IndividualAccount/homepage.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';

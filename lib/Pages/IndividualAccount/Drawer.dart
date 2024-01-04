@@ -1,6 +1,6 @@
 import 'package:final_project/Pages/IndividualAccount/Oops.dart';
 
-import 'package:final_project/widgets/LoginTab.dart';
+import 'package:final_project/LoginTab.dart';
 import 'package:final_project/Pages/IndividualAccount/maps.dart';
 import 'package:flutter/material.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';

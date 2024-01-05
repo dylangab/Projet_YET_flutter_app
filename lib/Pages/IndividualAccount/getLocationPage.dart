@@ -24,7 +24,7 @@ class _GetLocationState extends State<GetLocation> {
           String address;
           address = snapshot.toString();
 
-          //  Get.to(mainPage(), arguments: address);
+          Get.to(mainPage(), arguments: address);
           return Container(
             child: SizedBox(
                 height: 100,

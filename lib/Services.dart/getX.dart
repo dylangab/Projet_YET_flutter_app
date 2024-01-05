@@ -6,6 +6,8 @@ import 'package:latlong2/latlong.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
 
+import '../models/geofencing.dart';
+
 // Controller for managing map-related data
 class GetMapController extends GetxController {
   // Observable variables for map coordinates and place
@@ -125,5 +127,27 @@ class individualAccountFetch extends GetxController {
       userInterests.value = documentSnapshot.get('userInterest');
       print(userName.value);
     });
+  }
+}
+
+class Geofencingervice extends GetxController {
+  RxList account = [].obs;
+
+  void fetchMarkerDataFromFirestore() async {
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+    QuerySnapshot querySnapshot = await firestore
+        .collection("Business Accounts Requests")
+        .where('profile_finish', isEqualTo: 'yes')
+        .get();
+
+    account.value = querySnapshot.docs.map((doc) {
+      Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+
+      return Geofencing(
+        bid: data['bid'] as String,
+        coordinate: LatLng(data['latitude'], data['longitude']),
+      );
+    }).toList();
   }
 }

@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 
 import '../Pages/BusinessAccount/buzpage1.dart';
+import '../Services.dart/getX.dart';
 
 class RecentlyAdded extends StatefulWidget {
   @override
@@ -11,6 +12,7 @@ class RecentlyAdded extends StatefulWidget {
 
 class _RecentlyAddedState extends State<RecentlyAdded> {
   List<DocumentSnapshot> RecentlyAdded = [];
+  final GetAddress controller = Get.put(GetAddress());
 
   @override
   Widget build(BuildContext context) {
@@ -22,6 +24,8 @@ class _RecentlyAddedState extends State<RecentlyAdded> {
           child: StreamBuilder<QuerySnapshot>(
               stream: FirebaseFirestore.instance
                   .collection("Business Accounts Requests")
+                  .where('Business Address',
+                      isEqualTo: controller.currentAddress.value)
                   .where('profile_finish', isEqualTo: 'yes')
                   .orderBy('timestamp', descending: true)
                   .limit(2)

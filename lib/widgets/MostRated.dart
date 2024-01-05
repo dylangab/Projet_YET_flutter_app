@@ -4,6 +4,8 @@ import 'package:shimmer/shimmer.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 
+import '../Services.dart/getX.dart';
+
 class MostRated extends StatefulWidget {
   @override
   _MostRatedState createState() => _MostRatedState();
@@ -12,6 +14,7 @@ class MostRated extends StatefulWidget {
 class _MostRatedState extends State<MostRated> {
   List<DocumentSnapshot> mostrated = [];
   bool MostRatedExist = false;
+  final GetAddress controller = Get.put(GetAddress());
 
   @override
   Widget build(BuildContext context) {
@@ -23,6 +26,8 @@ class _MostRatedState extends State<MostRated> {
           child: StreamBuilder<QuerySnapshot>(
               stream: FirebaseFirestore.instance
                   .collection("Business Accounts Requests")
+                  .where('Business Address',
+                      isEqualTo: controller.currentAddress.value)
                   .where('profile_finish', isEqualTo: 'yes')
                   .snapshots(),
               builder: (context, snapshot) {

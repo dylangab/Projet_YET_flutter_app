@@ -15,6 +15,7 @@ class featured extends StatefulWidget {
 class _featuredState extends State<featured> {
   List<DocumentSnapshot> fearured = [];
   List dd = [];
+  final GetAddress controllerForLocation = Get.put(GetAddress());
 
   @override
   Widget build(BuildContext context) {
@@ -29,6 +30,8 @@ class _featuredState extends State<featured> {
           child: StreamBuilder<QuerySnapshot>(
               stream: FirebaseFirestore.instance
                   .collection("Business Accounts Requests")
+                  .where('Business Address',
+                      isEqualTo: controllerForLocation.currentAddress.value)
                   .where('profile_finish', isEqualTo: 'yes')
                   .where('businesscatagory', whereIn: bb)
                   .snapshots(),

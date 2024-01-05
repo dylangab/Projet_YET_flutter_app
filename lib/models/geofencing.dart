@@ -18,22 +18,26 @@ class Geofencing {
   final Geofencingervice controller = Get.put(Geofencingervice());
   Future<void> listenToUserLocation() async {
     List<Geofencing> list1 = await fetchMarkerDataFromFirestore();
-    late StreamSubscription<Position> _positionStreamSubscription;
-    const LocationSettings locationSettings = LocationSettings(
-      timeLimit: Duration(seconds: 10),
-      accuracy: LocationAccuracy.high,
-      distanceFilter: 20,
-    );
-    _positionStreamSubscription =
-        Geolocator.getPositionStream(locationSettings: locationSettings)
-            .listen((Position? position) {
-      for (var element in list1) {
-        sendNotificaion(
-            LatLng(position!.latitude, position.longitude),
-            LatLng(
-                element.coordinate!.latitude, element.coordinate!.longitude));
-      }
-    });
+    try {
+      late StreamSubscription<Position> _positionStreamSubscription;
+      const LocationSettings locationSettings = LocationSettings(
+        timeLimit: Duration(seconds: 10),
+        accuracy: LocationAccuracy.high,
+        distanceFilter: 20,
+      );
+      _positionStreamSubscription =
+          Geolocator.getPositionStream(locationSettings: locationSettings)
+              .listen((Position? position) {
+        for (var element in list1) {
+          sendNotificaion(
+              LatLng(position!.latitude, position.longitude),
+              LatLng(
+                  element.coordinate!.latitude, element.coordinate!.longitude));
+        }
+      });
+    } catch (e) {
+      print(e);
+    }
   }
 
   int calculateDistance(LatLng userLocation, LatLng businessLocation) {
@@ -49,7 +53,7 @@ class Geofencing {
   void sendNotificaion(LatLng userLocation, LatLng businessLocation) {
     int distance = calculateDistance(userLocation, businessLocation);
 
-    if (distance >= 100) {
+    if (distance <= 100) {
       NotiService().showNoti(
           id: 0,
           title: "Your friendly reminder",

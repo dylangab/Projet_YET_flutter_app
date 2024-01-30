@@ -38,7 +38,7 @@ class _BpPageState extends State<BpPage> {
   final FocusNode _eventNodeDescription = FocusNode();
   final GetMapController controller = Get.put(GetMapController());
   List tokenList = [];
-  List<String> userIdList = [];
+  List userIdList = [];
   String? photoUrl;
   String? _coordinateText;
   final ImagePicker _imagePicker = ImagePicker();
@@ -819,7 +819,8 @@ class _BpPageState extends State<BpPage> {
                                                     ));
                                                   } else {
                                                     await getUserId(_auth
-                                                            .currentUser!.uid)
+                                                            .currentUser!.uid
+                                                            .toString())
                                                         .then((value) {
                                                       for (var followerId
                                                           in value) {

@@ -73,7 +73,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primaryColor: Colors.white,
       ),
-      home: MyMap(),
+      home: LoginTab(),
     );
   }
 }

@@ -21,6 +21,7 @@ class mainPage extends StatefulWidget {
 class _mainPageState extends State<mainPage> {
   @override
   void initState() {
+    fetchAnnoucment();
     super.initState();
     messageCheck();
     messageCounter();

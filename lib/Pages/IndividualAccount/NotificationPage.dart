@@ -135,15 +135,11 @@ class _indiannoucmnetpageState extends State<indiannoucmnetpage> {
                                                   Padding(
                                                     padding:
                                                         const EdgeInsets.all(
-                                                            20),
-                                                    child: Text(
-                                                      "${getTime(annoucmnet[index]["timestamp"])}",
-                                                      style: const TextStyle(
-                                                          fontSize: 13,
-                                                          fontWeight:
-                                                              FontWeight.w300),
-                                                    ),
-                                                  )
+                                                            10),
+                                                    child: getTime(
+                                                        annoucmnet[index]
+                                                            ["timestamp"]),
+                                                  ),
                                                 ],
                                               )
                                             ],

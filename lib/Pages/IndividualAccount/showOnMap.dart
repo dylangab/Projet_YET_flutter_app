@@ -18,7 +18,9 @@ Map<String, dynamic> argument = Get.arguments as Map<String, dynamic>;
 class _ShowOnMapState extends State<ShowOnMap> {
   double latitude = double.parse(argument['latitude'] as String);
   double longitude = double.parse(argument['longitude'] as String);
+  LatLng _latLng = argument['coordinate'];
 
+  String buzname = argument['buzName'];
   MapController mapController = MapController();
   final GetMapController controller = Get.put(GetMapController());
 
@@ -50,11 +52,16 @@ class _ShowOnMapState extends State<ShowOnMap> {
                 Marker(
                   width: 30.0,
                   height: 30.0,
-                  point: LatLng(latitude, longitude),
-                  builder: (ctx) => const SizedBox(
-                    child: Icon(
-                      Icons.location_on,
-                      color: Colors.red,
+                  point: _latLng,
+                  builder: (ctx) => SizedBox(
+                    child: Column(
+                      children: [
+                        Icon(
+                          Icons.location_on,
+                          color: Colors.red,
+                        ),
+                        Text(buzname)
+                      ],
                     ),
                   ),
                 ),

@@ -6,7 +6,7 @@ import 'package:get/get.dart';
 import 'package:get_time_ago/get_time_ago.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:lorem_ipsum/lorem_ipsum.dart';
-
+import 'package:latlong2/latlong.dart';
 import '../../Services.dart/getX.dart';
 import '../IndividualAccount/MessagePage.dart';
 import '../IndividualAccount/showOnMap.dart';
@@ -495,8 +495,10 @@ class _buzpageState extends State<buzpage> with TickerProviderStateMixin {
                               GestureDetector(
                                 onTap: () {
                                   Get.to(() => const ShowOnMap(), arguments: {
-                                    'latitude': snapshot.data!["latitude"],
-                                    'longitude': snapshot.data!["longitude"],
+                                    'coordinate': LatLng(
+                                        snapshot.data!["latitude"],
+                                        snapshot.data!["longitude"]),
+                                    'buzName': snapshot.data!["Business Name"],
                                   });
                                 },
                                 child: Padding(

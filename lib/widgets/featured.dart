@@ -30,14 +30,13 @@ class _featuredState extends State<featured> {
           child: StreamBuilder<QuerySnapshot>(
               stream: FirebaseFirestore.instance
                   .collection("Business Accounts Requests")
-                  .where('Business Address',
-                      isEqualTo: controllerForLocation.currentAddress.value)
                   .where('profile_finish', isEqualTo: 'yes')
                   .where('businesscatagory', whereIn: bb)
                   .snapshots(),
               builder: (context, snapshot) {
                 print(snapshot);
-                if (snapshot.connectionState == ConnectionState.waiting) {
+                print(bb);
+                /*        if (snapshot.connectionState == ConnectionState.waiting) {
                   return SizedBox(
                     child: ListView.builder(
                         scrollDirection: Axis.horizontal,
@@ -60,7 +59,7 @@ class _featuredState extends State<featured> {
                         }),
                   );
                 }
-
+*/
                 if (snapshot.hasData && snapshot.data!.docs.isNotEmpty) {
                   fearured = snapshot.data!.docs;
                   return ListView.builder(

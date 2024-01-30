@@ -7,6 +7,7 @@ import 'package:get_time_ago/get_time_ago.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:lorem_ipsum/lorem_ipsum.dart';
 
+import '../../Services.dart/getX.dart';
 import '../IndividualAccount/MessagePage.dart';
 import '../IndividualAccount/showOnMap.dart';
 
@@ -46,6 +47,7 @@ class _buzpageState extends State<buzpage> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     TextEditingController comment = TextEditingController();
+    final individualAccountFetch controller = Get.put(individualAccountFetch());
 
     final TabController tabcontroller3 = TabController(length: 3, vsync: this);
     return Scaffold(
@@ -493,9 +495,8 @@ class _buzpageState extends State<buzpage> with TickerProviderStateMixin {
                               GestureDetector(
                                 onTap: () {
                                   Get.to(() => const ShowOnMap(), arguments: {
-                                    'latitude': snapshot.data!["profile_Pic"],
-                                    'longitude':
-                                        snapshot.data!["Business Name"],
+                                    'latitude': snapshot.data!["latitude"],
+                                    'longitude': snapshot.data!["longitude"],
                                   });
                                 },
                                 child: Padding(
@@ -564,78 +565,88 @@ class _buzpageState extends State<buzpage> with TickerProviderStateMixin {
                         ),
                         Padding(
                           padding: const EdgeInsets.only(left: 10, right: 10),
-                          child: Column(children: [
+                          child: ListView(children: [
                             SizedBox(
                               height: 300,
-                              child: check(snapshot.data!["reviews"])
-                                  ? ListView.builder(
-                                      itemCount:
-                                          snapshot.data!["reviews"].length,
-                                      itemBuilder: (context, index) {
-                                        return Container(
-                                          decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(15)),
-                                          width: 400,
-                                          child: Card(
-                                            shape: OutlineInputBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(15)),
-                                            color: const Color.fromARGB(
-                                                255, 238, 240, 235),
-                                            elevation: 8,
-                                            child: Padding(
-                                              padding: const EdgeInsets.all(15),
-                                              child: Column(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
+                              child: ListView.builder(
+                                itemCount: snapshot.data!["reviews"].length,
+                                itemBuilder: (context, reindex) {
+                                  if (snapshot.data!["reviews"].length == 0) {
+                                    return Container(
+                                      child: const Center(
+                                        child: Text("No Reviews Yet...."),
+                                      ),
+                                    );
+                                  } else {
+                                    return Container(
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(15)),
+                                      width: 400,
+                                      child: Card(
+                                        shape: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(15)),
+                                        color: const Color.fromARGB(
+                                            255, 238, 240, 235),
+                                        elevation: 8,
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(15),
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Row(
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.start,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
                                                 children: [
-                                                  Row(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceBetween,
-                                                    children: [
-                                                      SizedBox(),
-                                                      Padding(
-                                                        padding:
-                                                            EdgeInsets.all(5.0),
-                                                        child: getTime(snapshot
-                                                            .data!['reviews']
-                                                                ['timestamp']
-                                                            .toString()),
-                                                      ),
-                                                    ],
+                                                  Container(
+                                                    color: const Color.fromARGB(
+                                                        255, 78, 77, 61),
+                                                    child: Text(
+                                                        "${snapshot.data!["name"][reindex]}"),
                                                   ),
                                                   Padding(
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                            8.0),
-                                                    child: Text(
-                                                      snapshot.data!["reviews"]
-                                                          ['review'][index],
-                                                      style: const TextStyle(
-                                                          fontSize: 16,
-                                                          fontWeight:
-                                                              FontWeight.w300),
+                                                    padding: EdgeInsets.only(
+                                                        left: 10),
+                                                    child: Container(
+                                                      color: Colors.brown,
+                                                      child: getTime(snapshot
+                                                          .data!['timestamp']
+                                                              [reindex]
+                                                          .toString()),
                                                     ),
                                                   ),
                                                 ],
                                               ),
-                                            ),
+                                              Container(
+                                                color: Colors.green,
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(8.0),
+                                                  child: Text(
+                                                    snapshot.data!["reviews"]
+                                                        [reindex],
+                                                    style: const TextStyle(
+                                                        fontSize: 16,
+                                                        fontWeight:
+                                                            FontWeight.w300),
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
                                           ),
-                                        );
-                                      },
-                                    )
-                                  : Container(
-                                      child: const Center(
-                                        child: Text("No Reviews Yet...."),
+                                        ),
                                       ),
-                                    ),
+                                    );
+                                  }
+                                },
+                              ),
                             ),
                             Expanded(
                               child: SizedBox(
@@ -687,6 +698,8 @@ class _buzpageState extends State<buzpage> with TickerProviderStateMixin {
                                                           BorderRadius.circular(
                                                               10))),
                                               onPressed: () async {
+                                                var name =
+                                                    "john blake"; // controller.userName.value;
                                                 await FirebaseFirestore.instance
                                                     .collection(
                                                         "Business Accounts Requests")
@@ -697,14 +710,25 @@ class _buzpageState extends State<buzpage> with TickerProviderStateMixin {
                                                     FirebaseAuth
                                                         .instance.currentUser!.uid
                                                   ]),*/
-                                                  'reviews': {
+                                                  'name': FieldValue.arrayUnion(
+                                                      [name]),
+                                                  'reviews':
+                                                      FieldValue.arrayUnion(
+                                                          [comment.value.text]),
+                                                  'timestamp':
+                                                      FieldValue.arrayUnion([
+                                                    "${DateTime.now()}"
+                                                  ]),
+                                                  // "${DateTime.now()}",
+
+                                                  /*    'reviews': {
                                                     'review':
                                                         FieldValue.arrayUnion([
                                                       comment.value.text
                                                     ]),
                                                     'timestamp':
                                                         "${DateTime.now()}"
-                                                  }
+                                                  }*/
                                                 });
                                               },
                                               child:

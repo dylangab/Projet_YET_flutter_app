@@ -27,7 +27,6 @@ class _RecentlyAddedState extends State<RecentlyAdded> {
                   .where('Business Address',
                       isEqualTo: controller.currentAddress.value)
                   .where('profile_finish', isEqualTo: 'yes')
-                  .orderBy('timestamp', descending: true)
                   .limit(2)
                   .snapshots(),
               builder: (context, snapshot) {

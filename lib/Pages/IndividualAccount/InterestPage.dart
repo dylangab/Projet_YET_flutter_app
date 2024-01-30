@@ -20,13 +20,6 @@ class _InterestPageState extends State<InterestPage> {
   bool selected = false;
   List<String> _interestList = [];
 
-  List<String> interests = [
-    'Hotel',
-    'Cafe',
-    'Game zone',
-    'Beauty salon',
-    'barbor shop"'
-  ];
   final _auth = FirebaseAuth.instance.currentUser!.uid;
   List<String> selectedIntersts = [];
   @override

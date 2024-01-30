@@ -26,6 +26,7 @@ class _mainPageState extends State<mainPage> {
     messageCounter();
     final individualAccountFetch controller = Get.put(individualAccountFetch());
     print(controller.userName.value);
+    print(controller.userInterests.value);
   }
 
   final Future<SharedPreferences> _preferences =

@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:final_project/Pages/BusinessAccount/accountCheckPage.dart';
 import 'package:final_project/Pages/IndividualAccount/InterestPage.dart';
+import 'package:final_project/Pages/IndividualAccount/getLocationPage.dart';
 import 'package:final_project/Pages/IndividualAccount/homepage.dart';
 import 'package:final_project/Services.dart/getX.dart';
 import 'package:final_project/models/individualacc.dart';
@@ -38,6 +39,7 @@ class _LoginTabState extends State<LoginTab> with TickerProviderStateMixin {
   bool indiclicked = true;
   bool? buzclicked;
   bool? _exists;
+  bool? loadingon = false;
   final individualAccountFetch controller = Get.put(individualAccountFetch());
 
   @override
@@ -149,133 +151,128 @@ class _LoginTabState extends State<LoginTab> with TickerProviderStateMixin {
         child: IndexedStack(
           index: index,
           children: [
-            Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Container(
-                child: ListView(
-                  children: [
-                    SizedBox(
-                      child: Form(
-                          key: _formkey,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Padding(
-                                padding: EdgeInsets.fromLTRB(15, 15, 0, 10),
-                                child: Text(
-                                  'Email',
-                                  style: TextStyle(fontSize: 16),
-                                ),
+            Container(
+              child: ListView(
+                children: [
+                  SizedBox(
+                    child: Form(
+                        key: _formkey,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Padding(
+                              padding: EdgeInsets.fromLTRB(15, 15, 0, 10),
+                              child: Text(
+                                'Email',
+                                style: TextStyle(fontSize: 16),
                               ),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.fromLTRB(10, 5, 30, 10),
-                                child: TextFormField(
-                                  focusNode: _focusNode,
-                                  validator: (value) {
-                                    String? message;
-                                    if (value!.isEmpty) {
-                                      message = "email should not be empty";
-                                    } else if (!value.contains('@')) {
-                                      message = "email incorrect";
-                                    }
-                                    return message;
-                                  },
-                                  cursorColor:
-                                      const Color.fromARGB(255, 66, 106, 90),
-                                  controller: indiemail,
-                                  decoration: InputDecoration(
-                                      errorBorder: _emailerror
-                                          ? const OutlineInputBorder()
-                                          : const OutlineInputBorder(),
-                                      focusedBorder: const OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                              width: 1.5,
-                                              color: Color.fromARGB(
-                                                  255, 66, 106, 90))),
-                                      enabledBorder: const OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                              width: 1.5,
-                                              color: Color.fromARGB(
-                                                  255, 66, 106, 90))),
-                                      border: const OutlineInputBorder(
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(10, 5, 30, 10),
+                              child: TextFormField(
+                                focusNode: _focusNode,
+                                validator: (value) {
+                                  String? message;
+                                  if (value!.isEmpty) {
+                                    message = "email should not be empty";
+                                  } else if (!value.contains('@')) {
+                                    message = "email incorrect";
+                                  }
+                                  return message;
+                                },
+                                cursorColor:
+                                    const Color.fromARGB(255, 66, 106, 90),
+                                controller: indiemail,
+                                decoration: InputDecoration(
+                                    errorBorder: _emailerror
+                                        ? const OutlineInputBorder()
+                                        : const OutlineInputBorder(),
+                                    focusedBorder: const OutlineInputBorder(
                                         borderSide: BorderSide(
+                                            width: 1.5,
                                             color: Color.fromARGB(
-                                                255, 66, 106, 90)),
-                                      )),
-                                ),
+                                                255, 66, 106, 90))),
+                                    enabledBorder: const OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            width: 1.5,
+                                            color: Color.fromARGB(
+                                                255, 66, 106, 90))),
+                                    border: const OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color:
+                                              Color.fromARGB(255, 66, 106, 90)),
+                                    )),
                               ),
-                              const Padding(
-                                padding: EdgeInsets.fromLTRB(15, 15, 0, 10),
-                                child: Text('Password'),
-                              ),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.fromLTRB(10, 5, 30, 10),
-                                child: TextFormField(
-                                  focusNode: _focusNode1,
-                                  obscureText: !_passwordHide,
-                                  cursorColor:
-                                      const Color.fromARGB(255, 66, 106, 90),
-                                  keyboardType: TextInputType.emailAddress,
-                                  controller: indipass,
-                                  validator: (value) {
-                                    String? message;
-                                    if (value!.isEmpty) {
-                                      message = "password Should not be empty";
-                                    } else if (value.length.isLowerThan(8)) {
-                                      message =
-                                          "Password length should br atleast greater than 8";
-                                    }
+                            ),
+                            const Padding(
+                              padding: EdgeInsets.fromLTRB(15, 15, 0, 10),
+                              child: Text('Password'),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(10, 5, 30, 10),
+                              child: TextFormField(
+                                focusNode: _focusNode1,
+                                obscureText: !_passwordHide,
+                                cursorColor:
+                                    const Color.fromARGB(255, 66, 106, 90),
+                                keyboardType: TextInputType.emailAddress,
+                                controller: indipass,
+                                validator: (value) {
+                                  String? message;
+                                  if (value!.isEmpty) {
+                                    message = "password Should not be empty";
+                                  } else if (value.length.isLowerThan(8)) {
+                                    message =
+                                        "Password length should br atleast greater than 8";
+                                  }
 
-                                    return message;
-                                  },
-                                  decoration: InputDecoration(
-                                      suffixIcon: IconButton(
-                                        onPressed: () {
-                                          setState(() {
-                                            _passwordHide = !_passwordHide;
-                                          });
-                                        },
-                                        color: const Color.fromARGB(
-                                            255, 229, 143, 101),
-                                        icon: Icon(_passwordHide
-                                            ? Icons.visibility
-                                            : Icons.visibility_off),
-                                      ),
-                                      focusedBorder: const OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                              width: 1.5,
-                                              color: Color.fromRGBO(
-                                                  66, 106, 90, 1))),
-                                      enabledBorder: const OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                              width: 1.5,
-                                              color: Color.fromARGB(
-                                                  255, 66, 106, 90))),
-                                      border: const OutlineInputBorder(
+                                  return message;
+                                },
+                                decoration: InputDecoration(
+                                    suffixIcon: IconButton(
+                                      onPressed: () {
+                                        setState(() {
+                                          _passwordHide = !_passwordHide;
+                                        });
+                                      },
+                                      color: const Color.fromARGB(
+                                          255, 229, 143, 101),
+                                      icon: Icon(_passwordHide
+                                          ? Icons.visibility
+                                          : Icons.visibility_off),
+                                    ),
+                                    focusedBorder: const OutlineInputBorder(
                                         borderSide: BorderSide(
+                                            width: 1.5,
+                                            color: Color.fromRGBO(
+                                                66, 106, 90, 1))),
+                                    enabledBorder: const OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            width: 1.5,
                                             color: Color.fromARGB(
-                                                255, 66, 106, 90)),
-                                      )),
-                                ),
+                                                255, 66, 106, 90))),
+                                    border: const OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color:
+                                              Color.fromARGB(255, 66, 106, 90)),
+                                    )),
                               ),
-                              Padding(
-                                padding: const EdgeInsets.only(top: 21),
-                                child: Center(
-                                  child: ElevatedButton(
-                                      style: const ButtonStyle(
-                                        padding: MaterialStatePropertyAll(
-                                            EdgeInsets.fromLTRB(
-                                                100, 15, 100, 15)),
-                                        elevation: MaterialStatePropertyAll(5),
-                                        backgroundColor:
-                                            MaterialStatePropertyAll(
-                                                Color.fromARGB(
-                                                    255, 229, 143, 101)),
-                                      ),
-                                      onPressed: () async {
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 21),
+                              child: Center(
+                                child: ElevatedButton(
+                                    style: const ButtonStyle(
+                                      padding: MaterialStatePropertyAll(
+                                          EdgeInsets.fromLTRB(
+                                              100, 15, 100, 15)),
+                                      elevation: MaterialStatePropertyAll(5),
+                                      backgroundColor: MaterialStatePropertyAll(
+                                          Color.fromARGB(255, 229, 143, 101)),
+                                    ),
+                                    onPressed: () async {
+                                      if (_formkey.currentState!.validate()) {
                                         try {
                                           await FirebaseAuth.instance
                                               .signInWithEmailAndPassword(
@@ -310,45 +307,48 @@ class _LoginTabState extends State<LoginTab> with TickerProviderStateMixin {
                                                 'Wrong password provided for that user.');
                                           }
                                         }
-                                      },
-                                      child: const Text('Login')),
-                                ),
+                                        //  setState(() {
+                                        //  loadingon = !loadingon!;
+                                        //});
+                                      }
+                                    },
+                                    child: const Text('Login')),
                               ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  const Padding(
-                                    padding: EdgeInsets.fromLTRB(3, 10, 0, 3),
-                                    child: Text(
-                                      'Dont have an account',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.w200),
-                                    ),
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                const Padding(
+                                  padding: EdgeInsets.fromLTRB(3, 10, 0, 3),
+                                  child: Text(
+                                    'Dont have an account',
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.w200),
                                   ),
-                                  Padding(
-                                      padding: const EdgeInsets.fromLTRB(
-                                          3, 10, 20, 3),
-                                      child: GestureDetector(
-                                        child: const Text(
-                                          'Register',
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                        onTap: () {
-                                          Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      const IndiAccount()));
-                                        },
-                                      )),
-                                ],
-                              ),
-                            ],
-                          )),
-                    )
-                  ],
-                ),
+                                ),
+                                Padding(
+                                    padding:
+                                        const EdgeInsets.fromLTRB(3, 10, 20, 3),
+                                    child: GestureDetector(
+                                      child: const Text(
+                                        'Register',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      onTap: () {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    const IndiAccount()));
+                                      },
+                                    )),
+                              ],
+                            ),
+                          ],
+                        )),
+                  )
+                ],
               ),
             ),
             Container(

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
+import 'package:get_time_ago/get_time_ago.dart';
 import 'package:lorem_ipsum/lorem_ipsum.dart';
 
 class indiannoucmnetpage extends StatefulWidget {
@@ -136,7 +137,7 @@ class _indiannoucmnetpageState extends State<indiannoucmnetpage> {
                                                         const EdgeInsets.all(
                                                             20),
                                                     child: Text(
-                                                      "${annoucmnet[index]["timestamp"].toString()}",
+                                                      "${getTime(annoucmnet[index]["timestamp"])}",
                                                       style: const TextStyle(
                                                           fontSize: 13,
                                                           fontWeight:
@@ -237,5 +238,20 @@ class _indiannoucmnetpageState extends State<indiannoucmnetpage> {
         .get();
 
     return querySnapshot.size;
+  }
+
+  Widget getTime(String snaphot) {
+    String serverTime = snaphot;
+
+    var time = DateTime.parse(serverTime);
+    var result = GetTimeAgo.parse(time);
+
+    return Padding(
+      padding: const EdgeInsets.only(top: 30, left: 5),
+      child: Text(
+        result,
+        style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w300),
+      ),
+    );
   }
 }

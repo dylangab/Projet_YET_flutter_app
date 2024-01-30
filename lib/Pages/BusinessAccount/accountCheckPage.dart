@@ -3,6 +3,7 @@ import 'package:final_project/Pages/BusinessAccount/BpPage.dart';
 import 'package:final_project/Pages/BusinessAccount/RejectedPage.dart';
 import 'package:final_project/Pages/BusinessAccount/finishProfilePage.dart';
 import 'package:final_project/Pages/BusinessAccount/waitingPage.dart';
+import 'package:final_project/Pages/IndividualAccount/getLocationPage.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';

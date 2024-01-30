@@ -47,6 +47,11 @@ class _BpPageState extends State<BpPage> {
   XFile? file;
   bool? imagechecker;
   bool? checker;
+  bool postbutton = true;
+  bool? reviebutton = false;
+  bool? imagebutton = false;
+  bool? posteventbutton;
+  bool? postannoucemntbutton;
 
   void dispose() {
     _annoucment.dispose();
@@ -204,11 +209,16 @@ class _BpPageState extends State<BpPage> {
                             index = 0;
                           });
                         },
-                        child: const Text("Post"),
+                        child: const Text("Post",
+                            style: TextStyle(color: Colors.black)),
                         style: ElevatedButton.styleFrom(
-                            backgroundColor:
-                                const Color.fromARGB(255, 229, 143, 101),
+                            backgroundColor: index == 0
+                                ? const Color.fromARGB(255, 229, 143, 101)
+                                : Colors.white,
                             shape: RoundedRectangleBorder(
+                                side: BorderSide(
+                                    color: const Color.fromARGB(
+                                        255, 229, 143, 101)),
                                 borderRadius: BorderRadius.circular(15))),
                       ),
                     ),
@@ -219,11 +229,16 @@ class _BpPageState extends State<BpPage> {
                         });
                       },
                       style: ElevatedButton.styleFrom(
-                          backgroundColor:
-                              const Color.fromARGB(255, 229, 143, 101),
+                          backgroundColor: index == 1
+                              ? const Color.fromARGB(255, 229, 143, 101)
+                              : Colors.white,
                           shape: RoundedRectangleBorder(
+                              side: BorderSide(
+                                  color:
+                                      const Color.fromARGB(255, 229, 143, 101)),
                               borderRadius: BorderRadius.circular(15))),
-                      child: const Text("Reviews"),
+                      child: const Text("Reviews",
+                          style: TextStyle(color: Colors.black)),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(right: 10),
@@ -234,11 +249,16 @@ class _BpPageState extends State<BpPage> {
                           });
                         },
                         style: ElevatedButton.styleFrom(
-                            backgroundColor:
-                                const Color.fromARGB(255, 229, 143, 101),
+                            backgroundColor: index == 2
+                                ? const Color.fromARGB(255, 229, 143, 101)
+                                : Colors.white,
                             shape: RoundedRectangleBorder(
+                                side: BorderSide(
+                                    color: const Color.fromARGB(
+                                        255, 229, 143, 101)),
                                 borderRadius: BorderRadius.circular(15))),
-                        child: const Text("Photos"),
+                        child: const Text("Photos",
+                            style: TextStyle(color: Colors.black)),
                       ),
                     ),
                   ],
@@ -263,19 +283,21 @@ class _BpPageState extends State<BpPage> {
                                         });
                                       },
                                       style: TextButton.styleFrom(
+                                          backgroundColor: index1 == 0
+                                              ? const Color.fromARGB(
+                                                  255, 229, 143, 101)
+                                              : Colors.white,
                                           shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(15),
-                                        side: const BorderSide(
-                                          width: 1,
-                                          color: Color.fromARGB(
-                                              255, 238, 240, 235),
-                                        ),
-                                      )),
+                                            borderRadius:
+                                                BorderRadius.circular(15),
+                                            side: const BorderSide(
+                                                width: 1,
+                                                color: const Color.fromARGB(
+                                                    255, 229, 143, 101)),
+                                          )),
                                       child: const Text(
                                         "Post Event",
-                                        style: TextStyle(
-                                            color: Color.fromARGB(
-                                                255, 229, 143, 101)),
+                                        style: TextStyle(color: Colors.black),
                                       ),
                                     )),
                                 Padding(
@@ -287,19 +309,21 @@ class _BpPageState extends State<BpPage> {
                                         });
                                       },
                                       style: TextButton.styleFrom(
+                                          backgroundColor: index1 == 1
+                                              ? const Color.fromARGB(
+                                                  255, 229, 143, 101)
+                                              : Colors.white,
                                           shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(15),
-                                        side: const BorderSide(
-                                          width: 1,
-                                          color: Color.fromARGB(
-                                              255, 238, 240, 235),
-                                        ),
-                                      )),
+                                            borderRadius:
+                                                BorderRadius.circular(15),
+                                            side: const BorderSide(
+                                                width: 1,
+                                                color: const Color.fromARGB(
+                                                    255, 229, 143, 101)),
+                                          )),
                                       child: const Text(
                                         "Post Annoucment",
-                                        style: TextStyle(
-                                            color: Color.fromARGB(
-                                                255, 229, 143, 101)),
+                                        style: TextStyle(color: Colors.black),
                                       ),
                                     )),
                               ],
@@ -995,6 +1019,21 @@ class _BpPageState extends State<BpPage> {
     );
   }
 
+  bool buttonClick(int index) {
+    bool? value;
+    if (index == 0) {
+      value = postbutton;
+    } else if (index == 1) {
+      reviebutton = true;
+      value = reviebutton!;
+    } else if (index == 2) {
+      imagebutton = true;
+      value = imagebutton!;
+    }
+
+    return value!;
+  }
+
   void getTokenList() async {
     await FirebaseFirestore.instance
         .collection('Business Account Requests')
@@ -1026,7 +1065,7 @@ class _BpPageState extends State<BpPage> {
       'senderName': businessName,
       'bid': bid,
       'profilePic': profilePic,
-      'timestamp': DateTime.now(),
+      'timestamp': "${DateTime.now()}",
       'message': _annoucment.value.text,
       'title': _title.value.text,
       'status': "unseen"
@@ -1039,7 +1078,7 @@ class _BpPageState extends State<BpPage> {
         .doc(_auth.currentUser!.uid)
         .collection('My_messages')
         .add({
-      'timestamp': DateTime.now(),
+      'timestamp': "${DateTime.now()}",
       'message': _annoucment.value.text,
       'title': _title.value.text,
     });

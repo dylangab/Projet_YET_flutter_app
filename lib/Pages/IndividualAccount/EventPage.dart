@@ -3,6 +3,7 @@ import 'package:final_project/Pages/IndividualAccount/showOnMap.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
+import 'package:get_time_ago/get_time_ago.dart';
 import 'package:lorem_ipsum/lorem_ipsum.dart';
 import 'package:final_project/Services.dart/getX.dart';
 
@@ -249,7 +250,7 @@ class _eventpageState extends State<eventpage> {
                                                                                     ),
                                                                                   ),
                                                                                 ),
-                                                                                Text(time)
+                                                                                getTime(time)
                                                                               ]),
                                                                         ),
                                                                       ),
@@ -330,5 +331,20 @@ class _eventpageState extends State<eventpage> {
       // 'userName': userName
       'timestamp': "${DateTime.now()}"
     });
+  }
+
+  Widget getTime(String snaphot) {
+    String serverTime = snaphot;
+
+    var time = DateTime.parse(serverTime);
+    var result = GetTimeAgo.parse(time);
+
+    return Padding(
+      padding: const EdgeInsets.only(top: 30, left: 5),
+      child: Text(
+        result,
+        style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w300),
+      ),
+    );
   }
 }

@@ -130,24 +130,24 @@ class individualAccountFetch extends GetxController {
   }
 }
 
-class Geofencingervice extends GetxController {
-  RxList account = [].obs;
+// class Geofencingervice extends GetxController {
+//   RxList account = [].obs;
 
-  void fetchMarkerDataFromFirestore() async {
-    FirebaseFirestore firestore = FirebaseFirestore.instance;
+//   void fetchMarkerDataFromFirestore() async {
+//     FirebaseFirestore firestore = FirebaseFirestore.instance;
 
-    QuerySnapshot querySnapshot = await firestore
-        .collection("Business Accounts Requests")
-        .where('profile_finish', isEqualTo: 'yes')
-        .get();
+//     QuerySnapshot querySnapshot = await firestore
+//         .collection("Business Accounts Requests")
+//         .where('profile_finish', isEqualTo: 'yes')
+//         .get();
 
-    account.value = querySnapshot.docs.map((doc) {
-      Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+//     account.value = querySnapshot.docs.map((doc) {
+//       Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
 
-      return Geofencing(
-        bid: data['bid'] as String,
-        coordinate: LatLng(data['latitude'], data['longitude']),
-      );
-    }).toList();
-  }
-}
+//       return Geofencing(
+//         bid: data['bid'] as String,
+//         coordinate: LatLng(data['latitude'], data['longitude']),
+//       );
+//     }).toList();
+//   }
+// }

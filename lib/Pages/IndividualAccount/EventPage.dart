@@ -329,7 +329,7 @@ class _eventpageState extends State<eventpage> {
     FirebaseFirestore.instance.collection('Events').doc(uid).update({
       'comments': FieldValue.arrayUnion([commentController.value.text]),
       // 'userName': userName
-      'timestamp': "${DateTime.now()}"
+      'timestamp': FieldValue.arrayUnion(["${DateTime.now()}"])
     });
   }
 

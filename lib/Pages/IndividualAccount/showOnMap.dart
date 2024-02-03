@@ -16,8 +16,8 @@ late TapPosition tapPosition;
 Map<String, dynamic> argument = Get.arguments as Map<String, dynamic>;
 
 class _ShowOnMapState extends State<ShowOnMap> {
-  double latitude = double.parse(argument['latitude'] as String);
-  double longitude = double.parse(argument['longitude'] as String);
+  double latitude = double.parse(argument['latitude']);
+  double longitude = double.parse(argument['longitude']);
   LatLng _latLng = argument['coordinate'];
 
   String buzname = argument['buzName'];

@@ -6,8 +6,6 @@ import 'package:latlong2/latlong.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
 
-import '../models/geofencing.dart';
-
 // Controller for managing map-related data
 class GetMapController extends GetxController {
   // Observable variables for map coordinates and place
@@ -109,6 +107,7 @@ class individualAccountFetch extends GetxController {
   // Observable variables for user name and interests
   RxString userName = "".obs;
   RxList userInterests = [].obs;
+  RxString email = "".obs;
 
   // Method to interact with Firebase service to fetch individual account data
   Future<void> firebaseService(String uid) async {
@@ -125,7 +124,72 @@ class individualAccountFetch extends GetxController {
       userName.value =
           "${documentSnapshot.get('First Name') + documentSnapshot.get('Last Name')}";
       userInterests.value = documentSnapshot.get('userInterest');
+      email.value = "${documentSnapshot.get('email')}";
       print(userName.value);
+    });
+  }
+}
+
+class BuzAccountFetch extends GetxController {
+  // Observable variables for user name and interests
+  RxString userName = "".obs;
+
+  RxString email = "".obs;
+
+  // Method to interact with Firebase service to fetch individual account data
+  Future<void> firebaseService(String bid) async {
+    final DocumentReference reference = FirebaseFirestore.instance
+        .collection("Business Accounts Requests")
+        .doc(bid);
+    late Stream<DocumentSnapshot> stream;
+    late DocumentSnapshot documentSnapshot;
+
+    reference.get().then((value) => documentSnapshot = value);
+
+    stream = reference.snapshots();
+    stream.listen((event) {
+      documentSnapshot = event;
+      userName.value =
+          "${documentSnapshot.get('First Name') + documentSnapshot.get('Last Name')}";
+
+      email.value = "${documentSnapshot.get('email')}";
+      print(userName.value);
+    });
+  }
+}
+
+class FetchLocation extends GetxController {
+  RxString counter = "0".obs;
+  RxDouble inicialpointlatitude = 0.00.obs;
+  RxDouble inicialpointlongtude = 0.00.obs;
+  RxDouble updatedpointlatitude = 0.00.obs;
+  RxDouble updatedpointlongtude = 0.00.obs;
+
+  Future<void> fetchLocationPath(String uid) async {
+    final DocumentReference reference = FirebaseFirestore.instance
+        .collection("Indivdual Accounts")
+        .doc(uid)
+        .collection("LocationPath")
+        .doc(uid);
+    late Stream<DocumentSnapshot> stream;
+    late DocumentSnapshot documentSnapshot;
+
+    reference.get().then((value) => documentSnapshot = value);
+
+    stream = reference.snapshots();
+    stream.listen((event) {
+      documentSnapshot = event;
+      counter.value = documentSnapshot.get("counter");
+      inicialpointlatitude.value =
+          double.parse(documentSnapshot.get("inicialpointlatitude"));
+      inicialpointlongtude.value =
+          double.parse(documentSnapshot.get("inicialpointlongtude"));
+      updatedpointlatitude.value =
+          double.parse(documentSnapshot.get("updatedpointlatitude"));
+      updatedpointlongtude.value =
+          double.parse(documentSnapshot.get("updatedpointlongtude"));
+
+      print(counter.value);
     });
   }
 }

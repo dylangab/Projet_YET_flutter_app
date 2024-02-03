@@ -7,6 +7,9 @@ import 'package:flutter/material.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
+import 'package:tiktoklikescroller/controller.dart';
+
+import '../../Services.dart/getX.dart';
 
 class BuzDraer extends StatefulWidget {
   const BuzDraer({super.key});
@@ -17,6 +20,16 @@ class BuzDraer extends StatefulWidget {
 
 class _BuzDraerState extends State<BuzDraer> {
   @override
+  void initState() {
+    super.initState();
+
+    final BuzAccountFetch controller = Get.put(BuzAccountFetch());
+    controller.firebaseService.call;
+    print(controller.userName.value);
+  }
+
+  final BuzAccountFetch controller = Get.put(BuzAccountFetch());
+  @override
   Widget build(BuildContext context) {
     return Drawer(
       elevation: 5,
@@ -24,12 +37,12 @@ class _BuzDraerState extends State<BuzDraer> {
       child: ListView(
         padding: EdgeInsets.zero,
         children: [
-          const UserAccountsDrawerHeader(
+          UserAccountsDrawerHeader(
               decoration:
                   BoxDecoration(color: Color.fromARGB(255, 238, 240, 235)),
               currentAccountPicture: CircleAvatar(),
-              accountName: Text('something'),
-              accountEmail: Text(('someone@emal.com'))),
+              accountName: Obx(() => Text("${controller.userName.value}")),
+              accountEmail: Obx(() => Text("${controller.email.value}"))),
           Padding(
               padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
               child: ListTile(

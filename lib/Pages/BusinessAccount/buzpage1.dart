@@ -37,6 +37,9 @@ class _buzpageState extends State<buzpage> with TickerProviderStateMixin {
   bool? idCheck;
   bool rateCheck = true;
   String? bid;
+  TextEditingController reportController = TextEditingController();
+  FocusNode reportNode = FocusNode();
+
   @override
   void initState() {
     super.initState();
@@ -85,13 +88,68 @@ class _buzpageState extends State<buzpage> with TickerProviderStateMixin {
                           right: 10,
                           child: IconButton(
                             onPressed: () {
-                              Get.to(() => const MessagePage(), arguments: {
-                                'propic': snapshot.data!["profile_Pic"],
-                                'buzName': snapshot.data!["Business Name"],
-                                'bid': snapshot.data!["bid"]
-                              });
+                              showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return AlertDialog(
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(10)),
+                                    backgroundColor: const Color.fromARGB(
+                                        255, 233, 236, 239),
+                                    title: Center(
+                                      child: Column(
+                                        children: [
+                                          Text(
+                                              "what kind of report would you like to submit "),
+                                          Center(
+                                            child: Material(
+                                              elevation: 5,
+                                              shape: OutlineInputBorder(
+                                                  borderSide: BorderSide.none),
+                                              child: TextField(
+                                                focusNode: reportNode,
+                                                controller: reportController,
+                                                decoration: InputDecoration(
+                                                    hintText:
+                                                        "Enter your report",
+                                                    hintStyle: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.w300),
+                                                    fillColor:
+                                                        const Color.fromARGB(
+                                                            255, 238, 240, 235),
+                                                    border: OutlineInputBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(10),
+                                                        borderSide:
+                                                            BorderSide.none)),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    content: ElevatedButton(
+                                        style: ElevatedButton.styleFrom(
+                                            backgroundColor: Color.fromARGB(
+                                                255, 229, 143, 101)),
+                                        onPressed: () async {
+                                          sendReportbuz(
+                                              snapshot.data!["bid"],
+                                              _auth.toString(),
+                                              snapshot.data!["Business Name"]);
+                                        },
+                                        child: const Text("Submit Report",
+                                            style: TextStyle(
+                                                letterSpacing: 1.5 + 1,
+                                                color: Colors.black))),
+                                  );
+                                },
+                              );
                             },
-                            icon: const Icon(Icons.message_sharp,
+                            icon: const Icon(Icons.report,
                                 color: Color.fromARGB(255, 229, 143, 101)),
                           )),
                       Positioned(
@@ -580,68 +638,73 @@ class _buzpageState extends State<buzpage> with TickerProviderStateMixin {
                                       ),
                                     );
                                   } else {
-                                    return Container(
-                                      decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(15)),
-                                      width: 400,
-                                      child: Card(
-                                        shape: OutlineInputBorder(
+                                    return GestureDetector(
+                                      onDoubleTap: () {},
+                                      child: Container(
+                                        decoration: BoxDecoration(
                                             borderRadius:
                                                 BorderRadius.circular(15)),
-                                        color: const Color.fromARGB(
-                                            255, 238, 240, 235),
-                                        elevation: 8,
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(15),
-                                          child: Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Row(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                children: [
-                                                  Container(
-                                                    color: const Color.fromARGB(
-                                                        255, 78, 77, 61),
+                                        width: 400,
+                                        child: Card(
+                                          shape: OutlineInputBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(15)),
+                                          color: const Color.fromARGB(
+                                              255, 238, 240, 235),
+                                          elevation: 8,
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(15),
+                                            child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Row(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: [
+                                                    Container(
+                                                      color:
+                                                          const Color.fromARGB(
+                                                              255, 78, 77, 61),
+                                                      child: Text(
+                                                          "${snapshot.data!["name"][reindex]}"),
+                                                    ),
+                                                    Padding(
+                                                      padding: EdgeInsets.only(
+                                                          left: 10),
+                                                      child: Container(
+                                                        color: Colors.brown,
+                                                        child: getTime(snapshot
+                                                            .data!['timestamp']
+                                                                [reindex]
+                                                            .toString()),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                                Container(
+                                                  color: Colors.green,
+                                                  child: Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            8.0),
                                                     child: Text(
-                                                        "${snapshot.data!["name"][reindex]}"),
-                                                  ),
-                                                  Padding(
-                                                    padding: EdgeInsets.only(
-                                                        left: 10),
-                                                    child: Container(
-                                                      color: Colors.brown,
-                                                      child: getTime(snapshot
-                                                          .data!['timestamp']
-                                                              [reindex]
-                                                          .toString()),
+                                                      snapshot.data!["reviews"]
+                                                          [reindex],
+                                                      style: const TextStyle(
+                                                          fontSize: 16,
+                                                          fontWeight:
+                                                              FontWeight.w300),
                                                     ),
                                                   ),
-                                                ],
-                                              ),
-                                              Container(
-                                                color: Colors.green,
-                                                child: Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(8.0),
-                                                  child: Text(
-                                                    snapshot.data!["reviews"]
-                                                        [reindex],
-                                                    style: const TextStyle(
-                                                        fontSize: 16,
-                                                        fontWeight:
-                                                            FontWeight.w300),
-                                                  ),
                                                 ),
-                                              ),
-                                            ],
+                                              ],
+                                            ),
                                           ),
                                         ),
                                       ),
@@ -1054,5 +1117,18 @@ class _buzpageState extends State<buzpage> with TickerProviderStateMixin {
         style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w300),
       ),
     );
+  }
+
+  void sendReportbuz(var bid, var uid, var buzName) {
+    String buzid = bid;
+    String indiId = uid;
+    String name = buzName;
+    FirebaseFirestore.instance.collection("Reports on buz Account").add({
+      'bid': buzid,
+      'uid': indiId,
+      'buzName': name,
+      'report': reportController.value.text,
+      'warning': "unSent"
+    });
   }
 }

@@ -32,8 +32,11 @@ class _SelectedCatagoryPageState extends State<SelectedCatagoryPage> {
                   selectedCatagory = snapshot.data!.docs;
                 }
 
-                return ListView.builder(
-                    scrollDirection: Axis.horizontal,
+                return GridView.builder(
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 3),
+                    scrollDirection: Axis.vertical,
                     itemCount: snapshot.data!.docs.length,
                     itemBuilder: (context, index) {
                       return GestureDetector(
@@ -52,7 +55,8 @@ class _SelectedCatagoryPageState extends State<SelectedCatagoryPage> {
                                   decoration: BoxDecoration(
                                     image: DecorationImage(
                                         image: NetworkImage(
-                                            selectedCatagory[index]["image"]),
+                                            selectedCatagory[index]
+                                                ["coverPhoto"]),
                                         fit: BoxFit.cover),
                                     borderRadius: BorderRadius.circular(15),
                                     color: Colors.red,

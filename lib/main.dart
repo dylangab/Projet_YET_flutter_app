@@ -20,7 +20,7 @@ import 'package:final_project/Services.dart/notiservice.dart';
 
 import 'package:final_project/mainPage.dart';
 import 'package:final_project/Pages/IndividualAccount/NotificationPage.dart';
-import 'package:final_project/models/geofencing.dart';
+
 import 'package:final_project/widgets/MostRated.dart';
 
 import 'package:final_project/widgets/location.dart';

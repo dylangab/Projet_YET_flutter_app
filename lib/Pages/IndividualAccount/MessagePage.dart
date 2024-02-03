@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lorem_ipsum/lorem_ipsum.dart';
@@ -16,7 +17,7 @@ class _MessagePageState extends State<MessagePage> {
   List<DocumentSnapshot> message = [];
   TextEditingController _message = TextEditingController();
   Map<String, dynamic> argument = Get.arguments as Map<String, dynamic>;
-
+  final _auth = FirebaseAuth.instance.currentUser!.uid;
   String? time;
 
   @override
@@ -38,39 +39,47 @@ class _MessagePageState extends State<MessagePage> {
         // mainAxisAlignment: MainAxisAlignment.start,
         // crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Container(
-            height: 130,
-            color: const Color.fromARGB(
-              255,
-              238,
-              240,
-              235,
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 25),
-                    child: CircleAvatar(
-                      backgroundImage: NetworkImage(proPic),
-                      radius: 50,
+          StreamBuilder<DocumentSnapshot>(
+              stream: FirebaseFirestore.instance
+                  .collection("Business Accounts Requests")
+                  .doc(_auth)
+                  .snapshots(),
+              builder: (context, snapshot) {
+                return Container(
+                  height: 130,
+                  color: const Color.fromARGB(
+                    255,
+                    238,
+                    240,
+                    235,
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(left: 25),
+                          child: CircleAvatar(
+                            backgroundImage:
+                                NetworkImage(snapshot.data!["coverPhoto"]),
+                            radius: 50,
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 40, right: 70),
+                          child: Text(
+                            snapshot.data!["Business Name"],
+                            style: const TextStyle(
+                                fontSize: 30, fontWeight: FontWeight.bold),
+                          ),
+                        )
+                      ],
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 40, right: 70),
-                    child: Text(
-                      buzName,
-                      style: const TextStyle(
-                          fontSize: 30, fontWeight: FontWeight.bold),
-                    ),
-                  )
-                ],
-              ),
-            ),
-          ),
+                );
+              }),
           SizedBox(
             height: 400,
             child: StreamBuilder<QuerySnapshot>(
@@ -86,93 +95,82 @@ class _MessagePageState extends State<MessagePage> {
                   return ListView.builder(
                     itemCount: message.length,
                     itemBuilder: (context, index) {
-                      return Container(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                const Padding(
-                                  padding: EdgeInsets.only(top: 30),
-                                  child: Icon(
-                                    Icons.timer,
-                                    size: 15,
-                                  ),
-                                ),
-                                getTime(message[index]['timestamp'].toString())
-                                /*    Padding(
-                                  padding:
-                                      const EdgeInsets.only(top: 30, left: 5),
-                                  child: Text(
-                                    time = getTime(message[index]['timestamp']
-                                            .toString())
-                                        .toString(),
-                                    style: const TextStyle(
-                                        fontSize: 13,
-                                        fontWeight: FontWeight.w300),
-                                  ),
-                                )*/
-                                ,
-                              ],
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(
-                                  top: 5, left: 10, right: 10),
-                              child: Container(
-                                width: 200,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(15),
-                                ),
-                                child: Card(
-                                  color: const Color.fromARGB(
-                                    255,
-                                    238,
-                                    240,
-                                    235,
-                                  ),
-                                  elevation: 8,
-                                  shape: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(15)),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(10.0),
-                                    child: Text(
-                                      message[index]["message"],
-                                      style: const TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w300),
+                      return Padding(
+                        padding: const EdgeInsets.fromLTRB(15, 50, 15, 0),
+                        child: Container(
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(15)),
+                            width: 400,
+                            child: GestureDetector(
+                              onTap: () {
+                                // Get.to(() => buzpage(),
+                                //     arguments: annoucmnet[index]
+                                //         ["bid"]);
+                              },
+                              child: Card(
+                                shape: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(15)),
+                                color: const Color.fromARGB(255, 238, 240, 235),
+                                elevation: 8,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.all(10.0),
+                                          child: SizedBox(
+                                            width: 255,
+                                            child: Text(
+                                              message[index]["message"],
+                                              style: const TextStyle(
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.w300),
+                                            ),
+                                          ),
+                                        ),
+                                        IconButton(
+                                            onPressed: () {},
+                                            icon: const Icon(
+                                                Icons.more_horiz_sharp))
+                                      ],
                                     ),
-                                  ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.fromLTRB(
+                                              20, 8, 0, 10),
+                                          child: CircleAvatar(
+                                            backgroundImage: NetworkImage(
+                                                message[index]["profilePic"]
+                                                    .toString()),
+                                            radius: 18,
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.all(10),
+                                          child: getTime(
+                                              message[index]["timestamp"]),
+                                        ),
+                                      ],
+                                    )
+                                  ],
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
+                            )),
                       );
                     },
                   );
                 }),
           ),
-          SizedBox(
-            child: TextField(
-              controller: _message,
-              decoration: const InputDecoration(border: UnderlineInputBorder()),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(
-              top: 10,
-            ),
-            child: ElevatedButton(
-                onPressed: () async {
-                  await FirebaseFirestore.instance.collection('message').add({
-                    'message': _message.value.text,
-                    'timestamp': "${DateTime.now()}"
-                  });
-                },
-                child: const Text("post")),
-          )
         ],
       ),
     );

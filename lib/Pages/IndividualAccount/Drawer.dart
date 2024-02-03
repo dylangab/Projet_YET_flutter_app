@@ -7,6 +7,8 @@ import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 
+import '../../Services.dart/getX.dart';
+
 class DrawerPage extends StatefulWidget {
   const DrawerPage({super.key});
 
@@ -16,6 +18,16 @@ class DrawerPage extends StatefulWidget {
 
 class _DrawerPageState extends State<DrawerPage> {
   @override
+  void initState() {
+    super.initState();
+
+    final individualAccountFetch controller = Get.put(individualAccountFetch());
+    controller.firebaseService.call;
+    print(controller.userName.value);
+  }
+
+  final individualAccountFetch controller = Get.put(individualAccountFetch());
+  @override
   Widget build(BuildContext context) {
     return Drawer(
       elevation: 5,
@@ -23,12 +35,12 @@ class _DrawerPageState extends State<DrawerPage> {
       child: ListView(
         padding: EdgeInsets.zero,
         children: [
-          const UserAccountsDrawerHeader(
+          UserAccountsDrawerHeader(
               decoration:
                   BoxDecoration(color: Color.fromARGB(255, 238, 240, 235)),
               currentAccountPicture: CircleAvatar(),
-              accountName: Text('something'),
-              accountEmail: Text(('someone@emal.com'))),
+              accountName: Obx(() => Text('${controller.userName.value}')),
+              accountEmail: Obx(() => Text('${controller.email.value}'))),
           Padding(
               padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
               child: ListTile(

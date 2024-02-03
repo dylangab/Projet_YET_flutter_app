@@ -7,6 +7,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:get/get.dart';
+import 'package:get_time_ago/get_time_ago.dart';
 import 'package:lorem_ipsum/lorem_ipsum.dart';
 import 'package:final_project/Services.dart/getX.dart';
 
@@ -52,6 +53,8 @@ class _BpPageState extends State<BpPage> {
   bool? imagebutton = false;
   bool? posteventbutton;
   bool? postannoucemntbutton;
+  TextEditingController reportController = TextEditingController();
+  FocusNode reportNode = FocusNode();
 
   void dispose() {
     _annoucment.dispose();
@@ -869,70 +872,169 @@ class _BpPageState extends State<BpPage> {
                         child: check(snapshot.data!["reviews"])
                             ? ListView.builder(
                                 itemCount: snapshot.data!["reviews"].length,
-                                itemBuilder: (context, index) {
-                                  return Container(
-                                    decoration: BoxDecoration(
-                                        borderRadius:
-                                            BorderRadius.circular(15)),
-                                    width: 400,
-                                    child: Card(
-                                      shape: OutlineInputBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(15)),
-                                      color: const Color.fromARGB(
-                                          255, 238, 240, 235),
-                                      elevation: 8,
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(15),
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            const Row(
+                                itemBuilder: (context, reindex) {
+                                  if (snapshot.data!["reviews"].length == 0) {
+                                    return Container(
+                                      child: const Center(
+                                        child: Text("No Reviews Yet...."),
+                                      ),
+                                    );
+                                  } else {
+                                    return GestureDetector(
+                                      onDoubleTap: () {
+                                        showDialog(
+                                          context: context,
+                                          builder: (context) {
+                                            return AlertDialog(
+                                              shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          10)),
+                                              backgroundColor:
+                                                  const Color.fromARGB(
+                                                      255, 233, 236, 239),
+                                              title: Center(
+                                                child: Column(
+                                                  children: [
+                                                    Text(
+                                                        "what kind of report would you like to submit "),
+                                                    Center(
+                                                      child: Material(
+                                                        elevation: 5,
+                                                        shape:
+                                                            OutlineInputBorder(
+                                                                borderSide:
+                                                                    BorderSide
+                                                                        .none),
+                                                        child: TextField(
+                                                          focusNode: reportNode,
+                                                          controller:
+                                                              reportController,
+                                                          decoration: InputDecoration(
+                                                              hintText:
+                                                                  "Enter your report",
+                                                              hintStyle: TextStyle(
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w300),
+                                                              fillColor: const Color
+                                                                      .fromARGB(
+                                                                  255,
+                                                                  238,
+                                                                  240,
+                                                                  235),
+                                                              border: OutlineInputBorder(
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              10),
+                                                                  borderSide:
+                                                                      BorderSide
+                                                                          .none)),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              content: ElevatedButton(
+                                                  style:
+                                                      ElevatedButton.styleFrom(
+                                                          backgroundColor:
+                                                              Color.fromARGB(
+                                                                  255,
+                                                                  229,
+                                                                  143,
+                                                                  101)),
+                                                  onPressed: () async {
+                                                    sendReportindi(
+                                                        _auth.currentUser!.uid,
+                                                        snapshot
+                                                            .data!["revieUid"]
+                                                            .elementAt(
+                                                                reindex));
+                                                  },
+                                                  child: const Text(
+                                                      "Submit Report",
+                                                      style: TextStyle(
+                                                          letterSpacing:
+                                                              1.5 + 1,
+                                                          color:
+                                                              Colors.black))),
+                                            );
+                                          },
+                                        );
+                                      },
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(15)),
+                                        width: 400,
+                                        child: Card(
+                                          shape: OutlineInputBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(15)),
+                                          color: const Color.fromARGB(
+                                              255, 238, 240, 235),
+                                          elevation: 8,
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(15),
+                                            child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.start,
                                               children: [
-                                                CircleAvatar(
-                                                  radius: 15,
-                                                  child: Center(
-                                                    child: Text(
-                                                      "M",
-                                                      style: TextStyle(
-                                                          fontSize: 15),
+                                                Row(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: [
+                                                    Container(
+                                                      color:
+                                                          const Color.fromARGB(
+                                                              255, 78, 77, 61),
+                                                      child: Text(
+                                                          "${snapshot.data!["name"][reindex]}"),
                                                     ),
-                                                  ),
+                                                    Padding(
+                                                      padding: EdgeInsets.only(
+                                                          left: 10),
+                                                      child: Container(
+                                                        color: Colors.brown,
+                                                        child: getTime(snapshot
+                                                            .data!['timestamp']
+                                                                [reindex]
+                                                            .toString()),
+                                                      ),
+                                                    ),
+                                                  ],
                                                 ),
-                                                Padding(
-                                                  padding: EdgeInsets.all(5.0),
-                                                  child: Text(
-                                                    "Sara chakamola",
-                                                    style: TextStyle(
-                                                        fontSize: 16,
-                                                        fontWeight:
-                                                            FontWeight.w400),
+                                                Container(
+                                                  color: Colors.green,
+                                                  child: Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            8.0),
+                                                    child: Text(
+                                                      snapshot.data!["reviews"]
+                                                          [reindex],
+                                                      style: const TextStyle(
+                                                          fontSize: 16,
+                                                          fontWeight:
+                                                              FontWeight.w300),
+                                                    ),
                                                   ),
                                                 ),
                                               ],
                                             ),
-                                            Padding(
-                                              padding:
-                                                  const EdgeInsets.all(8.0),
-                                              child: Text(
-                                                snapshot.data!["reviews"]
-                                                    [index],
-                                                style: const TextStyle(
-                                                    fontSize: 16,
-                                                    fontWeight:
-                                                        FontWeight.w300),
-                                              ),
-                                            ),
-                                          ],
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                  );
+                                    );
+                                  }
                                 },
                               )
                             : Container(
@@ -1140,5 +1242,31 @@ class _BpPageState extends State<BpPage> {
       checker = true;
     }
     return checker!;
+  }
+
+  void sendReportindi(var bid, var uid) {
+    String buzid = bid;
+    String indiId = uid;
+    FirebaseFirestore.instance.collection("Reports on Individual Account").add({
+      'bid': buzid,
+      'uid': indiId,
+      'report': reportController.value.text,
+      'warning': "unSent"
+    });
+  }
+
+  Widget getTime(String snaphot) {
+    String serverTime = snaphot;
+
+    var time = DateTime.parse(serverTime);
+    var result = GetTimeAgo.parse(time);
+
+    return Padding(
+      padding: const EdgeInsets.only(top: 30, left: 5),
+      child: Text(
+        result,
+        style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w300),
+      ),
+    );
   }
 }
